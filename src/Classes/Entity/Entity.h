@@ -56,6 +56,7 @@ protected:
 	bool isGrounded;
 	bool freeze;
 	bool isAttack;
+	bool affectedByGravity;
 
 	bool dead = false;
 

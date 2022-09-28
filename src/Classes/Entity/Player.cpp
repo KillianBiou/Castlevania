@@ -2,7 +2,7 @@
 #include "../Manager/Animator.h"
 #include "../Manager/EntityManager.h"
 
-Player::Player(std::string texturePath, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager) : Entity(texturePath, sf::Vector2f(100.f, 100.f), 64, 128, frameDelay, currentLevel, levelXSize, speedFactor, jumpFactor, entityManager) {
+Player::Player(std::string texturePath, sf::Vector2f pos, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager) : Entity(texturePath, pos, 64, 128, frameDelay, currentLevel, levelXSize, speedFactor, jumpFactor, entityManager) {
 	this->weapon = new Weapon("images/Whip.png", 1);
 	this->spriteSizeXAttack1 = 128;
 	this->spriteSizeYAttack1 = 128;

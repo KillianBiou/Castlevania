@@ -19,7 +19,7 @@ private:
 	void updateHitboxWeapon();
 
 public:
-	Player(std::string texturePath, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager);
+	Player(std::string texturePath, sf::Vector2f pos, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager);
 	void const drawChild(sf::RenderWindow* renderWindow);
 	void update();
 

@@ -4,6 +4,7 @@
 #include "Classes/Entity/Entity.h"
 #include "Classes/Entity/Player.h"
 #include "Classes/Entity/Monster.h"
+#include "Classes/Entity/MedusaHead.h"
 #include "Classes/Manager/EntityManager.h"
 
 int main()
@@ -30,13 +31,10 @@ int main()
 
     EntityManager entityManager;
 
-    Player player("images/Belmon.png", 150, level, X_SIZE, 5.f, 15.f, &entityManager);
-    Monster mob1("images/Belmon.png", "Monster 1", 150, level, X_SIZE, 5.f, 15.f, &entityManager);
-    mob1.setPosition(450, 150);
-    Monster mob2("images/Belmon.png", "Monster 2", 150, level, X_SIZE, 5.f, 15.f, &entityManager);
-    mob1.setPosition(200, 150);
-    Monster mob3("images/Belmon.png", "Monster 3", 150, level, X_SIZE, 5.f, 15.f, &entityManager);
-    mob1.setPosition(350, 150);
+    Player player("images/Belmon.png", sf::Vector2f(60, 50), 150, level, X_SIZE, 5.f, 15.f, &entityManager);
+    Monster mob1("images/Belmon.png", sf::Vector2f(160, 50), 64, 128, "Monster 1", 150, level, X_SIZE, 5.f, 15.f, &entityManager);
+    Monster mob2("images/Belmon.png", sf::Vector2f(260, 50), 64, 128, "Monster 2", 150, level, X_SIZE, 5.f, 15.f, &entityManager);
+    Monster mob2("images/Belmon.png", sf::Vector2f(360, 50), 64, 128, "Monster 6", 150, level, X_SIZE, 5.f, 15.f, &entityManager);
 
     Tilemap map;
     map.load("images/TilesetTest.png", 64, level, 10, 10);

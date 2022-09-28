@@ -19,9 +19,11 @@ Entity::Entity(std::string texturePath, sf::Vector2f position, int sizeX, int si
     this->gravityFactor = .055f;
     this->side = RIGHT;
     this->freeze = false;
+    this->affectedByGravity = true;
 
     this->setOrigin(sizeX / 2, sizeY / 2);
     this->entityManager = entityManager;
+    this->setPosition(position);
 }
 
 void Entity::update() {
@@ -47,7 +49,11 @@ void Entity::moveTick() {
     if (freeze) {
         lateralMovement = 0.f;
     }
-    this->move(lateralMovement, this->verticalVelocity);
+
+    this->move(lateralMovement, 0.f);
+    if (affectedByGravity) {
+        this->move(0.f, this->verticalVelocity);
+    }
 }
 
 void Entity::moveCollisionPoint() {
