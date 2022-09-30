@@ -12,7 +12,9 @@ private:
 
 	float invulnerabilityTime;
 
-	sf::Vector2f weaponPositionModifier;
+	std::string debugAnim;
+
+	sf::Vector2f weaponPositionModifier = sf::Vector2f(0.f, 0.f);
 
 	bool dead = false;
 
@@ -22,6 +24,8 @@ public:
 	Player(std::string texturePath, sf::Vector2f pos, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager);
 	void const drawChild(sf::RenderWindow* renderWindow);
 	void update();
+
+	void updateAnim();
 
 	void const attack(bool advance);
 	void const taskDeletion();

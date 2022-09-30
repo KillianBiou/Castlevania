@@ -6,38 +6,79 @@
 #include "Classes/Entity/Monster.h"
 #include "Classes/Entity/MedusaHead.h"
 #include "Classes/Manager/EntityManager.h"
+#include "Classes/Spawner/MedusaHeadSpawner.h"
+#include <algorithm>
+
+float clip(float n, float lower, float upper) {
+    return std::max(lower, std::min(n, upper));
+}
 
 int main()
 {
-    sf::RenderWindow drawingWindow(sf::VideoMode(640, 640), "Drawing windows");
-    drawingWindow.setVerticalSyncEnabled(true);
-    const int X_SIZE = 10;
-    const int Y_SIZE = 10;
+    sf::RenderWindow drawingWindow(sf::VideoMode(640, 360), "Drawing windows", sf::Style::Close);
+    auto desktop = sf::VideoMode::getDesktopMode();
+    
+    sf::FloatRect viewArea(0, 0, 640, 360);
+    sf::View view = sf::View(viewArea);
+
+    sf::Sprite backgroundImage1;
+    sf::Texture bgImage1Texture;
+    if (bgImage1Texture.loadFromFile("images/Background1.png")) {
+        std::cout << "Error while loading : " << "images/Background1.png" << std::endl;
+    }
+    backgroundImage1.setTexture(bgImage1Texture);
+    backgroundImage1.setPosition(0.f, 64.f);
+
+    drawingWindow.setFramerateLimit(60);
+    const int X_SIZE = 60;
+    const int Y_SIZE = 24;
+
+    int width = 640;
+    int height = 360;
+
     bool leftHeld = false;
     bool rightHeld = false;
     const int level[] =
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        0, 0, 0, 1, 0, 0, 0, 0, 1, 2,
-        0, 0, 0, 0, 0, 0, 0, 1, 2, 2,
-        0, 0, 0, 0, 0, 0, 1, 2, 2, 2,
-        1, 1, 1, 1 ,1, 1, 2, 2, 2, 2,
-        2, 2, 2, 2, 2 ,2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2 ,2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2 ,2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2 ,2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 1, 1, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 1, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 1, 1, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 1, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 1, 1, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 1, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 1, 1, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 1, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 1, 1, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 1, 1, 0, 0, 0, 0, 0, 0,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 1, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 1, 1, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 1, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
     };
 
     EntityManager entityManager;
 
-    Player player("images/Belmon.png", sf::Vector2f(60, 50), 150, level, X_SIZE, 5.f, 15.f, &entityManager);
-    Monster mob1("images/Belmon.png", sf::Vector2f(160, 50), 64, 128, "Monster 1", 150, level, X_SIZE, 5.f, 15.f, &entityManager);
-    Monster mob2("images/Belmon.png", sf::Vector2f(260, 50), 64, 128, "Monster 2", 150, level, X_SIZE, 5.f, 15.f, &entityManager);
-    Monster mob2("images/Belmon.png", sf::Vector2f(360, 50), 64, 128, "Monster 6", 150, level, X_SIZE, 5.f, 15.f, &entityManager);
+    Player player("images/Belmon.png", sf::Vector2f(256, 1080), 150, level, X_SIZE, 5.f, 15.f, &entityManager);
+
+    MedusaHeadSpawner ms1(sf::Vector2f(1200, 1080), level, X_SIZE, 6.f, 4.f, 7.f, &entityManager, &view);
+    MedusaHeadSpawner ms2(sf::Vector2f(800, 900), level, X_SIZE, 4.f, 6.f, 8.f, &entityManager, &view);
+    MedusaHeadSpawner ms3(sf::Vector2f(800, 600), level, X_SIZE, 7.f, 5.f, 7.f, &entityManager, &view);
+    MedusaHeadSpawner ms4(sf::Vector2f(800, 300), level, X_SIZE, 3.f, 3.f, 3.f, &entityManager, &view);
 
     Tilemap map;
-    map.load("images/TilesetTest.png", 64, level, 10, 10);
+    map.load("images/Platform.png", 64, level, X_SIZE, Y_SIZE);
 
     while (drawingWindow.isOpen()) {
         sf::Event event;
@@ -45,6 +86,10 @@ int main()
             switch (event.type) {
             case sf::Event::Closed:
                 drawingWindow.close();
+                break;
+            case sf::Event::Resized:
+                viewArea.width = event.size.width;
+                viewArea.height = event.size.height;
                 break;
             case sf::Event::KeyPressed:
                 switch (event.key.code) {
@@ -63,6 +108,30 @@ int main()
                     break;
                 case sf::Keyboard::E:
                     player.attack(false);
+                    break;
+                case sf::Keyboard::Num1:
+                    width = 640;
+                    height = 360;
+                    viewArea.width = width;
+                    viewArea.height = height;
+                    drawingWindow.setSize(sf::Vector2u(width, height));
+                    drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
+                    break;
+                case sf::Keyboard::Num2:
+                    width = 1280;
+                    height = 720;
+                    viewArea.width = width;
+                    viewArea.height = height;
+                    drawingWindow.setSize(sf::Vector2u(width, height));
+                    drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
+                    break;
+                case sf::Keyboard::Num3:
+                    width = 1920;
+                    height = 1080;
+                    viewArea.width = width;
+                    viewArea.height = height;
+                    drawingWindow.setSize(sf::Vector2u(width, height));
+                    drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
                     break;
                 }
                 break;
@@ -94,6 +163,13 @@ int main()
             }
         }
 
+        // Update Camera
+        view = sf::View(viewArea);
+        float xPos = clip(player.getPosition().x, 0 + view.getSize().x / 2, X_SIZE * 64 - view.getSize().x / 2);
+        float yPos = clip(player.getPosition().y, 0 + view.getSize().y / 2, Y_SIZE * 64 - view.getSize().y / 2);
+        view.setCenter(xPos, yPos);
+        drawingWindow.setView(view);
+
         // Clear
         drawingWindow.clear(sf::Color::Cyan);
 
@@ -101,6 +177,7 @@ int main()
         entityManager.updateAllEntities();
 
         // Draw
+        drawingWindow.draw(backgroundImage1);
         drawingWindow.draw(map);
         entityManager.drawAllEntities(&drawingWindow);
 

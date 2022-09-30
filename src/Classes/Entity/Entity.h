@@ -33,11 +33,15 @@ protected:
 	int spriteSizeYAttack2;
 
 	sf::Vector2f groundedPoint;
+	sf::Vector2f groundedPointBis;
 	sf::Vector2f rightBoundPoint;
 	sf::Vector2f rightBoundPointBis;
+	sf::Vector2f rightBoundPointPrime;
 	sf::Vector2f leftBoundPoint;
 	sf::Vector2f leftBoundPointBis;
+	sf::Vector2f leftBoundPointPrime;
 	sf::Vector2f topBoundPoint;
+	sf::Vector2f topBoundPointBis;
 	sf::Vector2f debugPoint;
 
 	MoveDirection moveDirection;
@@ -98,14 +102,20 @@ public:
 	MoveDirection getSide();
 	MoveDirection getMoveDirection();
 	sf::Vector2f getGroundedPoint();
+	sf::Vector2f getGroundedPointBis();
 	sf::Vector2f getRightBoundPoint();
 	sf::Vector2f getRightBoundPointBis();
+	sf::Vector2f getRightBoundPointPrime();
 	sf::Vector2f getLeftBoundPoint();
 	sf::Vector2f getLeftBoundPointBis();
+	sf::Vector2f getLeftBoundPointPrime();
 	sf::Vector2f getTopBoundPoint();
+	sf::Vector2f getTopBoundPointBis();
 	bool getFreeze();
 	std::string getName();
 	virtual const void taskDeletion() = 0;
+
+	~Entity();
 
 	virtual const void drawChild(sf::RenderWindow* renderWindow) = 0;
 };

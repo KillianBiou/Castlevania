@@ -13,7 +13,7 @@ enum Animation {
 class Animator
 {
 private:
-	std::map<Animation, int> nbFrame = { {IDLE, 1}, {RUNNING, 3}, {JUMPING, 1}, {ATTACK, 3}, {HURT, 2}, {DEATH, 4} };
+	std::map<Animation, int> nbFrame = { {IDLE, 1} };
 
 	Entity* entity;
 	sf::Clock animationClock;
@@ -27,6 +27,8 @@ private:
 
 public:
 	Animator(Entity* entity, int frameDelay);
+
+	void setAnimations(std::map<Animation, int> nbFrame);
 
 	void animate();
 	void playAnimation(Animation animation);

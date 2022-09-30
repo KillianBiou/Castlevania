@@ -9,6 +9,8 @@ Player::Player(std::string texturePath, sf::Vector2f pos, int frameDelay, const 
 	this->spriteSizeXAttack2 = 241;
 	this->spriteSizeYAttack2 = 128;
 
+	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 3}, {JUMPING, 1}, {ATTACK, 3}, {HURT, 2}, {DEATH, 4} });
+
 	this->maxHp = 5;
 	this->hp = this->maxHp;
 	this->name = "Player";
@@ -40,6 +42,10 @@ void const Player::attack(bool advance) {
 			this->weapon->setPosition(this->getPosition().x - this->spriteSizeX / 2.f + 64, this->getPosition().y - this->spriteSizeY / 2.f);
 			if (this->side == RIGHT) {
 				this->weapon->move(-64.f, 0.f);
+				this->weaponPositionModifier = sf::Vector2f(-32.f, -64.f);
+			}
+			else {
+				this->weaponPositionModifier = sf::Vector2f(32.f, -64.f);
 			}
 			break;
 		case 1:
@@ -48,6 +54,7 @@ void const Player::attack(bool advance) {
 		case 2:
 			this->weapon->phase2(this->side == LEFT ? false : true);
 			this->weapon->move(-176.f * this->side * -1, 0.f);
+			this->weaponPositionModifier.x += -176.f * this->side * -1;
 			break;
 		case 3:
 			this->weapon->phase3(this->side == LEFT ? false : true);
@@ -56,6 +63,7 @@ void const Player::attack(bool advance) {
 			this->animator->playAnimation(IDLE);
 			this->setHorizontalMovement(NONE);
 			this->weapon->move(176.f * this->side * -1, 0.f);
+			this->weaponPositionModifier.x += 176.f * this->side * -1;
 			
 			for (Entity* entity : this->entityManager->detectCollision(this->hitboxWeapon.getGlobalBounds())) {
 				std::cout << "Hit : " << entity->getName() << std::endl;
@@ -70,7 +78,23 @@ void const Player::attack(bool advance) {
 
 void Player::update() {
 	Entity::update();
+	this->updateAnim();
 	this->updateHitboxWeapon();
+}
+
+void Player::updateAnim() {
+	this->debugAnim = "IDLE";
+	if(this->moveDirection != NONE){
+		this->debugAnim = "RUNNING";
+	}
+	if (this->verticalVelocity != 0) {
+		this->debugAnim = "JUMPING";
+	}
+	if (this->hp <= 0) {
+		this->debugAnim = "DEATH";
+	}
+
+	std::cout << this->debugAnim << std::endl;
 }
 
 void Player::takeDamage(int amount) {
@@ -85,10 +109,12 @@ void Player::updateHitboxWeapon() {
 	if (side == RIGHT) {
 		this->hitboxWeapon.setPosition(this->getPosition() + sf::Vector2f(this->spriteSizeX / 2.f, -24.f));
 		this->hitboxWeapon.setSize(sf::Vector2f(112.f, 24.f));
+		this->weapon->setPosition(this->getPosition() + this->weaponPositionModifier);
 	}
 	else {
 		this->hitboxWeapon.setPosition(this->getPosition() - sf::Vector2f(this->spriteSizeX / 2.f, 24.f));
 		this->hitboxWeapon.setSize(sf::Vector2f(-112.f, 24.f));
+		this->weapon->setPosition(this->getPosition() + this->weaponPositionModifier);
 	}
 }
 

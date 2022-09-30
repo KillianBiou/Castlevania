@@ -2,6 +2,7 @@
 
 Animator::Animator(Entity* entity, int frameDelay): frameDelay(frameDelay) {
 	this->entity = entity;
+	this->nbFrame = nbFrame;
 
 	this->animationClock = sf::Clock();
 	this->currentAnimation = IDLE;
@@ -69,6 +70,10 @@ void Animator::playAnimation(Animation animation) {
 		this->spriteRect.left =  0;
 		this->spriteRect.width = this->entity->getSpriteSizeX();
 	}
+}
+
+void Animator::setAnimations(std::map<Animation, int> nbFrame) {
+	this->nbFrame = nbFrame;
 }
 
 void Animator::lockAnimation(bool state) {
