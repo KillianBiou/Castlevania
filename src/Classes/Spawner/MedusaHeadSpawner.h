@@ -20,6 +20,5 @@ public:
 	void spawnEntity();
 	void const update();
 	void const onMobDeath();
-	void const drawEntity(sf::RenderWindow* renderWindow);
 };
 

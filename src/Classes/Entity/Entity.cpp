@@ -53,7 +53,6 @@ void Entity::moveTick() {
     if (freeze) {
         lateralMovement = 0.f;
     }
-
     this->move(lateralMovement, 0.f);
     if (affectedByGravity) {
         this->move(0.f, this->verticalVelocity);

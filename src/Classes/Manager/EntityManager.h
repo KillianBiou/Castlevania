@@ -3,6 +3,7 @@
 #include "../Entity/Monster.h"
 #include "../Entity/MedusaHead.h"
 #include "../Entity/Player.h"
+#include "../Entity/Zombie.h"
 #include "../Misc/Score.h"
 #include <vector>
 
@@ -36,6 +37,7 @@ public:
 	void drawAllEntities(sf::RenderWindow* renderWindow);
 	void updateAllEntities();
 
+	float xDistToPlayer(float xPos);
 	void addScore(int amount);
 
 	void debugDraw(sf::RenderWindow* renderWindow);

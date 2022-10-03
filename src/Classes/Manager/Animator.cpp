@@ -55,7 +55,7 @@ void Animator::animate() {
 
 void Animator::playAnimation(Animation animation) {
 	//std::cout << animation << std::endl;
-	if (animation != this->currentAnimation) {
+	if (animation != this->currentAnimation && !(this->nbFrame.find(animation) == this->nbFrame.end())) {
 		this->animationClock.restart();
 		this->currentAnimation = animation;
 		this->spriteRect.top = this->entity->getSpriteSizeY() * this->currentAnimation;

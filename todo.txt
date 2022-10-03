@@ -2,7 +2,7 @@ Systeme HP - Programmation V, HUD V
 
 Mob V
 	- MedusaHead V
-	- Zombie X
+	- Zombie V
 	- Squelette X
 
 Boss

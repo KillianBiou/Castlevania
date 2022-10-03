@@ -16,9 +16,6 @@ void MedusaHeadSpawner::spawnEntity() {
 	this->currentInstance = new MedusaHead("Medusahead 1", this->getPosition(), this->level, this->xSize, this->speedFactor, this->amplitude, this->frequency, this->entityManager, this);
 }
 
-void const MedusaHeadSpawner::drawEntity(sf::RenderWindow* renderWindow) {
-	renderWindow->draw(*this->currentInstance);
-}
 
 void const MedusaHeadSpawner::update() {
 	this->minX = this->view->getCenter().x - this->view->getSize().x / 2;

@@ -1,6 +1,7 @@
 #include "EntityManager.h"
 #include "../Spawner/Spawner.h"
 
+
 EntityManager::EntityManager(Score* score): score(score) {
 }
 
@@ -39,6 +40,9 @@ void EntityManager::updateAllEntities() {
         if (instanceof<MedusaHead>(currentMonster)) {
             ((MedusaHead*)currentMonster)->update();
         }
+        else if (instanceof<Zombie>(currentMonster)) {
+            ((Zombie*)currentMonster)->update();
+        }
         else {
             currentMonster->update();
         }
@@ -60,6 +64,10 @@ void EntityManager::drawAllEntities(sf::RenderWindow* renderWindow) {
 	for (int i = 0; i < monstersList.size(); i++) {
 		renderWindow->draw(*monstersList.at(i));
 	}
+}
+
+float EntityManager::xDistToPlayer(float xPos) {
+    return this->player->getPosition().x - xPos;
 }
 
 void EntityManager::addScore(int amount) {
