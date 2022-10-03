@@ -1,6 +1,17 @@
-Systeme HP - Programmation V, HUD X
-Collectibles
+Systeme HP - Programmation V, HUD V
+
+Mob V
+	- MedusaHead V
+	- Zombie X
+	- Squelette X
+
 Boss
-Amélioration arme
-Menu
+	- Momie X
+	- DraculaX
+
+Collectibles
+	- Coeur / Heal X
+	- HP up X
+	- Amélioration arme X
+
 Menu principal
