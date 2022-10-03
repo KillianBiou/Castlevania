@@ -1,7 +1,7 @@
 #include "Weapon.h"
 #include "../Entity/Entity.h"
 
-Weapon::Weapon(std::string spritesheetPath, int damage): damage(damage) {
+Weapon::Weapon(std::string spritesheetPath, int damage, float timePerAttack): damage(damage), timePerAttack(timePerAttack) {
     if (!this->spritesheet.loadFromFile(spritesheetPath)) {
         std::cout << "Error while loading : " << spritesheetPath << std::endl;
     }
@@ -72,4 +72,8 @@ int Weapon::getCurrentPhase() {
 
 int Weapon::getDamage() {
     return this->damage;
+}
+
+float Weapon::getTimePerAttack() {
+    return this->timePerAttack;
 }

@@ -4,7 +4,7 @@
 
 Entity::Entity(std::string texturePath, sf::Vector2f position, int sizeX, int sizeY, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager):
                spriteSizeX(sizeX), spriteSizeY(sizeY), frameDelay(frameDelay), currentLevel(currentLevel), levelXSize(levelXSize), speedFactor(speedFactor), jumpFactor(jumpFactor) {
-
+    this->name = "Entity";
     if (!this->texture.loadFromFile(texturePath)) {
         std::cout << "Error while loading : " << texturePath << std::endl;
     }
@@ -21,6 +21,7 @@ Entity::Entity(std::string texturePath, sf::Vector2f position, int sizeX, int si
     this->freeze = false;
     this->isHurt = false;
     this->affectedByGravity = true;
+    this->timePerAttack = 1;
 
     this->setOrigin(sizeX / 2, sizeY / 2);
     this->entityManager = entityManager;
@@ -212,6 +213,17 @@ MoveDirection Entity::getSide() {
     return this->side;
 }
 
+int Entity::getHp() {
+    return this->hp;
+}
+int Entity::getMaxHp() {
+    return this->maxHp;
+}
+
+float Entity::getTimePerAttack() {
+    return this->timePerAttack;
+}
+
 sf::Vector2f Entity::getGroundedPoint() {
     return this->groundedPoint;
 }
@@ -257,6 +269,7 @@ bool Entity::getFreeze() {
 }
 
 std::string Entity::getName() {
+    std::cout << this->name << std::endl;
     return this->name;
 }
 

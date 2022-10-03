@@ -47,6 +47,8 @@ protected:
 	MoveDirection moveDirection;
 	MoveDirection side;
 
+	float timePerAttack;
+
 	bool blockageRight;
 	bool blockageLeft;
 
@@ -96,6 +98,11 @@ public:
 	int getSpriteSizeYAttack1();
 	int getSpriteSizeXAttack2();
 	int getSpriteSizeYAttack2();
+
+	int getHp();
+	int getMaxHp();
+
+	float getTimePerAttack();
 
 	// Accesseur
 	void setIsGrounded(bool state);

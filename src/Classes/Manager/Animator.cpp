@@ -15,7 +15,7 @@ Animator::Animator(Entity* entity, int frameDelay): frameDelay(frameDelay) {
 }
 
 void Animator::animate() {
-	int nextFrame = this->animationClock.getElapsedTime().asMilliseconds() / this->frameDelay;
+	int nextFrame = this->animationClock.getElapsedTime().asMilliseconds() / (this->currentAnimation == ATTACK ? this->entity->getTimePerAttack() / 3 : this->frameDelay);
 
 	if (nextFrame >= this->nbFrame[this->currentAnimation]) {
 
@@ -56,7 +56,6 @@ void Animator::animate() {
 void Animator::playAnimation(Animation animation) {
 	//std::cout << animation << std::endl;
 	if (animation != this->currentAnimation) {
-		std::cout << animation << std::endl;
 		this->animationClock.restart();
 		this->currentAnimation = animation;
 		this->spriteRect.top = this->entity->getSpriteSizeY() * this->currentAnimation;

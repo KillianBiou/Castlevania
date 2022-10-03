@@ -7,6 +7,7 @@
 #include "Classes/Entity/MedusaHead.h"
 #include "Classes/Manager/EntityManager.h"
 #include "Classes/Spawner/MedusaHeadSpawner.h"
+#include "Classes/Misc/HealthBar.h"
 #include <algorithm>
 
 float clip(float n, float lower, float upper) {
@@ -23,7 +24,7 @@ int main()
 
     sf::Sprite backgroundImage1;
     sf::Texture bgImage1Texture;
-    if (bgImage1Texture.loadFromFile("images/Background1.png")) {
+    if (!bgImage1Texture.loadFromFile("images/Background1.png")) {
         std::cout << "Error while loading : " << "images/Background1.png" << std::endl;
     }
     backgroundImage1.setTexture(bgImage1Texture);
@@ -76,6 +77,8 @@ int main()
     MedusaHeadSpawner ms2(sf::Vector2f(800, 900), level, X_SIZE, 4.f, 6.f, 8.f, &entityManager, &view);
     MedusaHeadSpawner ms3(sf::Vector2f(800, 600), level, X_SIZE, 7.f, 5.f, 7.f, &entityManager, &view);
     MedusaHeadSpawner ms4(sf::Vector2f(800, 300), level, X_SIZE, 3.f, 3.f, 3.f, &entityManager, &view);
+
+    HealthBar playerHealth("font/Pixel.ttf", &player);
 
     Tilemap map;
     map.load("images/Platform.png", 64, level, X_SIZE, Y_SIZE);
@@ -131,6 +134,7 @@ int main()
                     viewArea.width = width;
                     viewArea.height = height;
                     drawingWindow.setSize(sf::Vector2u(width, height));
+                    playerHealth.setOrigin(sf::Vector2f(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2));
                     drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
                     break;
                 }
@@ -170,16 +174,22 @@ int main()
         view.setCenter(xPos, yPos);
         drawingWindow.setView(view);
 
+        // Update HUD
+        playerHealth.setPosition(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2);
+
         // Clear
         drawingWindow.clear(sf::Color::Cyan);
 
         // Update Entities
         entityManager.updateAllEntities();
+        playerHealth.update();
 
         // Draw
         drawingWindow.draw(backgroundImage1);
         drawingWindow.draw(map);
         entityManager.drawAllEntities(&drawingWindow);
+
+        drawingWindow.draw(playerHealth);
 
         // Debug
         entityManager.debugDraw(&drawingWindow);

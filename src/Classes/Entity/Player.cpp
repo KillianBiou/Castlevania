@@ -3,7 +3,8 @@
 #include "../Manager/EntityManager.h"
 
 Player::Player(std::string texturePath, sf::Vector2f pos, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager) : Entity(texturePath, pos, 64, 128, frameDelay, currentLevel, levelXSize, speedFactor, jumpFactor, entityManager) {
-	this->weapon = new Weapon("images/Whip.png", 1);
+	this->weapon = new Weapon("images/Whip.png", 1, 250);
+	this->timePerAttack = this->weapon->getTimePerAttack();
 	this->spriteSizeXAttack1 = 128;
 	this->spriteSizeYAttack1 = 128;
 	this->spriteSizeXAttack2 = 241;

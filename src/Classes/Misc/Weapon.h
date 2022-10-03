@@ -12,11 +12,12 @@ private:
 	sf::Sprite triggerredWeapon;
 
 	int damage;
+	float timePerAttack;
 
 	int currentPhase;
 
 public:
-	Weapon(std::string spritesheetPath, int damage);
+	Weapon(std::string spritesheetPath, int damage, float timePerAttack);
 
 	void phase0(bool reverse);
 	void phase1(bool reverse);
@@ -25,5 +26,6 @@ public:
 
 	int getCurrentPhase();
 	int getDamage();
+	float getTimePerAttack();
 };
 
