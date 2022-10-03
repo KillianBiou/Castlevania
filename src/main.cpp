@@ -8,6 +8,7 @@
 #include "Classes/Manager/EntityManager.h"
 #include "Classes/Spawner/MedusaHeadSpawner.h"
 #include "Classes/Misc/HealthBar.h"
+#include "Classes/Misc/Score.h"
 #include <algorithm>
 
 float clip(float n, float lower, float upper) {
@@ -69,7 +70,9 @@ int main()
         2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
     };
 
-    EntityManager entityManager;
+    Score score("font/Pixel.ttf");
+
+    EntityManager entityManager(&score);
 
     Player player("images/Belmon.png", sf::Vector2f(256, 1080), 150, level, X_SIZE, 5.f, 15.f, &entityManager);
 
@@ -176,6 +179,7 @@ int main()
 
         // Update HUD
         playerHealth.setPosition(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2);
+        score.setPosition(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2 + 70);
 
         // Clear
         drawingWindow.clear(sf::Color::Cyan);
@@ -183,6 +187,7 @@ int main()
         // Update Entities
         entityManager.updateAllEntities();
         playerHealth.update();
+        score.update();
 
         // Draw
         drawingWindow.draw(backgroundImage1);
@@ -190,6 +195,7 @@ int main()
         entityManager.drawAllEntities(&drawingWindow);
 
         drawingWindow.draw(playerHealth);
+        drawingWindow.draw(score);
 
         // Debug
         entityManager.debugDraw(&drawingWindow);

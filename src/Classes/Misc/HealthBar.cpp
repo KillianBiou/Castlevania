@@ -16,7 +16,6 @@ HealthBar::HealthBar(std::string fontPath, Entity* entity): entity(entity) {
         this->hearts.push_back(sf::Sprite(this->heartTexture, filledHeartRect));
     }
 
-    this->text = sf::Text();
     this->text.setFont(this->font);
     this->text.setCharacterSize(63);
     this->text.setString(this->entity->getName());

@@ -53,6 +53,7 @@ protected:
 	bool blockageLeft;
 
 	bool toBeDeleted;
+	int scoreOnDeath;
 
 	float verticalVelocity;
 	float speedFactor;

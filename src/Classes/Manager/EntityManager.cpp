@@ -1,7 +1,7 @@
 #include "EntityManager.h"
 #include "../Spawner/Spawner.h"
 
-EntityManager::EntityManager() {
+EntityManager::EntityManager(Score* score): score(score) {
 }
 
 std::vector<Entity*> EntityManager::detectCollision(sf::FloatRect boundary) {
@@ -60,6 +60,10 @@ void EntityManager::drawAllEntities(sf::RenderWindow* renderWindow) {
 	for (int i = 0; i < monstersList.size(); i++) {
 		renderWindow->draw(*monstersList.at(i));
 	}
+}
+
+void EntityManager::addScore(int amount) {
+    this->score->addScore(amount);
 }
 
 void EntityManager::debugDraw(sf::RenderWindow* renderWindow) {

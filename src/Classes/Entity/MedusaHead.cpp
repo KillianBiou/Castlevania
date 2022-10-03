@@ -6,6 +6,8 @@ MedusaHead::MedusaHead(std::string name, sf::Vector2f pos, const int* currentLev
 	this->hp = 1;
 	this->animator->setAnimations({ {IDLE, 1}, {DEATH, 0} });
 
+	this->scoreOnDeath = 50;
+
 	this->sinClock = sf::Clock();
 }
 

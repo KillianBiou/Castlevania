@@ -11,6 +11,8 @@ Entity::Entity(std::string texturePath, sf::Vector2f position, int sizeX, int si
     this->setTexture(this->texture);
     this->textureRect = sf::IntRect(0, 0, this->spriteSizeX, this->spriteSizeY);
 
+    this->scoreOnDeath = 0;
+
     this->animator = new Animator(this, this->frameDelay);
 
     this->blockageLeft = false;
@@ -152,6 +154,7 @@ void Entity::damageFlicker() {
 
 void Entity::die() {
     std::cout << "Death" << std::endl;
+    this->entityManager->addScore(this->scoreOnDeath);
     this->dead = true;
     this->animator->playAnimation(DEATH);
 }
