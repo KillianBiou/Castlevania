@@ -19,6 +19,7 @@ Entity::Entity(std::string texturePath, sf::Vector2f position, int sizeX, int si
     this->gravityFactor = .055f;
     this->side = RIGHT;
     this->freeze = false;
+    this->isHurt = false;
     this->affectedByGravity = true;
 
     this->setOrigin(sizeX / 2, sizeY / 2);
@@ -133,11 +134,23 @@ void Entity::takeDamage(int amount) {
     }
     else {
         this->animator->playAnimation(HURT);
+        this->damageFlicker();
     }
 }
 
+void Entity::damageFlicker() {
+    this->isHurt = !this->isHurt;
+    if (this->isHurt) {
+        this->setColor(sf::Color::Red);
+    }
+    else {
+        this->setColor(sf::Color::White);
+    }
+}
+
+
 void Entity::die() {
-    std::cout << "Deatr" << std::endl;
+    std::cout << "Death" << std::endl;
     this->dead = true;
     this->animator->playAnimation(DEATH);
 }
@@ -172,12 +185,8 @@ void Entity::setHorizontalMovement(MoveDirection direction) {
     if (!this->freeze) {
         this->moveDirection = direction;
         if ((direction == RIGHT) || (direction == LEFT)) {
-            this->animator->playAnimation(RUNNING);
             this->side = direction;
             this->setScale(side, 1.f);
-        }
-        else {
-            this->animator->playAnimation(IDLE);
         }
     }
 }
@@ -192,14 +201,6 @@ void Entity::setVerticalMovement(MoveDirection direction) {
 }
 
 void Entity::setIsGrounded(bool state) {
-    if (state == true && this->isGrounded == false) {
-        this->animator->lockAnimation(false);
-        this->animator->playAnimation(IDLE);
-    }
-    else if (state == false && this->isGrounded == true) {
-        this->animator->playAnimation(JUMPING);
-        this->animator->lockAnimation(true);
-    }
     this->isGrounded = state;
 }
 

@@ -13,7 +13,7 @@ Player::Player(std::string texturePath, sf::Vector2f pos, int frameDelay, const 
 
 	this->maxHp = 5;
 	this->hp = this->maxHp;
-	this->name = "Player";
+	this->name = "Belmon";
 
 	this->invulnerabilityClock = sf::Clock();
 	this->invulnerabilityTime = 1000.f;
@@ -30,14 +30,10 @@ void const Player::attack(bool advance) {
 		return;
 	}
 	if (((!advance && this->weapon->getCurrentPhase() == 0) || advance)) {
-		if (!this->isGrounded) {
-			this->animator->lockAnimation(false);
-		}
 		switch (this->weapon->getCurrentPhase()) {
 		case 0:
-			this->animator->playAnimation(ATTACK);
+			this->isAttacking = true;
 			this->freeze = true;
-			this->animator->lockAnimation(true);
 			this->weapon->phase0(this->side == LEFT ? false : true);
 			this->weapon->setPosition(this->getPosition().x - this->spriteSizeX / 2.f + 64, this->getPosition().y - this->spriteSizeY / 2.f);
 			if (this->side == RIGHT) {
@@ -59,8 +55,6 @@ void const Player::attack(bool advance) {
 		case 3:
 			this->weapon->phase3(this->side == LEFT ? false : true);
 			this->freeze = false;
-			this->animator->lockAnimation(false);
-			this->animator->playAnimation(IDLE);
 			this->setHorizontalMovement(NONE);
 			this->weapon->move(176.f * this->side * -1, 0.f);
 			this->weaponPositionModifier.x += 176.f * this->side * -1;
@@ -69,8 +63,7 @@ void const Player::attack(bool advance) {
 				std::cout << "Hit : " << entity->getName() << std::endl;
 				entity->takeDamage(this->weapon->getDamage());
 			}
-
-
+			this->isAttacking = false;
 			break;
 		}
 	}
@@ -84,23 +77,34 @@ void Player::update() {
 
 void Player::updateAnim() {
 	this->debugAnim = "IDLE";
+	Animation tempAnim = IDLE;
 	if(this->moveDirection != NONE){
 		this->debugAnim = "RUNNING";
+		tempAnim = RUNNING;
 	}
 	if (this->verticalVelocity != 0) {
 		this->debugAnim = "JUMPING";
+		tempAnim = JUMPING;
+	}
+	if (this->isHurt) {
+		this->debugAnim = "HURT";
+		tempAnim = HURT;
+	}
+	if (this->isAttacking) {
+		this->debugAnim = "ATTACKING";
+		tempAnim = ATTACK;
 	}
 	if (this->hp <= 0) {
 		this->debugAnim = "DEATH";
+		tempAnim = DEATH;
 	}
 
-	std::cout << this->debugAnim << std::endl;
+	this->animator->playAnimation(tempAnim);
 }
 
 void Player::takeDamage(int amount) {
 	if (!this->isInvulnerable()) {
 		Entity::takeDamage(amount);
-		this->animator->lockAnimation(true);
 		invulnerabilityClock.restart();
 	}
 }
@@ -131,6 +135,7 @@ bool Player::isInvulnerable() {
 }
 
 const void Player::taskDeletion() {
+	this->weapon->setTextureRect(sf::IntRect(0, 0, 0, 0));
 	this->freeze = true;
 	this->dead = true;
 }

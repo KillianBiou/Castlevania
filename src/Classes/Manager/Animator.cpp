@@ -26,9 +26,7 @@ void Animator::animate() {
 			this->entity->attack(true);
 		}
 		if (this->currentAnimation == HURT) {
-			this->lockAnimation(false);
-			this->entity->setColor(sf::Color::White);
-			this->playAnimation(IDLE);
+			this->entity->damageFlicker();
 		}
 		if (this->currentAnimation == DEATH) {
 			this->entity->taskDeletion();
@@ -57,13 +55,8 @@ void Animator::animate() {
 
 void Animator::playAnimation(Animation animation) {
 	//std::cout << animation << std::endl;
-	if (this->currentAnimation == ATTACK && this->entity->getFreeze()) {
-		return;
-	}
-	if (animation == HURT) {
-		this->entity->setColor(sf::Color::Red);
-	}
-	if (animation != this->currentAnimation && !lock) {
+	if (animation != this->currentAnimation) {
+		std::cout << animation << std::endl;
 		this->animationClock.restart();
 		this->currentAnimation = animation;
 		this->spriteRect.top = this->entity->getSpriteSizeY() * this->currentAnimation;

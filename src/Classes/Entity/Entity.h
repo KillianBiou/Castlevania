@@ -60,6 +60,7 @@ protected:
 	bool isGrounded;
 	bool freeze;
 	bool isAttack;
+	bool isHurt;
 	bool affectedByGravity;
 
 	bool dead = false;
@@ -87,6 +88,7 @@ public:
 
 	virtual void const attack(bool advance) = 0;
 	void takeDamage(int amount);
+	void damageFlicker();
 
 	int getSpriteSizeX();
 	int getSpriteSizeY();
