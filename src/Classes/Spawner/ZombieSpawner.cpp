@@ -3,8 +3,6 @@
 ZombieSpawner::ZombieSpawner(sf::Vector2f pos, const int* level, const int xSize, float speedFactor, float distToSpawn, EntityManager* entityManager, sf::View* view) : Spawner(pos, level, xSize, entityManager), speedFactor(speedFactor), view(view), distToSpawn(distToSpawn) {
 	this->entityManager->addSpawner(this);
 
-	srand(time(NULL));
-
 	this->timeForRespawn = 1000.f;
 
 	this->minX = 0;

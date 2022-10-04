@@ -3,8 +3,10 @@
 #include "../Entity/Monster.h"
 #include "../Entity/MedusaHead.h"
 #include "../Entity/Player.h"
+#include "../Entity/Skeleton.h"
 #include "../Entity/Zombie.h"
 #include "../Misc/Score.h"
+#include "../Projectiles/Projectile.h"
 #include <vector>
 
 template<typename Base, typename T>
@@ -19,24 +21,33 @@ class EntityManager
 private:
 	Player* player;
 	Score* score;
+	std::vector<Projectile*> projectileList;
 	std::vector<Monster*> monstersList;
 	std::vector<Spawner*> spawnerList;
+
+	sf::View* view;
 
 	void debugDrawPlayer(sf::RenderWindow* renderWindow);
 	void debugDrawMonsters(sf::RenderWindow* renderWindow);
 
 public:
-	EntityManager(Score* score);
-	std::vector<Entity*> detectCollision(sf::FloatRect boundary);
+	EntityManager(Score* score, sf::View* view);
+	std::vector<Entity*> detectCollisionMonster(sf::FloatRect boundary);
+	std::vector<Projectile*> detectCollisionProjectile(sf::FloatRect boundary);
 
 	void setPlayer(Player* player);
 	void addSpawner(Spawner* spawner);
 	void addMonster(Monster* monster);
+	void addProjectile(Projectile* projectile);
 	void removeMonster(Monster* monster);
+	void removeProjectile(Projectile* projectile);
 
 	void drawAllEntities(sf::RenderWindow* renderWindow);
 	void updateAllEntities();
 
+	void clearOutOfBoundsProjectiles();
+
+	sf::Vector2f playerPosition();
 	float xDistToPlayer(float xPos);
 	void addScore(int amount);
 

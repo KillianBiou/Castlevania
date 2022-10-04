@@ -1,9 +1,11 @@
-Systeme HP - Programmation V, HUD V
+HUD
+	- HP V
+	- Score V
 
 Mob V
 	- MedusaHead V
 	- Zombie V
-	- Squelette X
+	- Squelette V
 
 Boss
 	- Momie X
@@ -15,3 +17,5 @@ Collectibles
 	- Amélioration arme X
 
 Menu principal
+	- Nouvelle partie
+	- Quitter

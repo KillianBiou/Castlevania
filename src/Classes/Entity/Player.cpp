@@ -60,7 +60,7 @@ void const Player::attack(bool advance) {
 			this->weapon->move(176.f * this->side * -1, 0.f);
 			this->weaponPositionModifier.x += 176.f * this->side * -1;
 			
-			for (Entity* entity : this->entityManager->detectCollision(this->hitboxWeapon.getGlobalBounds())) {
+			for (Entity* entity : this->entityManager->detectCollisionMonster(this->hitboxWeapon.getGlobalBounds())) {
 				std::cout << "Hit : " << entity->getName() << std::endl;
 				entity->takeDamage(this->weapon->getDamage());
 			}

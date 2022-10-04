@@ -6,9 +6,11 @@
 #include "Classes/Entity/Monster.h"
 #include "Classes/Entity/MedusaHead.h"
 #include "Classes/Entity/Zombie.h"
+#include "Classes/Entity/Skeleton.h"
 #include "Classes/Manager/EntityManager.h"
 #include "Classes/Spawner/MedusaHeadSpawner.h"
 #include "Classes/Spawner/ZombieSpawner.h"
+#include "Classes/Spawner/SkeletonSpawner.h"
 #include "Classes/Misc/HealthBar.h"
 #include "Classes/Misc/Score.h"
 #include <algorithm>
@@ -74,7 +76,7 @@ int main()
 
     Score score("font/Pixel.ttf");
 
-    EntityManager entityManager(&score);
+    EntityManager entityManager(&score, &view);
 
     Player player("images/Belmon.png", sf::Vector2f(256, 1080), 150, level, X_SIZE, 5.f, 15.f, &entityManager);
 
@@ -83,7 +85,9 @@ int main()
     MedusaHeadSpawner ms3(sf::Vector2f(800, 600), level, X_SIZE, 7.f, 5.f, 7.f, &entityManager, &view);
     MedusaHeadSpawner ms4(sf::Vector2f(800, 300), level, X_SIZE, 3.f, 3.f, 3.f, &entityManager, &view);
 
-    ZombieSpawner zs1(sf::Vector2f(1200, 1080), level, X_SIZE, 3.f, 500.f, &entityManager, &view);
+    SkeletonSpawner sks1(sf::Vector2f(800, 1080), level, X_SIZE, 1.f, 500, 2500, &entityManager, &view);
+
+    //ZombieSpawner zs1(sf::Vector2f(1200, 1080), level, X_SIZE, 3.f, 500.f, &entityManager, &view);
     //ZombieSpawner zs2(sf::Vector2f(1000, 1080), level, X_SIZE, 4.f, 200.f, &entityManager, &view);
     //ZombieSpawner zs3(sf::Vector2f(1500, 1080), level, X_SIZE, 7.f, 200.f, &entityManager, &view);
     //ZombieSpawner zs4(sf::Vector2f(2000, 1080), level, X_SIZE, 3.f, 200.f, &entityManager, &view);
@@ -176,7 +180,6 @@ int main()
             }
         }
 
-        std::cout << entityManager.xDistToPlayer(zs1.getPosition().x) << std::endl;
         // Update Camera
         view = sf::View(viewArea);
         float xPos = clip(player.getPosition().x, 0 + view.getSize().x / 2, X_SIZE * 64 - view.getSize().x / 2);

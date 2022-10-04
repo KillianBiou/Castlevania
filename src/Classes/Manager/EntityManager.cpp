@@ -2,10 +2,10 @@
 #include "../Spawner/Spawner.h"
 
 
-EntityManager::EntityManager(Score* score): score(score) {
+EntityManager::EntityManager(Score* score, sf::View* view): score(score), view(view) {
 }
 
-std::vector<Entity*> EntityManager::detectCollision(sf::FloatRect boundary) {
+std::vector<Entity*> EntityManager::detectCollisionMonster(sf::FloatRect boundary) {
 	std::vector<Entity*> collidedList = std::vector<Entity*>();
 	for (int i = 0; i < this->monstersList.size(); i++) {
 		Monster* currentMonster = this->monstersList.at(i);
@@ -15,6 +15,18 @@ std::vector<Entity*> EntityManager::detectCollision(sf::FloatRect boundary) {
 	}
 
 	return collidedList;
+}
+
+std::vector<Projectile*> EntityManager::detectCollisionProjectile(sf::FloatRect boundary) {
+    std::vector<Projectile*> collidedList = std::vector<Projectile*>();
+    for (int i = 0; i < this->projectileList.size(); i++) {
+        Projectile* currentProjectile = this->projectileList.at(i);
+        if (boundary.intersects(currentProjectile->getGlobalBounds())) {
+            collidedList.push_back(currentProjectile);
+        }
+    }
+
+    return collidedList;
 }
 
 void EntityManager::setPlayer(Player* player) {
@@ -29,8 +41,16 @@ void EntityManager::addSpawner(Spawner* spawner) {
     this->spawnerList.push_back(spawner);
 }
 
+void EntityManager::addProjectile(Projectile* projectile) {
+    this->projectileList.push_back(projectile);
+}
+
 void EntityManager::removeMonster(Monster* monster) {
     this->monstersList.erase(std::remove(this->monstersList.begin(), this->monstersList.end(), monster), this->monstersList.end());
+}
+
+void EntityManager::removeProjectile(Projectile* projectile) {
+    this->projectileList.erase(std::remove(this->projectileList.begin(), this->projectileList.end(), projectile), this->projectileList.end());
 }
 
 void EntityManager::updateAllEntities() {
@@ -43,6 +63,9 @@ void EntityManager::updateAllEntities() {
         else if (instanceof<Zombie>(currentMonster)) {
             ((Zombie*)currentMonster)->update();
         }
+        else if (instanceof<Skeleton>(currentMonster)) {
+            ((Skeleton*)currentMonster)->update();
+        }
         else {
             currentMonster->update();
         }
@@ -50,12 +73,37 @@ void EntityManager::updateAllEntities() {
     for (Spawner* spawner : this->spawnerList) {
         spawner->update();
     }
+    this->clearOutOfBoundsProjectiles();
+    for (Projectile* projectile : projectileList) {
+        projectile->update();
+    }
     if (!player->isInvulnerable()) {
-        for (Entity* entity : this->detectCollision(player->getGlobalBounds())) {
+        for (Entity* entity : this->detectCollisionMonster(player->getGlobalBounds())) {
+            player->takeDamage(1);
+            //std::cout << "Player collide with : " << entity->getName() << std::endl;
+        }
+        for (Projectile* projectile : this->detectCollisionProjectile(player->getGlobalBounds())) {
             player->takeDamage(1);
             //std::cout << "Player collide with : " << entity->getName() << std::endl;
         }
     }
+}
+
+void EntityManager::clearOutOfBoundsProjectiles() {
+    float xMin = this->view->getCenter().x - this->view->getSize().x / 2;
+    float xMax = xMin + this->view->getSize().x;
+    float yMin = this->view->getCenter().y - this->view->getSize().y / 2;
+    float yMax = yMin + this->view->getSize().y;
+
+    sf::FloatRect tempCollider(sf::Vector2f(xMin, yMin), sf::Vector2f(this->view->getSize().x, this->view->getSize().y));
+    for (Projectile* projectile : this->projectileList) {
+        if (!projectile->getGlobalBounds().intersects(tempCollider)) {
+            Projectile* temp = projectile;
+            this->removeProjectile(projectile);
+            delete temp;
+        }
+    }
+
 }
 
 void EntityManager::drawAllEntities(sf::RenderWindow* renderWindow) {
@@ -64,6 +112,16 @@ void EntityManager::drawAllEntities(sf::RenderWindow* renderWindow) {
 	for (int i = 0; i < monstersList.size(); i++) {
 		renderWindow->draw(*monstersList.at(i));
 	}
+    for (int i = 0; i < projectileList.size(); i++) {
+        renderWindow->draw(*projectileList.at(i));
+    }
+    for (Projectile* projectile : projectileList) {
+        renderWindow->draw(*projectile);
+    }
+}
+
+sf::Vector2f EntityManager::playerPosition() {
+    return this->player->getPosition();
 }
 
 float EntityManager::xDistToPlayer(float xPos) {

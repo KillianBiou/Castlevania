@@ -17,7 +17,7 @@ void Zombie::update() {
 	if (!this->dead) {
 		this->animator->animate();
 	}
-		if (this->hp == 1 && !doubleSpeed) {
+	if (this->hp == 1 && !doubleSpeed) {
 		this->speedFactor *= 1.25f;
 		this->doubleSpeed = true;
 	}
