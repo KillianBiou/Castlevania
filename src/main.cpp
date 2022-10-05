@@ -13,8 +13,8 @@
 #include "Classes/Spawner/SkeletonSpawner.h"
 #include "Classes/Misc/HealthBar.h"
 #include "Classes/Misc/Score.h"
-#include "Classes/Collectible/Collectible.h"
 #include "Classes/Collectible/Heart.h"
+#include "Classes/Collectible/HPUp.h"
 #include <algorithm>
 
 float clip(float n, float lower, float upper) {
@@ -95,6 +95,10 @@ int main()
     //ZombieSpawner zs4(sf::Vector2f(2000, 1080), level, X_SIZE, 3.f, 200.f, &entityManager, &view);
 
     HealthBar playerHealth("font/Pixel.ttf", &player);
+
+    HPUp collectible(level, X_SIZE);
+    collectible.setPosition(player.getPosition() + sf::Vector2f(100.f, 0.f));
+    entityManager.addCollectible(&collectible);
 
     Tilemap map;
     map.load("images/Platform.png", 64, level, X_SIZE, Y_SIZE);
@@ -208,6 +212,7 @@ int main()
 
         drawingWindow.draw(playerHealth);
         drawingWindow.draw(score);
+        drawingWindow.draw(collectible);
 
         // Debug
         entityManager.debugDraw(&drawingWindow);

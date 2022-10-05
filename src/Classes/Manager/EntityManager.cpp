@@ -115,6 +115,10 @@ void EntityManager::updateAllEntities() {
             ((Heart*)collectible)->onPickup(this->player);
             this->removeCollectible(collectible);
         }
+        if (instanceof<HPUp>(collectible)) {
+            ((HPUp*)collectible)->onPickup(this->player);
+            this->removeCollectible(collectible);
+        }
     }
 }
 

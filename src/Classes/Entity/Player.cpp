@@ -116,6 +116,13 @@ void Player::addHp(int amount) {
 	}
 }
 
+void Player::addMaxHp(int amount) {
+	if (this->maxHp + amount <= 10) {
+		this->maxHp += amount;
+	}
+	this->hp = this->maxHp;
+}
+
 void Player::updateHitboxWeapon() {
 	if (side == RIGHT) {
 		this->hitboxWeapon.setPosition(this->getPosition() + sf::Vector2f(this->spriteSizeX / 2.f, -24.f));

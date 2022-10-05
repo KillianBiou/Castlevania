@@ -9,6 +9,7 @@
 #include "../Projectiles/Projectile.h"
 #include "../Collectible/Collectible.h"
 #include "../Collectible/Heart.h"
+#include "../Collectible/HPUp.h"
 #include <vector>
 
 template<typename Base, typename T>
@@ -34,6 +35,7 @@ private:
 	void debugDrawMonsters(sf::RenderWindow* renderWindow);
 
 public:
+
 	EntityManager(Score* score, sf::View* view);
 	std::vector<Entity*> detectCollisionMonster(sf::FloatRect boundary);
 	std::vector<Projectile*> detectCollisionProjectile(sf::FloatRect boundary);

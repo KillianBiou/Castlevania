@@ -22,6 +22,9 @@ HealthBar::HealthBar(std::string fontPath, Entity* entity): entity(entity) {
 }
 
 void HealthBar::updateHeart() {
+    while (this->hearts.size() < this->entity->getMaxHp()) {
+        this->hearts.push_back(sf::Sprite(this->heartTexture, filledHeartRect));
+    }
     for (int i = 0; i < this->hearts.size(); i++) {
         sf::Sprite* currentSprite = &hearts.at(i);
         if (i < this->entity->getHp()) {

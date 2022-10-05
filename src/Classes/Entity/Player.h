@@ -32,6 +32,7 @@ public:
 	void takeDamage(int amount);
 	
 	void addHp(int amount);
+	void addMaxHp(int amount);
 
 	Weapon* getWeapon();
 	sf::RectangleShape gethitboxWeapon();
