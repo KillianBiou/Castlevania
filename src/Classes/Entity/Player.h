@@ -30,6 +30,8 @@ public:
 	void const attack(bool advance);
 	void const taskDeletion();
 	void takeDamage(int amount);
+	
+	void addHp(int amount);
 
 	Weapon* getWeapon();
 	sf::RectangleShape gethitboxWeapon();

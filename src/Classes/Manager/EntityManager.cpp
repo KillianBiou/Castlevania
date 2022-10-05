@@ -29,6 +29,18 @@ std::vector<Projectile*> EntityManager::detectCollisionProjectile(sf::FloatRect 
     return collidedList;
 }
 
+std::vector<Collectible*> EntityManager::detectCollisionCollectibles(sf::FloatRect boundary) {
+    std::vector<Collectible*> collidedList = std::vector<Collectible*>();
+    for (int i = 0; i < this->collectibleList.size(); i++) {
+        Collectible* currentCollectible = this->collectibleList.at(i);
+        if (boundary.intersects(currentCollectible->getGlobalBounds())) {
+            collidedList.push_back(currentCollectible);
+        }
+    }
+
+    return collidedList;
+}
+
 void EntityManager::setPlayer(Player* player) {
 	this->player = player;
 }
@@ -41,6 +53,10 @@ void EntityManager::addSpawner(Spawner* spawner) {
     this->spawnerList.push_back(spawner);
 }
 
+void EntityManager::addCollectible(Collectible* collectible) {
+    this->collectibleList.push_back(collectible);
+}
+
 void EntityManager::addProjectile(Projectile* projectile) {
     this->projectileList.push_back(projectile);
 }
@@ -51,6 +67,10 @@ void EntityManager::removeMonster(Monster* monster) {
 
 void EntityManager::removeProjectile(Projectile* projectile) {
     this->projectileList.erase(std::remove(this->projectileList.begin(), this->projectileList.end(), projectile), this->projectileList.end());
+}
+
+void EntityManager::removeCollectible(Collectible* collectible) {
+    this->collectibleList.erase(std::remove(this->collectibleList.begin(), this->collectibleList.end(), collectible), this->collectibleList.end());
 }
 
 void EntityManager::updateAllEntities() {
@@ -73,6 +93,9 @@ void EntityManager::updateAllEntities() {
     for (Spawner* spawner : this->spawnerList) {
         spawner->update();
     }
+    for (Collectible* collectible : this->collectibleList) {
+        collectible->update();
+    }
     this->clearOutOfBoundsProjectiles();
     for (Projectile* projectile : projectileList) {
         projectile->update();
@@ -85,6 +108,12 @@ void EntityManager::updateAllEntities() {
         for (Projectile* projectile : this->detectCollisionProjectile(player->getGlobalBounds())) {
             player->takeDamage(1);
             //std::cout << "Player collide with : " << entity->getName() << std::endl;
+        }
+    }
+    for (Collectible* collectible : this->detectCollisionCollectibles(player->getGlobalBounds())) {
+        if (instanceof<Heart>(collectible)) {
+            ((Heart*)collectible)->onPickup(this->player);
+            this->removeCollectible(collectible);
         }
     }
 }
@@ -115,8 +144,11 @@ void EntityManager::drawAllEntities(sf::RenderWindow* renderWindow) {
     for (int i = 0; i < projectileList.size(); i++) {
         renderWindow->draw(*projectileList.at(i));
     }
-    for (Projectile* projectile : projectileList) {
-        renderWindow->draw(*projectile);
+    for (int i = 0; i < projectileList.size(); i++) {
+        renderWindow->draw(*projectileList.at(i));
+    }
+    for (int i = 0; i < collectibleList.size(); i++) {
+        renderWindow->draw(*collectibleList.at(i));
     }
 }
 

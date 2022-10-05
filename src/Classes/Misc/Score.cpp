@@ -24,3 +24,7 @@ void Score::update() {
 void Score::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(this->text);
 }
+
+int Score::getScore() {
+    return this->score;
+}

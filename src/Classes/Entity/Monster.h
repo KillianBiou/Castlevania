@@ -1,6 +1,9 @@
 #pragma once
+#include <stdlib.h>
+#include <time.h> 
 #include "Entity.h"
 #include "../Manager/Animator.h"
+#include "../Collectible/Heart.h"
 
 class Spawner;
 

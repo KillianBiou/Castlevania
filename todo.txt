@@ -9,13 +9,13 @@ Mob V
 
 Boss
 	- Momie X
-	- DraculaX
+	- Dracula X
 
 Collectibles
-	- Coeur / Heal X
-	- HP up X
-	- Amélioration arme X
+	- Coeur / Heal V -> random on kill
+	- HP up X -> drop at x score
+	- Amélioration arme X -> drop at x score
 
 Menu principal
 	- Nouvelle partie
-	- Quitter
+	- Quitter 
