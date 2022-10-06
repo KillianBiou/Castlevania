@@ -11,7 +11,7 @@ Monster::Monster(std::string texturePath, sf::Vector2f pos, int sizeX, int sizeY
 	this->name = name;
 	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 3}, {JUMPING, 1}, {ATTACK, 3}, {HURT, 2}, {DEATH, 4} });
 
-	this->specialDrop = true;
+	this->specialDrop = false;
 
 	this->side = RIGHT;
 }

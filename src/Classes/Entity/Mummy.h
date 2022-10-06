@@ -10,15 +10,17 @@ private:
 	float timeBetweenAttacks;
 
 	sf::Texture projectileTexture;
+	bool enraged = false;
 
 	sf::Clock attackClock;
+
+	void enrage();
+	void animate();
+	void goToward();
 
 public:
 	Mummy(sf::Vector2f pos, const int* currentLevel, const int levelXSize, float speedFactor, EntityManager* entityManager);
 	const void update();
-	void goToward();
-
-	void animate();
 
 	const void taskDeletion();
 	~Mummy();
