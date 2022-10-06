@@ -3,7 +3,7 @@
 #include "../Manager/EntityManager.h"
 
 Player::Player(std::string texturePath, sf::Vector2f pos, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager) : Entity(texturePath, pos, 64, 128, frameDelay, currentLevel, levelXSize, speedFactor, jumpFactor, entityManager) {
-	this->weapon = new Weapon("images/Whip.png", 1, 250);
+	this->weapon = new Weapon("images/Whip1.png", 1, 400);
 	this->timePerAttack = this->weapon->getTimePerAttack();
 	this->spriteSizeXAttack1 = 128;
 	this->spriteSizeYAttack1 = 128;
@@ -108,6 +108,12 @@ void Player::takeDamage(int amount) {
 		Entity::takeDamage(amount);
 		invulnerabilityClock.restart();
 	}
+}
+
+void Player::changeWeapon(Weapon* weapon) {
+	delete this->weapon;
+	this->weapon = weapon;
+	this->timePerAttack = weapon->getTimePerAttack();
 }
 
 void Player::addHp(int amount) {

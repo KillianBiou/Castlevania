@@ -9,8 +9,8 @@ Collectible::Collectible(std::string texturePath, sf::IntRect textureRect, const
 }
 
 void Collectible::moveGroundedPoint() {
-    this->groundedPoint1 = this->getPosition() + sf::Vector2f(-(this->getTextureRect().width / 5.f) * 2.f, this->getTextureRect().height);
-    this->groundedPoint2 = this->getPosition() + sf::Vector2f((this->getTextureRect().width / 5.f) * 2.f, this->getTextureRect().height);
+    this->groundedPoint1 = this->getPosition() + sf::Vector2f(-(this->getTextureRect().width / 5.f) * 2.f, this->getTextureRect().height * this->getScale().y);
+    this->groundedPoint2 = this->getPosition() + sf::Vector2f((this->getTextureRect().width / 5.f) * 2.f, this->getTextureRect().height * this->getScale().y);
 }
 
 void Collectible::checkGrounded() {

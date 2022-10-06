@@ -118,14 +118,16 @@ void EntityManager::updateAllEntities() {
         }
     }
     for (Collectible* collectible : this->detectCollisionCollectibles(player->getGlobalBounds())) {
-        if (instanceof<Heart>(collectible)) {
+        /*if (instanceof<Heart>(collectible)) {
             ((Heart*)collectible)->onPickup(this->player);
             this->removeCollectible(collectible);
         }
         if (instanceof<HPUp>(collectible)) {
             ((HPUp*)collectible)->onPickup(this->player);
             this->removeCollectible(collectible);
-        }
+        }*/
+        collectible->onPickup(this->player);
+        this->removeCollectible(collectible);
     }
 }
 

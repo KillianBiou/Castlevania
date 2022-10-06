@@ -34,6 +34,8 @@ public:
 	void addHp(int amount);
 	void addMaxHp(int amount);
 
+	void changeWeapon(Weapon* weapon);
+
 	Weapon* getWeapon();
 	sf::RectangleShape gethitboxWeapon();
 	bool isInvulnerable();

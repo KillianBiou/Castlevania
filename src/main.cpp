@@ -15,6 +15,7 @@
 #include "Classes/Misc/Score.h"
 #include "Classes/Collectible/Heart.h"
 #include "Classes/Collectible/HPUp.h"
+#include "Classes/Collectible/WeaponUpgrade.h"
 #include "Classes/Manager/GameManager.h"
 #include <algorithm>
 
@@ -98,9 +99,12 @@ int main()
 
     HealthBar playerHealth("font/Pixel.ttf", &player);
 
-    HPUp collectible(level, X_SIZE);
+    WeaponUpgrade collectible(level, X_SIZE, 1);
     collectible.setPosition(player.getPosition() + sf::Vector2f(100.f, 0.f));
     entityManager.addCollectible(&collectible);
+    WeaponUpgrade collectible2(level, X_SIZE, 2);
+    collectible2.setPosition(player.getPosition() + sf::Vector2f(300.f, 0.f));
+    entityManager.addCollectible(&collectible2);
 
     Tilemap map;
     map.load("images/Platform.png", 64, level, X_SIZE, Y_SIZE);
@@ -215,6 +219,7 @@ int main()
         drawingWindow.draw(playerHealth);
         drawingWindow.draw(score);
         drawingWindow.draw(collectible);
+        drawingWindow.draw(collectible2);
 
         // Debug
         entityManager.debugDraw(&drawingWindow);
