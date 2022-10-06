@@ -14,7 +14,7 @@ Boss
 Collectibles
 	- Coeur / Heal V -> random on kill V
 	- HP up V -> drop at x score V
-	- Amélioration arme X -> drop boss X
+	- Amélioration arme V -> drop boss X
 
 Menu principal
 	- Nouvelle partie
