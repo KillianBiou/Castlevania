@@ -12,9 +12,9 @@ Boss
 	- Dracula X
 
 Collectibles
-	- Coeur / Heal V -> random on kill
-	- HP up X -> drop at x score
-	- Amélioration arme X -> drop at x score
+	- Coeur / Heal V -> random on kill V
+	- HP up V -> drop at x score V
+	- Amélioration arme X -> drop boss X
 
 Menu principal
 	- Nouvelle partie

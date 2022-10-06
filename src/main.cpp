@@ -15,6 +15,7 @@
 #include "Classes/Misc/Score.h"
 #include "Classes/Collectible/Heart.h"
 #include "Classes/Collectible/HPUp.h"
+#include "Classes/Manager/GameManager.h"
 #include <algorithm>
 
 float clip(float n, float lower, float upper) {
@@ -78,7 +79,8 @@ int main()
 
     Score score("font/Pixel.ttf");
 
-    EntityManager entityManager(&score, &view);
+    GameManager gameManager(EASY);
+    EntityManager entityManager(&score, &view, &gameManager);
 
     Player player("images/Belmon.png", sf::Vector2f(256, 1080), 150, level, X_SIZE, 5.f, 15.f, &entityManager);
 

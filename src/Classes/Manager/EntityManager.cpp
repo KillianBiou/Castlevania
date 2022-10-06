@@ -2,7 +2,7 @@
 #include "../Spawner/Spawner.h"
 
 
-EntityManager::EntityManager(Score* score, sf::View* view): score(score), view(view) {
+EntityManager::EntityManager(Score* score, sf::View* view, GameManager* gameManager): score(score), view(view), gameManager(gameManager) {
 }
 
 std::vector<Entity*> EntityManager::detectCollisionMonster(sf::FloatRect boundary) {
@@ -39,6 +39,13 @@ std::vector<Collectible*> EntityManager::detectCollisionCollectibles(sf::FloatRe
     }
 
     return collidedList;
+}
+
+bool EntityManager::verifyScore() {
+    if (this->gameManager->isNextBuffReached(this->score->getScore())) {
+        return true;
+    }
+    return false;
 }
 
 void EntityManager::setPlayer(Player* player) {

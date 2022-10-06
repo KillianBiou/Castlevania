@@ -10,6 +10,7 @@
 #include "../Collectible/Collectible.h"
 #include "../Collectible/Heart.h"
 #include "../Collectible/HPUp.h"
+#include "GameManager.h"
 #include <vector>
 
 template<typename Base, typename T>
@@ -24,6 +25,7 @@ class EntityManager
 private:
 	Player* player;
 	Score* score;
+	GameManager* gameManager;
 	std::vector<Projectile*> projectileList;
 	std::vector<Monster*> monstersList;
 	std::vector<Spawner*> spawnerList;
@@ -36,7 +38,7 @@ private:
 
 public:
 
-	EntityManager(Score* score, sf::View* view);
+	EntityManager(Score* score, sf::View* view, GameManager* gameManager);
 	std::vector<Entity*> detectCollisionMonster(sf::FloatRect boundary);
 	std::vector<Projectile*> detectCollisionProjectile(sf::FloatRect boundary);
 	std::vector<Collectible*> detectCollisionCollectibles(sf::FloatRect boundary);
@@ -46,6 +48,8 @@ public:
 	void addMonster(Monster* monster);
 	void addProjectile(Projectile* projectile);
 	void addCollectible(Collectible* collectible);
+
+	bool verifyScore();
 
 	void removeMonster(Monster* monster);
 	void removeProjectile(Projectile* projectile);

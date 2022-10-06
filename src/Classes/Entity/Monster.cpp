@@ -18,16 +18,23 @@ void const Monster::drawChild(sf::RenderWindow* renderWindow) {
 
 }
 
-const void Monster::attack(bool advance) {
+void const Monster::attack(bool advance) {
 
 }
 
 Monster::~Monster() {
-	if (this->dead) {
-		if (rand() % 2 == 0) {
-			Collectible* temp = new Heart(this->currentLevel, this->levelXSize);
-			temp->setPosition(this->getPosition());
-			this->entityManager->addCollectible(temp);
+	if (this->entityManager->verifyScore()) {
+		Collectible* temp = new HPUp(this->currentLevel, this->levelXSize);
+		temp->setPosition(this->getPosition());
+		this->entityManager->addCollectible(temp);
+	}
+	else {
+		if (this->dead) {
+			if (rand() % 2 == 0) {
+				Collectible* temp = new Heart(this->currentLevel, this->levelXSize);
+				temp->setPosition(this->getPosition());
+				this->entityManager->addCollectible(temp);
+			}
 		}
 	}
 	this->entityManager->removeMonster(this);
