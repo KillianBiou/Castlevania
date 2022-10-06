@@ -11,6 +11,8 @@ Monster::Monster(std::string texturePath, sf::Vector2f pos, int sizeX, int sizeY
 	this->name = name;
 	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 3}, {JUMPING, 1}, {ATTACK, 3}, {HURT, 2}, {DEATH, 4} });
 
+	this->specialDrop = true;
+
 	this->side = RIGHT;
 }
 
@@ -23,17 +25,19 @@ void const Monster::attack(bool advance) {
 }
 
 Monster::~Monster() {
-	if (this->entityManager->verifyScore()) {
-		Collectible* temp = new HPUp(this->currentLevel, this->levelXSize);
-		temp->setPosition(this->getPosition());
-		this->entityManager->addCollectible(temp);
-	}
-	else {
-		if (this->dead) {
-			if (rand() % 2 == 0) {
-				Collectible* temp = new Heart(this->currentLevel, this->levelXSize);
-				temp->setPosition(this->getPosition());
-				this->entityManager->addCollectible(temp);
+	if (!this->specialDrop) {
+		if (this->entityManager->verifyScore()) {
+			Collectible* temp = new HPUp(this->currentLevel, this->levelXSize);
+			temp->setPosition(this->getPosition());
+			this->entityManager->addCollectible(temp);
+		}
+		else {
+			if (this->dead) {
+				if (rand() % 2 == 0) {
+					Collectible* temp = new Heart(this->currentLevel, this->levelXSize);
+					temp->setPosition(this->getPosition());
+					this->entityManager->addCollectible(temp);
+				}
 			}
 		}
 	}

@@ -276,5 +276,4 @@ std::string Entity::getName() {
 }
 
 Entity::~Entity() {
-    delete this->animator;
 }

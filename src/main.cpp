@@ -7,6 +7,7 @@
 #include "Classes/Entity/MedusaHead.h"
 #include "Classes/Entity/Zombie.h"
 #include "Classes/Entity/Skeleton.h"
+#include "Classes/Entity/Mummy.h"
 #include "Classes/Manager/EntityManager.h"
 #include "Classes/Spawner/MedusaHeadSpawner.h"
 #include "Classes/Spawner/ZombieSpawner.h"
@@ -85,26 +86,28 @@ int main()
 
     Player player("images/Belmon.png", sf::Vector2f(256, 1080), 150, level, X_SIZE, 5.f, 15.f, &entityManager);
 
-    MedusaHeadSpawner ms1(sf::Vector2f(1200, 1080), level, X_SIZE, 6.f, 4.f, 7.f, &entityManager, &view);
-    MedusaHeadSpawner ms2(sf::Vector2f(800, 900), level, X_SIZE, 4.f, 6.f, 8.f, &entityManager, &view);
-    MedusaHeadSpawner ms3(sf::Vector2f(800, 600), level, X_SIZE, 7.f, 5.f, 7.f, &entityManager, &view);
-    MedusaHeadSpawner ms4(sf::Vector2f(800, 300), level, X_SIZE, 3.f, 3.f, 3.f, &entityManager, &view);
+    //MedusaHeadSpawner ms1(sf::Vector2f(1200, 1080), level, X_SIZE, 6.f, 4.f, 7.f, &entityManager, &view);
+    //MedusaHeadSpawner ms2(sf::Vector2f(800, 900), level, X_SIZE, 4.f, 6.f, 8.f, &entityManager, &view);
+    //MedusaHeadSpawner ms3(sf::Vector2f(800, 600), level, X_SIZE, 7.f, 5.f, 7.f, &entityManager, &view);
+    //MedusaHeadSpawner ms4(sf::Vector2f(800, 300), level, X_SIZE, 3.f, 3.f, 3.f, &entityManager, &view);
 
-    SkeletonSpawner sks1(sf::Vector2f(2000, 1080), level, X_SIZE, 1.f, 500, 2500, &entityManager, &view);
+    //SkeletonSpawner sks1(sf::Vector2f(2000, 1080), level, X_SIZE, 1.f, 500, 2500, &entityManager, &view);
 
-    ZombieSpawner zs1(sf::Vector2f(1000, 1080), level, X_SIZE, 3.f, 500.f, &entityManager, &view);
+    //ZombieSpawner zs1(sf::Vector2f(1000, 1080), level, X_SIZE, 3.f, 500.f, &entityManager, &view);
     //ZombieSpawner zs2(sf::Vector2f(1000, 1080), level, X_SIZE, 4.f, 200.f, &entityManager, &view);
     //ZombieSpawner zs3(sf::Vector2f(1500, 1080), level, X_SIZE, 7.f, 200.f, &entityManager, &view);
     //ZombieSpawner zs4(sf::Vector2f(2000, 1080), level, X_SIZE, 3.f, 200.f, &entityManager, &view);
 
+    Mummy mummy(sf::Vector2f(1000, 1080), level, X_SIZE, 3.f, &entityManager);
+
     HealthBar playerHealth("font/Pixel.ttf", &player);
 
-    WeaponUpgrade collectible(level, X_SIZE, 1);
+    /*WeaponUpgrade collectible(level, X_SIZE, 1);
     collectible.setPosition(player.getPosition() + sf::Vector2f(100.f, 0.f));
     entityManager.addCollectible(&collectible);
     WeaponUpgrade collectible2(level, X_SIZE, 2);
     collectible2.setPosition(player.getPosition() + sf::Vector2f(300.f, 0.f));
-    entityManager.addCollectible(&collectible2);
+    entityManager.addCollectible(&collectible2);*/
 
     Tilemap map;
     map.load("images/Platform.png", 64, level, X_SIZE, Y_SIZE);
@@ -218,8 +221,8 @@ int main()
 
         drawingWindow.draw(playerHealth);
         drawingWindow.draw(score);
-        drawingWindow.draw(collectible);
-        drawingWindow.draw(collectible2);
+        /*drawingWindow.draw(collectible);
+        drawingWindow.draw(collectible2);*/
 
         // Debug
         entityManager.debugDraw(&drawingWindow);

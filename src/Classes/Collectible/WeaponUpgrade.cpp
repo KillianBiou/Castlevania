@@ -11,6 +11,7 @@ WeaponUpgrade::WeaponUpgrade(const int* level, const int X_SIZE, int upgradeLeve
 		this->weapon = new Weapon("images/Whip3.png", 3, 150);
 		break;
 	default:
+		this->weapon = new Weapon("images/Whip2.png", 2, 250);
 		break;
 	}
 }

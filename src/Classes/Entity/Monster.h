@@ -12,6 +12,7 @@ class Monster: public Entity
 {
 protected:
 	Spawner* spawner;
+	bool specialDrop;
 
 public:
 	Monster(std::string texturePath, sf::Vector2f pos, int sizeX, int sizeY, std::string name, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager, Spawner* spawner);
