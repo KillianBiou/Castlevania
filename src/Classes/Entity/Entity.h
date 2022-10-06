@@ -86,7 +86,7 @@ public:
 	Entity(std::string texturePath, sf::Vector2f position, int sizeX, int sizeY, int frameDelay, const int* currentLevel, const int levelXSize,
 		   float speedFactor, float jumpFactor, EntityManager* entityManager);
 
-	void update();
+	void updateAll();
 	void moveCollisionPoint();
 
 	virtual void const attack(bool advance) = 0;

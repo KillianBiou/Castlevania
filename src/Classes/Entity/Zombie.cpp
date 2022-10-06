@@ -12,8 +12,8 @@ Zombie::Zombie(sf::Vector2f pos, const int* currentLevel, const int levelXSize, 
 	this->setHorizontalMovement(direction);
 }
 
-void Zombie::update() {
-	Monster::update();
+void const Zombie::update() {
+	this->updateAll();
 	if (!this->dead) {
 		this->animator->animate();
 	}

@@ -30,7 +30,7 @@ Entity::Entity(std::string texturePath, sf::Vector2f position, int sizeX, int si
     this->setPosition(position);
 }
 
-void Entity::update() {
+void Entity::updateAll() {
     this->applyGravity();
     this->moveCollisionPoint();
     this->checkCollision();

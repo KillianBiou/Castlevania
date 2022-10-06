@@ -11,7 +11,7 @@ MedusaHead::MedusaHead(std::string name, sf::Vector2f pos, const int* currentLev
 	this->sinClock = sf::Clock();
 }
 
-void MedusaHead::update() {
+const void MedusaHead::update() {
 	this->move(-this->speedFactor, std::sin(this->sinClock.getElapsedTime().asSeconds() * this->frequency) * this->amplitude);
 	this->animator->animate();
 }

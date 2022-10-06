@@ -1,7 +1,7 @@
 #pragma once
 #include "Monster.h"
 #include "../Manager/EntityManager.h"
-#include "../Projectiles/Projectile.h"
+#include "../Projectiles/ParabolicProjectile.h"
 
 
 class Skeleton: public Monster
@@ -19,7 +19,9 @@ private:
 	void goToward();
 public:
 	Skeleton(sf::Vector2f pos, const int* currentLevel, const int levelXSize, float speedFactor, float targetDistToPlayer, int attackCooldown, EntityManager* entityManager, Spawner* spawner);
-	void update();
+	
+	void const update();
+	
 	void animate();
 };
 

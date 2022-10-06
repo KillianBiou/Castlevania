@@ -20,7 +20,7 @@ Skeleton::Skeleton(sf::Vector2f pos, const int* currentLevel, const int levelXSi
 
 
 
-void Skeleton::update() {
+void const Skeleton::update() {
 	float distToPlayer = this->entityManager->xDistToPlayer(this->getPosition().x);
 	this->positionTarget = this->entityManager->playerPosition() + sf::Vector2f(distToPlayer < 0.f ? this->targetDistToPlayer : -this->targetDistToPlayer, 0.f);
 
@@ -36,15 +36,14 @@ void Skeleton::update() {
 	else {
 		this->moveDirection = NONE;
 	}
-	Monster::update();
+	this->updateAll();
 	if (!this->dead) {
 		this->animate();
 	}
 }
 
 void Skeleton::attack() {
-	std::cout << "attack" << std::endl;
-	currentProjectile = new Projectile(this->boneTexture, 64, 64, this->getPosition(), 0.5f, this->entityManager->xDistToPlayer(this->getPosition().x), 3);
+	currentProjectile = new ParabolicProjectile(this->boneTexture, 64, 64, this->getPosition(), 0.5f, this->entityManager->xDistToPlayer(this->getPosition().x), 3);
 	this->entityManager->addProjectile(currentProjectile);
 }
 

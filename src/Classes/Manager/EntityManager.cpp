@@ -83,7 +83,7 @@ void EntityManager::removeCollectible(Collectible* collectible) {
 void EntityManager::updateAllEntities() {
 	player->update();
 	for (int i = 0; i < monstersList.size(); i++) {
-        Monster* currentMonster = monstersList.at(i);
+        /*Monster* currentMonster = monstersList.at(i);
         if (instanceof<MedusaHead>(currentMonster)) {
             ((MedusaHead*)currentMonster)->update();
         }
@@ -95,7 +95,8 @@ void EntityManager::updateAllEntities() {
         }
         else {
             currentMonster->update();
-        }
+        }*/
+        monstersList.at(i)->update();
 	}
     for (Spawner* spawner : this->spawnerList) {
         spawner->update();
@@ -110,22 +111,12 @@ void EntityManager::updateAllEntities() {
     if (!player->isInvulnerable()) {
         for (Entity* entity : this->detectCollisionMonster(player->getGlobalBounds())) {
             player->takeDamage(1);
-            //std::cout << "Player collide with : " << entity->getName() << std::endl;
         }
         for (Projectile* projectile : this->detectCollisionProjectile(player->getGlobalBounds())) {
             player->takeDamage(1);
-            //std::cout << "Player collide with : " << entity->getName() << std::endl;
         }
     }
     for (Collectible* collectible : this->detectCollisionCollectibles(player->getGlobalBounds())) {
-        /*if (instanceof<Heart>(collectible)) {
-            ((Heart*)collectible)->onPickup(this->player);
-            this->removeCollectible(collectible);
-        }
-        if (instanceof<HPUp>(collectible)) {
-            ((HPUp*)collectible)->onPickup(this->player);
-            this->removeCollectible(collectible);
-        }*/
         collectible->onPickup(this->player);
         this->removeCollectible(collectible);
     }

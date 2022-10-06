@@ -1,29 +1,18 @@
 #include "Projectile.h"
 
-Projectile::Projectile(sf::Texture spritesheet, int xSize, int ySize, sf::Vector2f position, float gravity, float distance, int nbFrame) : spritesheet(spritesheet), nbFrame(nbFrame), xSize(xSize), ySize(ySize) {
+Projectile::Projectile(sf::Texture spritesheet, int xSize, int ySize, sf::Vector2f position, int nbFrame) : spritesheet(spritesheet), nbFrame(nbFrame), xSize(xSize), ySize(ySize) {
 	this->setPosition(position);
 	this->setTexture(this->spritesheet);
 	this->textureRect = sf::IntRect(0, 0, xSize, ySize);
-
-	this->gravity = gravity;
-	this->distance = distance;
-
-	this->yVelocity = -this->gravity * 35;
-	this->frameToGround = (2 * this->yVelocity) / this->gravity;
-	this->xVelocity = -(this->distance / this->frameToGround);
 }
 
-void Projectile::update() {
+const void Projectile::update() {
 	this->animate();
 	this->moveTick();
 }
 
-void Projectile::moveTick() {
-	this->move(xVelocity, yVelocity);
-	this->yVelocity += gravity;
-}
-
-void Projectile::animate() {
+const void Projectile::animate() {
+	std::cout << this->textureRect.left << ", " << this->textureRect.top << std::endl;
 	if (this->animationClock.getElapsedTime().asMilliseconds() > 100) {
 		if (this->textureRect.left == (this->nbFrame - 1) * this->xSize) {
 			this->textureRect.left = 0;
@@ -35,8 +24,4 @@ void Projectile::animate() {
 	}
 
 	this->setTextureRect(this->textureRect);
-}
-
-Projectile::~Projectile() {
-	std::cout << "destroyed" << std::endl;
 }
