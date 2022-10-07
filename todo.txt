@@ -8,13 +8,14 @@ Mob V
 	- Squelette V
 
 Boss
-	- Momie X
+	- Momie V
+	- Reaper X
 	- Dracula X
 
 Collectibles
 	- Coeur / Heal V -> random on kill V
 	- HP up V -> drop at x score V
-	- Amélioration arme V -> drop boss X
+	- Amélioration arme V -> drop boss V
 
 Menu principal
 	- Nouvelle partie

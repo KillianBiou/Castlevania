@@ -5,10 +5,9 @@ Animator::Animator(Entity* entity, int frameDelay): frameDelay(frameDelay) {
 	this->nbFrame = nbFrame;
 
 	this->animationClock = sf::Clock();
-	this->currentAnimation = IDLE;
 	this->currentFrame = 0;
 
-	this->spriteRect = sf::IntRect(0, entity->getSpriteSizeY(), entity->getSpriteSizeX(), entity->getSpriteSizeY());
+	this->spriteRect = sf::IntRect(0, 0, entity->getSpriteSizeX(), entity->getSpriteSizeY());
 	this->entity->setTextureRect(this->spriteRect);
 	this->lock = false;
 	this->isDead = false;

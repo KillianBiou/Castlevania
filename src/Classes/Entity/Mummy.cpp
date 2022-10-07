@@ -17,8 +17,14 @@ Mummy::Mummy(sf::Vector2f pos, const int* currentLevel, const int levelXSize, fl
 }
 
 const void Mummy::update() {
-	if (!this->enraged && this->hp <= this->maxHp / 2) {
-		this->enrage();
+	if (this->hp <= this->maxHp / 2) {
+		if (!this->isHurt)
+		{
+			this->setColor(sf::Color::Yellow);
+		}
+		if (!this->enraged) {
+			this->enrage();
+		}
 	}
 
 	this->updateAll();
@@ -49,7 +55,6 @@ void Mummy::animate() {
 		tempAnim = RUNNING;
 	}
 	if (this->isHurt) {
-		std::cout << "sdkz,efoe\n";
 		tempAnim = HURT;
 	}
 	if (this->hp <= 0) {

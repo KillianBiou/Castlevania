@@ -8,6 +8,7 @@
 #include "Classes/Entity/Zombie.h"
 #include "Classes/Entity/Skeleton.h"
 #include "Classes/Entity/Mummy.h"
+#include "Classes/Entity/Reaper.h"
 #include "Classes/Manager/EntityManager.h"
 #include "Classes/Spawner/MedusaHeadSpawner.h"
 #include "Classes/Spawner/ZombieSpawner.h"
@@ -18,6 +19,7 @@
 #include "Classes/Collectible/HPUp.h"
 #include "Classes/Collectible/WeaponUpgrade.h"
 #include "Classes/Manager/GameManager.h"
+#include "Classes/Projectiles/StraightProjectile.h"
 #include <algorithm>
 
 float clip(float n, float lower, float upper) {
@@ -86,21 +88,30 @@ int main()
 
     Player player("images/Belmon.png", sf::Vector2f(256, 1080), 150, level, X_SIZE, 5.f, 15.f, &entityManager);
 
-    MedusaHeadSpawner ms1(sf::Vector2f(1200, 1080), level, X_SIZE, 6.f, 4.f, 7.f, &entityManager, &view);
+    /*MedusaHeadSpawner ms1(sf::Vector2f(1200, 1080), level, X_SIZE, 6.f, 4.f, 7.f, &entityManager, &view);
     MedusaHeadSpawner ms2(sf::Vector2f(800, 900), level, X_SIZE, 4.f, 6.f, 8.f, &entityManager, &view);
     MedusaHeadSpawner ms3(sf::Vector2f(800, 600), level, X_SIZE, 7.f, 5.f, 7.f, &entityManager, &view);
-    MedusaHeadSpawner ms4(sf::Vector2f(800, 300), level, X_SIZE, 3.f, 3.f, 3.f, &entityManager, &view);
+    MedusaHeadSpawner ms4(sf::Vector2f(800, 300), level, X_SIZE, 3.f, 3.f, 3.f, &entityManager, &view);*/
 
     SkeletonSpawner sks1(sf::Vector2f(2000, 1080), level, X_SIZE, 1.f, 500, 2500, &entityManager, &view);
 
-    //ZombieSpawner zs1(sf::Vector2f(1000, 1080), level, X_SIZE, 3.f, 500.f, &entityManager, &view);
+    ZombieSpawner zs1(sf::Vector2f(1000, 1080), level, X_SIZE, 3.f, 500.f, &entityManager, &view);
     //ZombieSpawner zs2(sf::Vector2f(1000, 1080), level, X_SIZE, 4.f, 200.f, &entityManager, &view);
     //ZombieSpawner zs3(sf::Vector2f(1500, 1080), level, X_SIZE, 7.f, 200.f, &entityManager, &view);
     //ZombieSpawner zs4(sf::Vector2f(2000, 1080), level, X_SIZE, 3.f, 200.f, &entityManager, &view);
 
     Mummy mummy(sf::Vector2f(1000, 1080), level, X_SIZE, 1.f, &entityManager);
+    Reaper reaper(sf::Vector2f(2000, 1080), level, X_SIZE, 1.f, &entityManager);
 
     HealthBar playerHealth("font/Pixel.ttf", &player);
+
+    sf::Texture tex;
+    if (!tex.loadFromFile("images/Scythe.png")) {
+        std::cout << "Error while loading : " << "images/Scythe.png" << std::endl;
+    }
+
+    StraightProjectile a(tex, 64, 64, sf::Vector2f(256, 1080), 0.f, 4);
+    //entityManager.addProjectile(&a);
 
     /*WeaponUpgrade collectible(level, X_SIZE, 1);
     collectible.setPosition(player.getPosition() + sf::Vector2f(100.f, 0.f));
