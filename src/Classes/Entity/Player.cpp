@@ -12,7 +12,7 @@ Player::Player(std::string texturePath, sf::Vector2f pos, int frameDelay, const 
 
 	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 3}, {JUMPING, 1}, {ATTACK, 3}, {HURT, 2}, {DEATH, 4} });
 
-	this->maxHp = 5;
+	this->maxHp = 75;
 	this->hp = this->maxHp;
 	this->name = "Belmon";
 

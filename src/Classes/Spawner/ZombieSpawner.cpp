@@ -12,7 +12,6 @@ ZombieSpawner::ZombieSpawner(sf::Vector2f pos, const int* level, const int xSize
 void ZombieSpawner::spawnEntity() {
 	MoveDirection direction = RIGHT;
 	float xSpawn = this->minX;
-	std::cout << this->entityManager->xDistToPlayer(this->getPosition().x) << std::endl;
 
 	if (this->entityManager->xDistToPlayer(this->getPosition().x) < 0) {
 		direction = LEFT;

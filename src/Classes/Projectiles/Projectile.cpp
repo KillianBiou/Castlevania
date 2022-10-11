@@ -12,7 +12,6 @@ const void Projectile::update() {
 }
 
 const void Projectile::animate() {
-	std::cout << this->textureRect.left << ", " << this->textureRect.top << std::endl;
 	if (this->animationClock.getElapsedTime().asMilliseconds() > 100) {
 		if (this->textureRect.left == (this->nbFrame - 1) * this->xSize) {
 			this->textureRect.left = 0;

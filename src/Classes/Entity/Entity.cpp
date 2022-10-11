@@ -152,7 +152,6 @@ void Entity::damageFlicker() {
 
 
 void Entity::die() {
-    std::cout << "Death" << std::endl;
     this->entityManager->addScore(this->scoreOnDeath);
     this->dead = true;
     this->animator->playAnimation(DEATH);

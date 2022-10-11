@@ -164,6 +164,23 @@ float EntityManager::xDistToPlayer(float xPos) {
     return this->player->getPosition().x - xPos;
 }
 
+sf::View* EntityManager::getView() {
+    return this->view;
+}
+
+bool EntityManager::isOnScreen(sf::Vector2f pos) {
+    float xMin = this->view->getCenter().x - this->view->getSize().x / 2;
+    float xMax = xMin + this->view->getSize().x;
+    float yMin = this->view->getCenter().y - this->view->getSize().y / 2;
+    float yMax = yMin + this->view->getSize().y;
+    sf::FloatRect tempCollider(sf::Vector2f(xMin, yMin), sf::Vector2f(this->view->getSize().x, this->view->getSize().y));
+
+    if (!tempCollider.contains(pos)) {
+        return false;
+    }
+    return true;
+}
+
 void EntityManager::addScore(int amount) {
     this->score->addScore(amount);
 }

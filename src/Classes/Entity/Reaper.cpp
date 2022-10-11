@@ -6,6 +6,12 @@ Reaper::Reaper(sf::Vector2f pos, const int* currentLevel, const int levelXSize, 
 	this->animator->setAnimations({ {IDLE, 1}, {HURT, 2}, {DEATH, 3} });
 	this->animator->playAnimation(IDLE);
 
+	this->timeBetweenAttacks = 2000;
+	this->attackClock = sf::Clock();
+	this->touchdownCooldown = sf::Clock();
+
+	this->movementVector = sf::Vector2f(speedFactor, -speedFactor);
+
 	this->specialDrop = true;
 
 	if (!this->projectileTexture.loadFromFile("images/Scythe.png")) {
@@ -18,7 +24,49 @@ Reaper::Reaper(sf::Vector2f pos, const int* currentLevel, const int levelXSize, 
 const void Reaper::update() {
 	this->animate();
 	animator->animate();
-	//std::cout << this->getTextureRect().left << ", " << this->getTextureRect().top << std::endl;
+	this->moveCollisionPoint();
+
+	if (this->entityManager->xDistToPlayer(this->getPosition().x) < 1000) {
+		if (this->attackClock.getElapsedTime().asMilliseconds() >= this->timeBetweenAttacks) {
+			int direction = this->entityManager->xDistToPlayer(this->getPosition().x) < 0 ? -1 : 1;
+			StraightProjectile* temp = new StraightProjectile(this->projectileTexture, 64, 64, this->getPosition() + sf::Vector2f(0.f, -64.f), 5.f, this->entityManager->playerPosition(), 2);
+			this->entityManager->addProjectile(temp);
+			this->attackClock.restart();
+		}
+		if (touchdownCooldown.getElapsedTime().asMilliseconds() >= 5000 && this->entityManager->isOnScreen(this->getPosition())) {
+			this->checkCollision();
+			this->moveTick();
+		}
+	}
+}
+
+void Reaper::moveTick() {
+	this->move(this->movementVector);
+}
+
+void Reaper::checkCollision() {
+	sf::View* view = this->entityManager->getView();
+
+	if (!this->entityManager->isOnScreen(this->topBoundPoint) || !this->entityManager->isOnScreen(this->groundedPoint)) {
+		this->movementVector.y *= -1;
+	}
+	if (!this->entityManager->isOnScreen(this->rightBoundPointBis) || !this->entityManager->isOnScreen(this->leftBoundPointBis)) {
+		this->movementVector.x *= -1;
+	}
+
+	int xCollision = int(this->groundedPoint.x / 64);
+	int yCollision = int(this->groundedPoint.y / 64);
+	int xCollisionBis = int(this->groundedPointBis.x / 64);
+	int yCollisionBis = int(this->groundedPointBis.y / 64);
+	if ((this->currentLevel[xCollision + yCollision * levelXSize] != 0 && this->currentLevel[xCollisionBis + yCollisionBis * levelXSize] != 0) && this->isGrounded == false) {
+		this->movementVector.y *= -1;
+		this->touchdownCooldown.restart();
+		this->setPosition(this->getPosition().x, yCollision * 64 - spriteSizeY / 2.f);
+
+	}
+	else if ((this->currentLevel[xCollision + yCollision * levelXSize] == 0 && this->currentLevel[xCollisionBis + yCollisionBis * levelXSize] == 0) && this->isGrounded == true) {
+		this->setIsGrounded(false);
+	}
 }
 
 void Reaper::animate() {

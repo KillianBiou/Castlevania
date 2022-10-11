@@ -62,6 +62,8 @@ public:
 
 	sf::Vector2f playerPosition();
 	float xDistToPlayer(float xPos);
+	sf:: View* getView();
+	bool isOnScreen(sf::Vector2f pos);
 	void addScore(int amount);
 
 	void debugDraw(sf::RenderWindow* renderWindow);
