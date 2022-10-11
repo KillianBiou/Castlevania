@@ -19,6 +19,7 @@ inline bool instanceof(const T* ptr) {
 }
 
 class Spawner;
+class Camera;
 
 class EntityManager
 {
@@ -26,6 +27,8 @@ private:
 	Player* player;
 	Score* score;
 	GameManager* gameManager;
+	Camera* camera;
+
 	std::vector<Projectile*> projectileList;
 	std::vector<Monster*> monstersList;
 	std::vector<Spawner*> spawnerList;
@@ -38,7 +41,8 @@ private:
 
 public:
 
-	EntityManager(Score* score, sf::View* view, GameManager* gameManager);
+	EntityManager(Score* score, Camera* camera, GameManager* gameManager);
+
 	std::vector<Entity*> detectCollisionMonster(sf::FloatRect boundary);
 	std::vector<Projectile*> detectCollisionProjectile(sf::FloatRect boundary);
 	std::vector<Collectible*> detectCollisionCollectibles(sf::FloatRect boundary);
@@ -61,6 +65,7 @@ public:
 	void clearOutOfBoundsProjectiles();
 
 	sf::Vector2f playerPosition();
+	Player* getPlayer();
 	float xDistToPlayer(float xPos);
 	sf:: View* getView();
 	bool isOnScreen(sf::Vector2f pos);

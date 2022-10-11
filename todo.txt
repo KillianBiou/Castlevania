@@ -9,13 +9,17 @@ Mob V
 
 Boss
 	- Momie V
-	- Reaper X
+	- Reaper V
 	- Dracula X
 
 Collectibles
 	- Coeur / Heal V -> random on kill V
 	- HP up V -> drop at x score V
 	- Amélioration arme V -> drop boss V
+
+Camera 
+	- System focus
+		- Changer de focus en cours de jeu
 
 Menu principal
 	- Nouvelle partie

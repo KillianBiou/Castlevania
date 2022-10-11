@@ -91,6 +91,7 @@ public:
 
 	virtual void const attack(bool advance) = 0;
 	void takeDamage(int amount);
+	sf::Vector2f cameraTracking();
 	void damageFlicker();
 
 	int getSpriteSizeX();

@@ -1,8 +1,11 @@
 #include "EntityManager.h"
 #include "../Spawner/Spawner.h"
+#include "Camera.h"
 
 
-EntityManager::EntityManager(Score* score, sf::View* view, GameManager* gameManager): score(score), view(view), gameManager(gameManager) {
+EntityManager::EntityManager(Score* score, Camera* camera, GameManager* gameManager): score(score), camera(camera), gameManager(gameManager) {
+    this->view = camera->getView();
+    this->camera->setEntityManager(this);
 }
 
 std::vector<Entity*> EntityManager::detectCollisionMonster(sf::FloatRect boundary) {
@@ -183,6 +186,10 @@ bool EntityManager::isOnScreen(sf::Vector2f pos) {
 
 void EntityManager::addScore(int amount) {
     this->score->addScore(amount);
+}
+
+Player* EntityManager::getPlayer() {
+    return this->player;
 }
 
 void EntityManager::debugDraw(sf::RenderWindow* renderWindow) {

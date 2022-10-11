@@ -19,6 +19,7 @@
 #include "Classes/Collectible/HPUp.h"
 #include "Classes/Collectible/WeaponUpgrade.h"
 #include "Classes/Manager/GameManager.h"
+#include "Classes/Manager/Camera.h"
 #include "Classes/Projectiles/StraightProjectile.h"
 #include <algorithm>
 
@@ -28,13 +29,10 @@ float clip(float n, float lower, float upper) {
 
 int main()
 {
-    sf::RenderWindow drawingWindow(sf::VideoMode(640, 360), "Drawing windows", sf::Style::Close);
+    sf::RenderWindow drawingWindow(sf::VideoMode(1920, 1080), "Drawing windows", sf::Style::Close);
     auto desktop = sf::VideoMode::getDesktopMode();
     
     bool a = true;
-
-    sf::FloatRect viewArea(0, 0, 640, 360);
-    sf::View view = sf::View(viewArea);
 
     sf::Sprite backgroundImage1;
     sf::Texture bgImage1Texture;
@@ -85,15 +83,14 @@ int main()
 
     Score score("font/Pixel.ttf");
 
+    Camera camera(X_SIZE, Y_SIZE, &drawingWindow);
+
     GameManager gameManager(EASY);
-    EntityManager entityManager(&score, &view, &gameManager);
+    EntityManager entityManager(&score, &camera, &gameManager);
 
     Player player("images/Belmon.png", sf::Vector2f(256, 1080), 150, level, X_SIZE, 5.f, 15.f, &entityManager);
 
-    float xPos = clip(player.getPosition().x, 0 + view.getSize().x / 2, X_SIZE * 64 - view.getSize().x / 2);
-    float yPos = clip(player.getPosition().y, 0 + view.getSize().y / 2, Y_SIZE * 64 - view.getSize().y / 2);
-    view.setCenter(xPos, yPos);
-    drawingWindow.setView(view);
+    camera.setTarget(&player);
 
     /*MedusaHeadSpawner ms1(sf::Vector2f(1200, 1080), level, X_SIZE, 6.f, 4.f, 7.f, &entityManager, &view);
     MedusaHeadSpawner ms2(sf::Vector2f(800, 900), level, X_SIZE, 4.f, 6.f, 8.f, &entityManager, &view);
@@ -101,13 +98,16 @@ int main()
     MedusaHeadSpawner ms4(sf::Vector2f(800, 300), level, X_SIZE, 3.f, 3.f, 3.f, &entityManager, &view);*/
 
     //SkeletonSpawner sks1(sf::Vector2f(2000, 1080), level, X_SIZE, 1.f, 500, 2500, &entityManager, &view);
+    //SkeletonSpawner sks2(sf::Vector2f(1000, 1080), level, X_SIZE, 1.f, 500, 2500, &entityManager, &view);
+    //SkeletonSpawner sks3(sf::Vector2f(1500, 1080), level, X_SIZE, 1.f, 500, 2500, &entityManager, &view);
+    //SkeletonSpawner sks4(sf::Vector2f(2500, 1080), level, X_SIZE, 1.f, 500, 2500, &entityManager, &view);
 
-    //ZombieSpawner zs1(sf::Vector2f(1000, 1080), level, X_SIZE, 3.f, 500.f, &entityManager, &view);
+    // ZombieSpawner zs1(sf::Vector2f(1000, 1080), level, X_SIZE, 3.f, 500.f, &entityManager, &view);
     //ZombieSpawner zs2(sf::Vector2f(1000, 1080), level, X_SIZE, 4.f, 200.f, &entityManager, &view);
     //ZombieSpawner zs3(sf::Vector2f(1500, 1080), level, X_SIZE, 7.f, 200.f, &entityManager, &view);
     //ZombieSpawner zs4(sf::Vector2f(2000, 1080), level, X_SIZE, 3.f, 200.f, &entityManager, &view);
 
-    //Mummy mummy(sf::Vector2f(1000, 1080), level, X_SIZE, 1.f, &entityManager);
+    //Mummy mummy(sf::Vector2f(2000, 1080), level, X_SIZE, 1.f, &entityManager);
     Reaper reaper(sf::Vector2f(1000, 1080), level, X_SIZE, 5.f, &entityManager);
 
     HealthBar playerHealth("font/Pixel.ttf", &player);
@@ -137,8 +137,6 @@ int main()
                 drawingWindow.close();
                 break;
             case sf::Event::Resized:
-                viewArea.width = event.size.width;
-                viewArea.height = event.size.height;
                 break;
             case sf::Event::KeyPressed:
                 switch (event.key.code) {
@@ -162,24 +160,18 @@ int main()
                 case sf::Keyboard::Num1:
                     width = 640;
                     height = 360;
-                    viewArea.width = width;
-                    viewArea.height = height;
                     drawingWindow.setSize(sf::Vector2u(width, height));
                     drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
                     break;
                 case sf::Keyboard::Num2:
                     width = 1280;
                     height = 720;
-                    viewArea.width = width;
-                    viewArea.height = height;
                     drawingWindow.setSize(sf::Vector2u(width, height));
                     drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
                     break;
                 case sf::Keyboard::Num3:
                     width = 1920;
                     height = 1080;
-                    viewArea.width = width;
-                    viewArea.height = height;
                     drawingWindow.setSize(sf::Vector2u(width, height));
                     drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
                     break;
@@ -214,15 +206,12 @@ int main()
         }
 
         // Update Camera
-        view = sf::View(viewArea);
-        float xPos = clip(player.getPosition().x, 0 + view.getSize().x / 2, X_SIZE * 64 - view.getSize().x / 2);
-        float yPos = clip(player.getPosition().y, 0 + view.getSize().y / 2, Y_SIZE * 64 - view.getSize().y / 2);
-        view.setCenter(xPos, yPos);
-        drawingWindow.setView(view);
+        camera.trackTarget();
 
         // Update HUD
-        playerHealth.setPosition(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2);
-        score.setPosition(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2 + 70);
+        sf::View* view = camera.getView();
+        playerHealth.setPosition(view->getCenter().x - view->getSize().x / 2, view->getCenter().y - view->getSize().y / 2);
+        score.setPosition(view->getCenter().x - view->getSize().x / 2, view->getCenter().y - view->getSize().y / 2 + 70);
 
         // Clear
         drawingWindow.clear(sf::Color::Cyan);
