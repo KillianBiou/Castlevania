@@ -9,7 +9,7 @@ private:
 	sf::VertexArray vArray;
 
 public:
-	void load(std::string tilesetPath, int tileSize, const int* map, int numberXTiles, int numberYTiles);
+	void load(std::string tilesetPath, int tileSize, const int* map, const int numberXTiles, const int numberYTiles);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	sf::VertexArray* getVertexArray();
 };

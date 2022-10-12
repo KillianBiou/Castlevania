@@ -1,6 +1,16 @@
 #include "GameManager.h"
 
-GameManager::GameManager(Difficulty difficulty) {
+GameManager::GameManager(Level* level, Difficulty difficulty, std::map<EntityType, sf::Vector2f>* entityList): level(level) {
+	this->camera = new Camera(this->level->getSizeX(), this->level->getSizeY());
+	this->entityManager = new EntityManager(this->camera, this);
+
+	EntityFactory tempFactory(this->level, this->entityManager);
+
+	for (std::pair<EntityType, sf::Vector2f> entry : *entityList) {
+		tempFactory.createEntity(entry.first, entry.second);
+	}
+	this->camera->setTarget(this->entityManager->getPlayer());
+	
 	switch (difficulty)
 	{
 	case EASY:
@@ -17,10 +27,23 @@ GameManager::GameManager(Difficulty difficulty) {
 	}
 }
 
+void GameManager::update(sf::RenderTarget* renderTarget) {
+	this->entityManager->updateAllEntities();
+	this->camera->trackTarget(renderTarget);
+
+	renderTarget->draw(*this->level);
+	entityManager->drawAllEntities(renderTarget);
+}
+
+
 bool GameManager::isNextBuffReached(int score) {
 	if (this->pointsToHpUp.size() != 0 && score >= this->pointsToHpUp.at(0)) {
 		this->pointsToHpUp.erase(this->pointsToHpUp.begin());
 		return true;
 	}
 	return false;
+}
+
+Level* GameManager::getLevel() {
+	return this->level;
 }

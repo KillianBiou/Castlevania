@@ -127,7 +127,5 @@ public:
 	virtual const void taskDeletion() = 0;
 
 	~Entity();
-
-	virtual const void drawChild(sf::RenderWindow* renderWindow) = 0;
 };
 

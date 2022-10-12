@@ -1,6 +1,6 @@
 #include "Tilemap.h"
 
-void Tilemap::load(std::string tilesetPath, int tileSize, const int* map, int numberXTiles, int numberYTiles) {
+void Tilemap::load(std::string tilesetPath, int tileSize, const int* map, const int numberXTiles, const int numberYTiles) {
 
 	if (!this->tileset.loadFromFile(tilesetPath)) {
 		std::cout << "Error while loading : " << tilesetPath << std::endl;

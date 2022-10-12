@@ -1,11 +1,12 @@
 #include "EntityManager.h"
 #include "../Spawner/Spawner.h"
 #include "Camera.h"
+#include "GameManager.h"
 
 
-EntityManager::EntityManager(Score* score, Camera* camera, GameManager* gameManager): score(score), camera(camera), gameManager(gameManager) {
-    this->view = camera->getView();
-    this->camera->setEntityManager(this);
+EntityManager::EntityManager(Camera* camera, GameManager* gameManager): gameManager(gameManager) {
+    this->score = camera->getScore();
+    this->cameraView = camera->getView();
 }
 
 std::vector<Entity*> EntityManager::detectCollisionMonster(sf::FloatRect boundary) {
@@ -84,21 +85,9 @@ void EntityManager::removeCollectible(Collectible* collectible) {
 }
 
 void EntityManager::updateAllEntities() {
-	player->update();
+	if(player)
+        player->update();
 	for (int i = 0; i < monstersList.size(); i++) {
-        /*Monster* currentMonster = monstersList.at(i);
-        if (instanceof<MedusaHead>(currentMonster)) {
-            ((MedusaHead*)currentMonster)->update();
-        }
-        else if (instanceof<Zombie>(currentMonster)) {
-            ((Zombie*)currentMonster)->update();
-        }
-        else if (instanceof<Skeleton>(currentMonster)) {
-            ((Skeleton*)currentMonster)->update();
-        }
-        else {
-            currentMonster->update();
-        }*/
         monstersList.at(i)->update();
 	}
     for (Spawner* spawner : this->spawnerList) {
@@ -126,12 +115,12 @@ void EntityManager::updateAllEntities() {
 }
 
 void EntityManager::clearOutOfBoundsProjectiles() {
-    float xMin = this->view->getCenter().x - this->view->getSize().x / 2;
-    float xMax = xMin + this->view->getSize().x;
-    float yMin = this->view->getCenter().y - this->view->getSize().y / 2;
-    float yMax = yMin + this->view->getSize().y;
+    float xMin = this->cameraView->getCenter().x - this->cameraView->getSize().x / 2;
+    float xMax = xMin + this->cameraView->getSize().x;
+    float yMin = this->cameraView->getCenter().y - this->cameraView->getSize().y / 2;
+    float yMax = yMin + this->cameraView->getSize().y;
 
-    sf::FloatRect tempCollider(sf::Vector2f(xMin, yMin), sf::Vector2f(this->view->getSize().x, this->view->getSize().y));
+    sf::FloatRect tempCollider(sf::Vector2f(xMin, yMin), sf::Vector2f(this->cameraView->getSize().x, this->cameraView->getSize().y));
     for (Projectile* projectile : this->projectileList) {
         if (!projectile->getGlobalBounds().intersects(tempCollider)) {
             Projectile* temp = projectile;
@@ -142,20 +131,20 @@ void EntityManager::clearOutOfBoundsProjectiles() {
 
 }
 
-void EntityManager::drawAllEntities(sf::RenderWindow* renderWindow) {
-	renderWindow->draw(*player);
-	player->drawChild(renderWindow);
+void EntityManager::drawAllEntities(sf::RenderTarget* renderTarget) {
+    renderTarget->draw(*player);
+	player->drawChild(renderTarget);
 	for (int i = 0; i < monstersList.size(); i++) {
-		renderWindow->draw(*monstersList.at(i));
+        renderTarget->draw(*monstersList.at(i));
 	}
     for (int i = 0; i < projectileList.size(); i++) {
-        renderWindow->draw(*projectileList.at(i));
+        renderTarget->draw(*projectileList.at(i));
     }
     for (int i = 0; i < projectileList.size(); i++) {
-        renderWindow->draw(*projectileList.at(i));
+        renderTarget->draw(*projectileList.at(i));
     }
     for (int i = 0; i < collectibleList.size(); i++) {
-        renderWindow->draw(*collectibleList.at(i));
+        renderTarget->draw(*collectibleList.at(i));
     }
 }
 
@@ -166,17 +155,13 @@ sf::Vector2f EntityManager::playerPosition() {
 float EntityManager::xDistToPlayer(float xPos) {
     return this->player->getPosition().x - xPos;
 }
-
-sf::View* EntityManager::getView() {
-    return this->view;
-}
-
+ 
 bool EntityManager::isOnScreen(sf::Vector2f pos) {
-    float xMin = this->view->getCenter().x - this->view->getSize().x / 2;
-    float xMax = xMin + this->view->getSize().x;
-    float yMin = this->view->getCenter().y - this->view->getSize().y / 2;
-    float yMax = yMin + this->view->getSize().y;
-    sf::FloatRect tempCollider(sf::Vector2f(xMin, yMin), sf::Vector2f(this->view->getSize().x, this->view->getSize().y));
+    float xMin = this->cameraView->getCenter().x - this->cameraView->getSize().x / 2;
+    float xMax = xMin + this->cameraView->getSize().x;
+    float yMin = this->cameraView->getCenter().y - this->cameraView->getSize().y / 2;
+    float yMax = yMin + this->cameraView->getSize().y;
+    sf::FloatRect tempCollider(sf::Vector2f(xMin, yMin), sf::Vector2f(this->cameraView->getSize().x, this->cameraView->getSize().y));
 
     if (!tempCollider.contains(pos)) {
         return false;
@@ -301,4 +286,8 @@ void EntityManager::debugDrawMonsters(sf::RenderWindow* renderWindow) {
         shapeUB.setFillColor(sf::Color::Red);
         renderWindow->draw(shapeUB);
     }
+}
+
+sf::View* EntityManager::getView() {
+    return this->cameraView;
 }

@@ -10,7 +10,6 @@
 #include "../Collectible/Collectible.h"
 #include "../Collectible/Heart.h"
 #include "../Collectible/HPUp.h"
-#include "GameManager.h"
 #include <vector>
 
 template<typename Base, typename T>
@@ -20,6 +19,7 @@ inline bool instanceof(const T* ptr) {
 
 class Spawner;
 class Camera;
+class GameManager;
 
 class EntityManager
 {
@@ -27,21 +27,20 @@ private:
 	Player* player;
 	Score* score;
 	GameManager* gameManager;
-	Camera* camera;
+
+	sf::View* cameraView;
 
 	std::vector<Projectile*> projectileList;
 	std::vector<Monster*> monstersList;
 	std::vector<Spawner*> spawnerList;
 	std::vector<Collectible*> collectibleList;
 
-	sf::View* view;
-
 	void debugDrawPlayer(sf::RenderWindow* renderWindow);
 	void debugDrawMonsters(sf::RenderWindow* renderWindow);
 
 public:
 
-	EntityManager(Score* score, Camera* camera, GameManager* gameManager);
+	EntityManager(Camera* camera, GameManager* gameManager);
 
 	std::vector<Entity*> detectCollisionMonster(sf::FloatRect boundary);
 	std::vector<Projectile*> detectCollisionProjectile(sf::FloatRect boundary);
@@ -59,17 +58,18 @@ public:
 	void removeProjectile(Projectile* projectile);
 	void removeCollectible(Collectible* collectible);
 
-	void drawAllEntities(sf::RenderWindow* renderWindow);
+	void drawAllEntities(sf::RenderTarget* renderTarget);
 	void updateAllEntities();
 
 	void clearOutOfBoundsProjectiles();
 
 	sf::Vector2f playerPosition();
-	Player* getPlayer();
 	float xDistToPlayer(float xPos);
-	sf:: View* getView();
 	bool isOnScreen(sf::Vector2f pos);
 	void addScore(int amount);
+
+	Player* getPlayer();
+	sf::View* getView();
 
 	void debugDraw(sf::RenderWindow* renderWindow);
 };

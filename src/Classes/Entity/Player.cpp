@@ -2,7 +2,8 @@
 #include "../Manager/Animator.h"
 #include "../Manager/EntityManager.h"
 
-Player::Player(std::string texturePath, sf::Vector2f pos, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager) : Entity(texturePath, pos, 64, 128, frameDelay, currentLevel, levelXSize, speedFactor, jumpFactor, entityManager) {
+Player::Player(sf::Vector2f pos, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager) : Entity("images/Belmon.png", pos, 64, 128, frameDelay, currentLevel, levelXSize, speedFactor, jumpFactor, entityManager) {
+	std::cout << levelXSize << std::endl;
 	this->weapon = new Weapon("images/Whip1.png", 1, 400);
 	this->timePerAttack = this->weapon->getTimePerAttack();
 	this->spriteSizeXAttack1 = 128;
@@ -21,8 +22,8 @@ Player::Player(std::string texturePath, sf::Vector2f pos, int frameDelay, const 
 	entityManager->setPlayer(this);
 }
 
-void const Player::drawChild(sf::RenderWindow* renderWindow) {
-	renderWindow->draw(*this->weapon);
+void const Player::drawChild(sf::RenderTarget* renderTarget) {
+	renderTarget->draw(*this->weapon);
 	//renderWindow->draw(this->hitboxWeapon);
 }
 
