@@ -1,4 +1,4 @@
-HUD
+HUD V
 	- HP V
 	- Score V
 
@@ -18,8 +18,18 @@ Collectibles
 	- Amélioration arme V -> drop boss V
 
 Camera 
-	- System focus
-		- Changer de focus en cours de jeu
+	- System focus V
+		- Changer de focus en cours de jeu V
+
+Musique :
+	- Musique background
+	- Sound Effect
+		- Attack
+		- Hurt
+		- Death
+		Monster :
+			- Death move
+			- Mummy move
 
 Menu principal
 	- Nouvelle partie
