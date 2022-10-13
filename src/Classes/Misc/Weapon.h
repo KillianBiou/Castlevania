@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <SFML/Audio.hpp>
 
 class Entity;
 
@@ -11,13 +12,15 @@ private:
 	sf::IntRect textureRect;
 	sf::Sprite triggerredWeapon;
 
+	sf::SoundBuffer attackSound;
+
 	int damage;
 	float timePerAttack;
 
 	int currentPhase;
 
 public:
-	Weapon(std::string spritesheetPath, int damage, float timePerAttack);
+	Weapon(std::string spritesheetPath, int damage, float timePerAttack, std::string soundPath);
 
 	void phase0(bool reverse);
 	void phase1(bool reverse);
@@ -27,5 +30,6 @@ public:
 	int getCurrentPhase();
 	int getDamage();
 	float getTimePerAttack();
+	sf::SoundBuffer* getAttackSound();
 };
 

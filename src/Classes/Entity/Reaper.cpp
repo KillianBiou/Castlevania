@@ -21,6 +21,8 @@ Reaper::Reaper(sf::Vector2f pos, const int* currentLevel, const int levelXSize, 
 	}
 
 	this->scoreOnDeath = 1000;
+
+	this->hitSound.loadFromFile("sfx/pHurt.wav");
 }
 
 const void Reaper::update() {

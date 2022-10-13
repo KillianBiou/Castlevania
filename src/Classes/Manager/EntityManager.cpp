@@ -299,3 +299,7 @@ void EntityManager::debugDrawMonsters(sf::RenderWindow* renderWindow) {
 sf::View* EntityManager::getView() {
     return this->cameraView;
 }
+
+GameManager* EntityManager::getGameManager() {
+    return this->gameManager;
+}

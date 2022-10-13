@@ -29,7 +29,7 @@ const sf::Vector2f Monster::cameraTracking() {
 
 Monster::~Monster() {
 	if (!this->specialDrop) {
-		if (this->entityManager->verifyScore()) {
+		if (this->entityManager->verifyScore() && this->dead) {
 			Collectible* temp = new HPUp(this->currentLevel, this->levelXSize);
 			temp->setPosition(this->getPosition());
 			this->entityManager->addCollectible(temp);

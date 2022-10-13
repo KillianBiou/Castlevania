@@ -10,6 +10,8 @@ Zombie::Zombie(sf::Vector2f pos, const int* currentLevel, const int levelXSize, 
 
 	this->scoreOnDeath = 100;
 	this->setHorizontalMovement(direction);
+
+	this->hitSound.loadFromFile("sfx/pHurt.wav");
 }
 
 void const Zombie::update() {

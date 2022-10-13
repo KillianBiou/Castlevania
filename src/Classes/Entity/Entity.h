@@ -1,8 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 
 class EntityManager;
+class GameManager;
+class Animator;
 
 enum MoveDirection
 {
@@ -12,8 +15,6 @@ enum MoveDirection
 	UP = -1,
 	DOWN = 1
 };
-
-class Animator;
 
 class Entity: public sf::Sprite
 {
@@ -76,11 +77,14 @@ protected:
 	Animator* animator;
 	int frameDelay;
 
+	sf::SoundBuffer hitSound;
+
 	// Function
 	void applyGravity();
 	void checkCollision();
 	void moveTick();
 	void die();
+	void playSfx(sf::SoundBuffer* sound);
 
 public:
 	Entity(std::string texturePath, sf::Vector2f position, int sizeX, int sizeY, int frameDelay, const int* currentLevel, const int levelXSize,

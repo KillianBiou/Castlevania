@@ -3,6 +3,7 @@
 GameManager::GameManager(Level* level, Difficulty difficulty, std::multimap<EntityType, sf::Vector2f>* entityList): level(level) {
 	this->camera = new Camera(this->level->getSizeX(), this->level->getSizeY());
 	this->entityManager = new EntityManager(this->camera, this);
+    this->soundManager = new SoundManager();
 
 	EntityFactory tempFactory(this->level, this->entityManager, this->camera->getView());
 
@@ -37,6 +38,8 @@ void GameManager::update(sf::RenderTarget* renderTarget) {
 	entityManager->drawAllEntities(renderTarget);
 
     this->camera->trackTarget(renderTarget);
+
+    this->soundManager->update();
 }
 
 const void GameManager::processInput(sf::Event event, sf::RenderTarget* target) {
@@ -59,7 +62,7 @@ const void GameManager::processInput(sf::Event event, sf::RenderTarget* target) 
             this->entityManager->getPlayer()->setHorizontalMovement(RIGHT);
             break;
         case sf::Keyboard::Space:
-            this->entityManager->getPlayer()->setVerticalMovement(UP);
+            this->entityManager->getPlayer()->jump();
             break;
         case sf::Keyboard::E:
             this->entityManager->getPlayer()->attack(false);
@@ -115,4 +118,8 @@ Level* GameManager::getLevel() {
 
 Camera* GameManager::getCamera() {
     return this->camera;
+}
+
+SoundManager* GameManager::getSoundManager() {
+    return this->soundManager;
 }

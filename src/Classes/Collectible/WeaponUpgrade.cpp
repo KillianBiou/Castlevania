@@ -5,13 +5,13 @@ WeaponUpgrade::WeaponUpgrade(const int* level, const int X_SIZE, int upgradeLeve
 	switch (upgradeLevel)
 	{
 	case 1:
-		this->weapon = new Weapon("images/Whip2.png", 2, 250);
+		this->weapon = new Weapon("images/Whip2.png", 2, 250, "sfx/whip2.ogg");
 		break;
 	case 2:
-		this->weapon = new Weapon("images/Whip3.png", 3, 150);
+		this->weapon = new Weapon("images/Whip3.png", 3, 150, "sfx/whip3.ogg");
 		break;
 	default:
-		this->weapon = new Weapon("images/Whip2.png", 2, 250);
+		this->weapon = new Weapon("images/Whip2.png", 2, 250, "sfx/whip2.ogg");
 		break;
 	}
 }

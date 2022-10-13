@@ -18,6 +18,8 @@ private:
 
 	bool dead = false;
 
+	sf::SoundBuffer jumpSound;
+
 	void updateHitboxWeapon();
 
 public:
@@ -30,6 +32,7 @@ public:
 	void const attack(bool advance);
 	void const taskDeletion();
 	void takeDamage(int amount);
+	void jump();
 	
 	void addHp(int amount);
 	void addMaxHp(int amount);

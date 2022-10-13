@@ -3,6 +3,7 @@
 #include "EntityManager.h"
 #include "Camera.h"
 #include "InputManager.h"
+#include "SoundManager.h"
 #include "../Misc/Level.h"
 #include "../Misc/EntityFactory.h"
 
@@ -17,6 +18,7 @@ private:
 	Level* level;
 	EntityManager* entityManager;
 	Camera* camera;
+	SoundManager* soundManager;
 
 	bool leftHeld;
 	bool rightHeld;
@@ -34,4 +36,5 @@ public:
 
 	Level* getLevel();
 	Camera* getCamera();
+	SoundManager* getSoundManager();
 };

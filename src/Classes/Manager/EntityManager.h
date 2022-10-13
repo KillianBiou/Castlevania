@@ -73,6 +73,7 @@ public:
 
 	Player* getPlayer();
 	sf::View* getView();
+	GameManager* getGameManager();
 
 	void debugDraw(sf::RenderWindow* renderWindow);
 };

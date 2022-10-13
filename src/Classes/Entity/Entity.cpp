@@ -1,6 +1,8 @@
 #include "Entity.h"
 #include "../Manager/Animator.h"
 #include "../Manager/EntityManager.h"
+#include "../Manager/GameManager.h"
+
 
 Entity::Entity(std::string texturePath, sf::Vector2f position, int sizeX, int sizeY, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager):
                spriteSizeX(sizeX), spriteSizeY(sizeY), frameDelay(frameDelay), currentLevel(currentLevel), levelXSize(levelXSize), speedFactor(speedFactor), jumpFactor(jumpFactor) {
@@ -36,6 +38,10 @@ void Entity::updateAll() {
     this->checkCollision();
     this->moveTick();
     animator->animate();
+}
+
+void Entity::playSfx(sf::SoundBuffer* sound) {
+    this->entityManager->getGameManager()->getSoundManager()->playSoundEffect(sound);
 }
 
 void Entity::applyGravity() {
@@ -136,6 +142,7 @@ void Entity::takeDamage(int amount) {
     }
     else {
         this->animator->playAnimation(HURT);
+        this->entityManager->getGameManager()->getSoundManager()->playSoundEffect(&this->hitSound);
         this->damageFlicker();
     }
 }

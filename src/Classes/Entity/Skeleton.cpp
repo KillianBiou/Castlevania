@@ -16,6 +16,8 @@ Skeleton::Skeleton(sf::Vector2f pos, const int* currentLevel, const int levelXSi
 	this->attackCooldown = attackCooldown;
 
 	this->scoreOnDeath = 200;
+
+	this->hitSound.loadFromFile("sfx/pHurt.wav");
 }
 
 

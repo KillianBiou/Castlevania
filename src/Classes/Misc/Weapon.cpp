@@ -1,10 +1,14 @@
 #include "Weapon.h"
 #include "../Entity/Entity.h"
 
-Weapon::Weapon(std::string spritesheetPath, int damage, float timePerAttack): damage(damage), timePerAttack(timePerAttack) {
+Weapon::Weapon(std::string spritesheetPath, int damage, float timePerAttack, std::string soundPath): damage(damage), timePerAttack(timePerAttack) {
     if (!this->spritesheet.loadFromFile(spritesheetPath)) {
         std::cout << "Error while loading : " << spritesheetPath << std::endl;
     }
+    
+    if (!this->attackSound.loadFromFile(soundPath))
+        std::cout << "fzepokfzepokfzopefkzeopf\n";
+
     this->setTexture(this->spritesheet);
     this->textureRect = sf::IntRect(0, 0, 0, 0);
     this->setTextureRect(this->textureRect);
@@ -76,4 +80,8 @@ int Weapon::getDamage() {
 
 float Weapon::getTimePerAttack() {
     return this->timePerAttack;
+}
+
+sf::SoundBuffer* Weapon::getAttackSound() {
+    return &this->attackSound;
 }

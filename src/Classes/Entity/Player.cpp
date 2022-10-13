@@ -1,9 +1,10 @@
 #include "Player.h"
 #include "../Manager/Animator.h"
 #include "../Manager/EntityManager.h"
+#include "../Manager/GameManager.h"
 
 Player::Player(sf::Vector2f pos, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager) : Entity("images/Belmon.png", pos, 64, 128, frameDelay, currentLevel, levelXSize, speedFactor, jumpFactor, entityManager) {
-	this->weapon = new Weapon("images/Whip1.png", 1, 400);
+	this->weapon = new Weapon("images/Whip1.png", 1, 400, "sfx/whip1.ogg");
 	this->timePerAttack = this->weapon->getTimePerAttack();
 	this->spriteSizeXAttack1 = 128;
 	this->spriteSizeYAttack1 = 128;
@@ -15,6 +16,10 @@ Player::Player(sf::Vector2f pos, int frameDelay, const int* currentLevel, const 
 	this->maxHp = 75;
 	this->hp = this->maxHp;
 	this->name = "Belmon";
+
+	this->jumpSound = sf::SoundBuffer();
+	this->jumpSound.loadFromFile("sfx/jump.wav");
+	this->hitSound.loadFromFile("sfx/pHurt.wav");
 
 	this->invulnerabilityClock = sf::Clock();
 	this->invulnerabilityTime = 1000.f;
@@ -37,6 +42,7 @@ void const Player::attack(bool advance) {
 	if (((!advance && this->weapon->getCurrentPhase() == 0) || advance)) {
 		switch (this->weapon->getCurrentPhase()) {
 		case 0:
+			this->entityManager->getGameManager()->getSoundManager()->playSoundEffect(this->weapon->getAttackSound());
 			this->isAttacking = true;
 			this->freeze = true;
 			this->weapon->phase0(this->side == LEFT ? false : true);
@@ -112,6 +118,11 @@ void Player::takeDamage(int amount) {
 		Entity::takeDamage(amount);
 		invulnerabilityClock.restart();
 	}
+}
+
+void Player::jump() {
+	this->setVerticalMovement(UP);
+	this->entityManager->getGameManager()->getSoundManager()->playSoundEffect(&this->jumpSound);
 }
 
 void Player::changeWeapon(Weapon* weapon) {

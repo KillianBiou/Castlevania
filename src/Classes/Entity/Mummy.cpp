@@ -16,6 +16,7 @@ Mummy::Mummy(sf::Vector2f pos, const int* currentLevel, const int levelXSize, fl
 	}
 
 	this->scoreOnDeath = 400;
+	this->hitSound.loadFromFile("sfx/pHurt.wav");
 }
 
 const sf::Vector2f Mummy::cameraTracking() {
