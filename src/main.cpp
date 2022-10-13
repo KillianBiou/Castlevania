@@ -62,7 +62,11 @@ const int lvl1XSize = 60;
 const int lvl1ySize = 24;
 
 std::map<EntityType, sf::Vector2f> lvl1EntityMap{
-    {PLAYER, sf::Vector2f(256, 1080)}
+    {PLAYER, sf::Vector2f(256, 1080)},
+    {MEDUSA, sf::Vector2f(0, 1000)},
+    {ZOMBIE, sf::Vector2f(1000, 1080)},
+    {SKELETON, sf::Vector2f(2000, 1080)},
+    {REAPER, sf::Vector2f(2000, 1000)}
 };
 
 /*int main()
@@ -134,77 +138,7 @@ std::map<EntityType, sf::Vector2f> lvl1EntityMap{
     while (drawingWindow.isOpen()) {
         sf::Event event;
         while (drawingWindow.pollEvent(event)) {
-            switch (event.type) {
-            case sf::Event::Closed:
-                drawingWindow.close();
-                break;
-            case sf::Event::Resized:
-                break;
-            case sf::Event::KeyPressed:
-                switch (event.key.code) {
-                case sf::Keyboard::Q:
-                    player.setHorizontalMovement(LEFT);
-                    leftHeld = true;
-                    break;
-                case sf::Keyboard::S:
-                    a = false;
-                    break;
-                case sf::Keyboard::D:
-                    rightHeld = true;
-                    player.setHorizontalMovement(RIGHT);
-                    break;
-                case sf::Keyboard::Space:
-                    player.setVerticalMovement(UP);
-                    break;
-                case sf::Keyboard::E:
-                    player.attack(false);
-                    break;
-                case sf::Keyboard::Num1:
-                    width = 640;
-                    height = 360;
-                    drawingWindow.setSize(sf::Vector2u(width, height));
-                    drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
-                    break;
-                case sf::Keyboard::Num2:
-                    width = 1280;
-                    height = 720;
-                    drawingWindow.setSize(sf::Vector2u(width, height));
-                    drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
-                    break;
-                case sf::Keyboard::Num3:
-                    width = 1920;
-                    height = 1080;
-                    drawingWindow.setSize(sf::Vector2u(width, height));
-                    drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
-                    break;
-                }
-                break;
-
-            case sf::Event::KeyReleased:
-                switch (event.key.code) {
-                case sf::Keyboard::Q:
-                    leftHeld = false;
-                    if (rightHeld) {
-                        player.setHorizontalMovement(RIGHT);
-                    }
-                    else {
-                        player.setHorizontalMovement(NONE);
-                    }
-                    break;
-                case sf::Keyboard::S:
-                    break;
-                case sf::Keyboard::D:
-                    rightHeld = false;
-                    if (leftHeld) {
-                        player.setHorizontalMovement(LEFT);
-                    }
-                    else {
-                        player.setHorizontalMovement(NONE);
-                    }
-                    break;
-                }
-                break;
-            }
+            
         }
 
         drawingWindow.clear(sf::Color::Black);
@@ -249,16 +183,7 @@ int main() {
     sf::RenderWindow drawingWindow(sf::VideoMode(1920, 1080), "Drawing windows", sf::Style::Close);
     auto desktop = sf::VideoMode::getDesktopMode();
 
-    bool a = true;
-
-
     drawingWindow.setFramerateLimit(60);
-
-    int width = 640;
-    int height = 360;
-
-    bool leftHeld = false;
-    bool rightHeld = false;
 
     Level l(level1, lvl1XSize, lvl1ySize, "images/Background1.png");
 
@@ -267,57 +192,7 @@ int main() {
     while (drawingWindow.isOpen()) {
         sf::Event event;
         while (drawingWindow.pollEvent(event)) {
-            switch (event.type) {
-            case sf::Event::Closed:
-                drawingWindow.close();
-                break;
-            case sf::Event::Resized:
-                break;
-            case sf::Event::KeyPressed:
-                switch (event.key.code) {
-                case sf::Keyboard::Q:
-                    break;
-                case sf::Keyboard::S:
-                    a = false;
-                    break;
-                case sf::Keyboard::D:
-                    break;
-                case sf::Keyboard::Space:
-                    break;
-                case sf::Keyboard::E:
-                    break;
-                case sf::Keyboard::Num1:
-                    width = 640;
-                    height = 360;
-                    drawingWindow.setSize(sf::Vector2u(width, height));
-                    drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
-                    break;
-                case sf::Keyboard::Num2:
-                    width = 1280;
-                    height = 720;
-                    drawingWindow.setSize(sf::Vector2u(width, height));
-                    drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
-                    break;
-                case sf::Keyboard::Num3:
-                    width = 1920;
-                    height = 1080;
-                    drawingWindow.setSize(sf::Vector2u(width, height));
-                    drawingWindow.setPosition(sf::Vector2i(desktop.width / 2 - width / 2, desktop.height / 2 - height / 2));
-                    break;
-                }
-                break;
-
-            case sf::Event::KeyReleased:
-                switch (event.key.code) {
-                case sf::Keyboard::Q:
-                    break;
-                case sf::Keyboard::S:
-                    break;
-                case sf::Keyboard::D:
-                    break;
-                }
-                break;
-            }
+            gameManager.processInput(event, &drawingWindow);
         }
 
         drawingWindow.clear(sf::Color::Black);

@@ -1,6 +1,7 @@
 #pragma once
 #include "EntityManager.h"
 #include "../Misc/Score.h"
+#include "../Misc/HealthBar.h"
 
 class Camera {
 private:
@@ -10,9 +11,12 @@ private:
 	Entity *target;
 
 	Score* score;
+	HealthBar* healthBar;
 
 	float width;
 	float height;
+
+	bool firstInitialisation = true;
 
 	const int levelXSize;
 	const int levelYSize;
@@ -28,4 +32,5 @@ public:
 	void setTarget(Entity* entity);
 
 	Score* getScore();
+	HealthBar* getHealthBar();
 };

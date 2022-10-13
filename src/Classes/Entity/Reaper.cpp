@@ -6,6 +6,8 @@ Reaper::Reaper(sf::Vector2f pos, const int* currentLevel, const int levelXSize, 
 	this->animator->setAnimations({ {IDLE, 1}, {HURT, 2}, {DEATH, 3} });
 	this->animator->playAnimation(IDLE);
 
+	this->cameraLock = this->getPosition();
+
 	this->timeBetweenAttacks = 2000;
 	this->attackClock = sf::Clock();
 	this->touchdownCooldown = sf::Clock();
@@ -26,7 +28,11 @@ const void Reaper::update() {
 	animator->animate();
 	this->moveCollisionPoint();
 
-	if (this->entityManager->xDistToPlayer(this->getPosition().x) < 1000) {
+	if (abs(this->entityManager->xDistToPlayer(this->getPosition().x)) < 500) {
+		if (!this->bossStarted)
+			this->startBoss();
+	}
+	if (this->bossStarted) {
 		if (this->attackClock.getElapsedTime().asMilliseconds() >= this->timeBetweenAttacks) {
 			int direction = this->entityManager->xDistToPlayer(this->getPosition().x) < 0 ? -1 : 1;
 			StraightProjectile* temp = new StraightProjectile(this->projectileTexture, 64, 64, this->getPosition() + sf::Vector2f(0.f, -64.f), 5.f, this->entityManager->playerPosition(), 2);
@@ -42,6 +48,15 @@ const void Reaper::update() {
 
 void Reaper::moveTick() {
 	this->move(this->movementVector);
+}
+
+void Reaper::startBoss() {
+	this->bossStarted = true;
+	this->entityManager->startBossCombat(this);
+}
+
+const sf::Vector2f Reaper::cameraTracking() {
+	return this->cameraLock;
 }
 
 void Reaper::checkCollision() {
@@ -85,6 +100,7 @@ const void Reaper::taskDeletion() {
 }
 
 Reaper::~Reaper() {
+	this->entityManager->endBossCombat();
 	this->weaponUpgrade = new WeaponUpgrade(this->currentLevel, this->levelXSize, 2);
 	this->entityManager->addCollectible(this->weaponUpgrade);
 	this->weaponUpgrade->setPosition(this->getPosition());

@@ -59,10 +59,6 @@ void Entity::moveTick() {
     }
 }
 
-sf::Vector2f Entity::cameraTracking() {
-    return this->getPosition();
-}
-
 void Entity::moveCollisionPoint() {
     sf::Vector2f center = this->getOrigin();
     this->groundedPoint = this->getPosition() + sf::Vector2f(-(this->spriteSizeX / 5.f) * 2.f, this->spriteSizeY / 2.f );

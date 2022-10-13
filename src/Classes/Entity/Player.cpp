@@ -3,8 +3,7 @@
 #include "../Manager/EntityManager.h"
 
 Player::Player(sf::Vector2f pos, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager) : Entity("images/Belmon.png", pos, 64, 128, frameDelay, currentLevel, levelXSize, speedFactor, jumpFactor, entityManager) {
-	std::cout << levelXSize << std::endl;
-	this->weapon = new Weapon("images/Whip1.png", 1, 400);
+	this->weapon = new Weapon("images/Whip1.png", 5, 400);
 	this->timePerAttack = this->weapon->getTimePerAttack();
 	this->spriteSizeXAttack1 = 128;
 	this->spriteSizeYAttack1 = 128;
@@ -25,6 +24,10 @@ Player::Player(sf::Vector2f pos, int frameDelay, const int* currentLevel, const 
 void const Player::drawChild(sf::RenderTarget* renderTarget) {
 	renderTarget->draw(*this->weapon);
 	//renderWindow->draw(this->hitboxWeapon);
+}
+
+const sf::Vector2f Player::cameraTracking() {
+	return this->getPosition();
 }
 
 void const Player::attack(bool advance) {

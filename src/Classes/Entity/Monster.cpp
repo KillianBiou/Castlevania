@@ -23,6 +23,10 @@ void const Monster::attack(bool advance) {
 
 }
 
+const sf::Vector2f Monster::cameraTracking() {
+	return this->getPosition();
+}
+
 Monster::~Monster() {
 	if (!this->specialDrop) {
 		if (this->entityManager->verifyScore()) {

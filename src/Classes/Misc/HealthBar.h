@@ -20,7 +20,8 @@ private:
 	void updateHeart();
 
 public:
-	HealthBar(std::string fontPath, Entity* entity);
+	HealthBar(std::string fontPath);
+	void setEntity(Entity* entity);
 	void update();
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };

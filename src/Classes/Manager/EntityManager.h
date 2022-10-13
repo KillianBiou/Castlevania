@@ -61,6 +61,9 @@ public:
 	void drawAllEntities(sf::RenderTarget* renderTarget);
 	void updateAllEntities();
 
+	void startBossCombat(Monster* target);
+	void endBossCombat();
+
 	void clearOutOfBoundsProjectiles();
 
 	sf::Vector2f playerPosition();

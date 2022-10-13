@@ -34,6 +34,8 @@ public:
 	void addHp(int amount);
 	void addMaxHp(int amount);
 
+	const sf::Vector2f cameraTracking();
+
 	void changeWeapon(Weapon* weapon);
 
 	Weapon* getWeapon();

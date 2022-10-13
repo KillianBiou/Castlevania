@@ -169,6 +169,14 @@ bool EntityManager::isOnScreen(sf::Vector2f pos) {
     return true;
 }
 
+void EntityManager::startBossCombat(Monster* target) {
+    this->gameManager->getCamera()->setTarget(target);
+}
+
+void EntityManager::endBossCombat() {
+    this->gameManager->getCamera()->setTarget(this->player);
+}
+
 void EntityManager::addScore(int amount) {
     this->score->addScore(amount);
 }

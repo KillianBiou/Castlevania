@@ -1,6 +1,6 @@
 #include "MedusaHeadSpawner.h"
 
-MedusaHeadSpawner::MedusaHeadSpawner(sf::Vector2f pos, const int* level, const int xSize, float speedFactor, float amplitude, float frequency, EntityManager* entityManager, sf::View* view) : Spawner(pos, level, xSize, entityManager), speedFactor(speedFactor), amplitude(amplitude), frequency(frequency), view(view) {
+MedusaHeadSpawner::MedusaHeadSpawner(float y, const int* level, const int xSize, float speedFactor, float amplitude, float frequency, EntityManager* entityManager, sf::View* view) : Spawner(sf::Vector2f(0, y), level, xSize, entityManager), speedFactor(speedFactor), amplitude(amplitude), frequency(frequency), view(view) {
 	this->spawnEntity();
 	this->entityManager->addSpawner(this);
 

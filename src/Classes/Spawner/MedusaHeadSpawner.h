@@ -15,7 +15,7 @@ private:
 
 
 public:
-	MedusaHeadSpawner(sf::Vector2f pos, const int* level, const int xSize, float speedFactor, float amplitude, float frequency, EntityManager* entityManager, sf::View* view);
+	MedusaHeadSpawner(float y, const int* level, const int xSize, float speedFactor, float amplitude, float frequency, EntityManager* entityManager, sf::View* view);
 
 	void spawnEntity();
 	void const update();

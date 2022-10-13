@@ -1,6 +1,6 @@
 #include "HealthBar.h"
 
-HealthBar::HealthBar(std::string fontPath, Entity* entity): entity(entity) {
+HealthBar::HealthBar(std::string fontPath): entity(entity) {
     if (!this->font.loadFromFile(fontPath)) {
         std::cout << "Error while loading : " << fontPath << std::endl;
     }
@@ -12,13 +12,12 @@ HealthBar::HealthBar(std::string fontPath, Entity* entity): entity(entity) {
     this->emptyHeartRect = sf::IntRect(63, 0, 63, 63);
 
     
-    for (int i = 0; i < this->entity->getMaxHp(); i++) {
+    /*for (int i = 0; i < this->entity->getMaxHp(); i++) {
         this->hearts.push_back(sf::Sprite(this->heartTexture, filledHeartRect));
-    }
+    }*/
 
     this->text.setFont(this->font);
     this->text.setCharacterSize(63);
-    this->text.setString(this->entity->getName());
 }
 
 void HealthBar::updateHeart() {
@@ -38,9 +37,16 @@ void HealthBar::updateHeart() {
     }
 }
 
+void HealthBar::setEntity(Entity* entity) {
+    this->entity = entity;
+    this->text.setString(this->entity->getName());
+}
+
 void HealthBar::update() {
-    this->text.setPosition(this->getPosition() + sf::Vector2f(10.f, 5.f));
-    this->updateHeart();
+    if (this->entity) {
+        this->text.setPosition(this->getPosition() + sf::Vector2f(10.f, 5.f));
+        this->updateHeart();
+    }
 }
 
 void HealthBar::draw(sf::RenderTarget& target, sf::RenderStates states) const {

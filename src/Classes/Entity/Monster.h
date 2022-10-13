@@ -22,6 +22,7 @@ public:
 
 	void const attack(bool advance);
 	void const taskDeletion();
+	const sf::Vector2f cameraTracking();
 
 	~Monster();
 };
