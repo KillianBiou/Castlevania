@@ -25,7 +25,6 @@ void Camera::trackTarget(sf::RenderTarget* renderTarget) {
 			this->view->move(direction);
 		}
 		else {
-			std::cout << magnitude << std::endl;
 			this->view->setCenter(targetPos);
 		}
 

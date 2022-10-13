@@ -5,6 +5,8 @@ Mummy::Mummy(sf::Vector2f pos, const int* currentLevel, const int levelXSize, fl
 	this->maxHp = 10;
 	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 3}, {HURT, 2}, {DEATH, 3} });
 
+	this->cameraLock = this->getPosition();
+
 	this->specialDrop = true;
 	this->timeBetweenAttacks = 3000;
 	this->attackClock = sf::Clock();
@@ -14,6 +16,10 @@ Mummy::Mummy(sf::Vector2f pos, const int* currentLevel, const int levelXSize, fl
 	}
 
 	this->scoreOnDeath = 400;
+}
+
+const sf::Vector2f Mummy::cameraTracking() {
+	return this->cameraLock;
 }
 
 const void Mummy::update() {
@@ -28,7 +34,11 @@ const void Mummy::update() {
 	}
 
 	this->updateAll();
-	if (this->entityManager->xDistToPlayer(this->getPosition().x) < 1000) {
+	if (abs(this->entityManager->xDistToPlayer(this->getPosition().x)) < 500) {
+		if(!this->bossStarted)
+			this->startBoss();
+	}
+	if (this->bossStarted) {
 		if (this->attackClock.getElapsedTime().asMilliseconds() >= this->timeBetweenAttacks) {
 			int direction = this->entityManager->xDistToPlayer(this->getPosition().x) < 0 ? -1 : 1;
 			SinProjectile* temp = new SinProjectile(this->projectileTexture, 64, 64, this->getPosition() + sf::Vector2f(0.f, -64.f), 5.f * direction, 5.f, 5.f, 2);
@@ -37,16 +47,19 @@ const void Mummy::update() {
 		}
 		this->goToward();
 	}
-	else {
-		this->moveDirection = NONE;
-	}
+	
 	this->animate();
 }
 
 void Mummy::enrage() {
 	this->enraged = true;
-	this->speedFactor *= 1.5;
+	//this->speedFactor *= 1.5;
 	this->timeBetweenAttacks /= 2;
+}
+
+void Mummy::startBoss() {
+	this->bossStarted = true;
+	this->entityManager->startBossCombat(this);
 }
 
 void Mummy::animate() {
@@ -81,6 +94,7 @@ const void Mummy::taskDeletion() {
 }
 
 Mummy::~Mummy() {
+	this->entityManager->endBossCombat();
 	this->weaponUpgrade = new WeaponUpgrade(this->currentLevel, this->levelXSize, 1);
 	this->entityManager->addCollectible(this->weaponUpgrade);
 	this->weaponUpgrade->setPosition(this->getPosition());

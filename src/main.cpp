@@ -61,12 +61,14 @@ const int level1[] =
 const int lvl1XSize = 60;
 const int lvl1ySize = 24;
 
-std::map<EntityType, sf::Vector2f> lvl1EntityMap{
+std::multimap<EntityType, sf::Vector2f> lvl1EntityMap{
     {PLAYER, sf::Vector2f(256, 1080)},
     {MEDUSA, sf::Vector2f(0, 1000)},
+    {MEDUSA, sf::Vector2f(0, 500)},
+    {MEDUSA, sf::Vector2f(0, 1500)},
     {ZOMBIE, sf::Vector2f(1000, 1080)},
-    {SKELETON, sf::Vector2f(2000, 1080)},
-    {REAPER, sf::Vector2f(2000, 1000)}
+    {SKELETON, sf::Vector2f(500, 1080)},
+    {MUMMY, sf::Vector2f(2000, 1000)}
 };
 
 /*int main()

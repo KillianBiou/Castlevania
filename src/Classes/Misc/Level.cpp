@@ -28,6 +28,5 @@ const int Level::getSizeY() {
 }
 
 const int* Level::getLevelRaw() {
-	std::cout << this->levelRaw;
 	return this->levelRaw;
 }

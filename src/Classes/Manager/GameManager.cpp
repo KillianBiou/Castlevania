@@ -1,11 +1,12 @@
 #include "GameManager.h"
 
-GameManager::GameManager(Level* level, Difficulty difficulty, std::map<EntityType, sf::Vector2f>* entityList): level(level) {
+GameManager::GameManager(Level* level, Difficulty difficulty, std::multimap<EntityType, sf::Vector2f>* entityList): level(level) {
 	this->camera = new Camera(this->level->getSizeX(), this->level->getSizeY());
 	this->entityManager = new EntityManager(this->camera, this);
 
 	EntityFactory tempFactory(this->level, this->entityManager, this->camera->getView());
 
+    std::cout << entityList->size() << std::endl;
 	for (std::pair<EntityType, sf::Vector2f> entry : *entityList) {
 		tempFactory.createEntity(entry.first, entry.second);
 	}

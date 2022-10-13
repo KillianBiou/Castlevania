@@ -24,7 +24,7 @@ private:
 	std::vector<int> pointsToHpUp;
 
 public:
-	GameManager(Level* level, Difficulty difficulty, std::map<EntityType, sf::Vector2f>* entityList);
+	GameManager(Level* level, Difficulty difficulty, std::multimap<EntityType, sf::Vector2f>* entityList);
 
 	void update(sf::RenderTarget* renderTarget);
 
