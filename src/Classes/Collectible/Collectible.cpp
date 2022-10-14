@@ -6,6 +6,8 @@ Collectible::Collectible(std::string texturePath, sf::IntRect textureRect, const
     }
     this->setTexture(this->texture);
     this->setTextureRect(textureRect);
+
+    this->pickupSound.loadFromFile("sfx/pickup.wav");
 }
 
 void Collectible::moveGroundedPoint() {

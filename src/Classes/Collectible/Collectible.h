@@ -5,13 +5,15 @@
 
 class Collectible: public sf::Sprite
 {
-private:
+protected:
 	sf::Texture texture;
 	sf::Vector2f groundedPoint1;
 	sf::Vector2f groundedPoint2;
 
 	const int* level;
 	const int X_SIZE;
+
+	sf::SoundBuffer pickupSound;
 
 	bool isGrounded = false;
 

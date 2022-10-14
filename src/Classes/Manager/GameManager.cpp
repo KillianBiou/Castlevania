@@ -12,7 +12,9 @@ GameManager::GameManager(Level* level, Difficulty difficulty, std::multimap<Enti
 		tempFactory.createEntity(entry.first, entry.second);
 	}
 	this->camera->setTarget(this->entityManager->getPlayer());
+
     this->camera->getHealthBar()->setEntity(this->entityManager->getPlayer());
+    this->camera->getManaBar()->setPlayer(this->entityManager->getPlayer());
 	
 	switch (difficulty)
 	{
@@ -68,8 +70,10 @@ const void GameManager::processInput(sf::Event event, sf::RenderTarget* target) 
             this->entityManager->getPlayer()->attack(false);
             break;
         case sf::Keyboard::Num1:
+            this->entityManager->getPlayer()->specialOne();
             break;
         case sf::Keyboard::Num2:
+            this->entityManager->getPlayer()->specialTwo();
             break;
         case sf::Keyboard::Num3:
             break;

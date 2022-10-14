@@ -4,8 +4,6 @@ MedusaHeadSpawner::MedusaHeadSpawner(float y, const int* level, const int xSize,
 	this->spawnEntity();
 	this->entityManager->addSpawner(this);
 
-	srand(time(NULL));
-
 	this->timeForRespawn = 1000.f;
 
 	this->minX = 0;

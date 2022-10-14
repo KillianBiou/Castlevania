@@ -58,6 +58,12 @@ void Weapon::phase2(bool reverse) {
 
 void Weapon::phase3(bool reverse) {
     std::cout << "Phase 3\n";
+
+    this->currentPhase = 4;
+}
+
+void Weapon::phase4(bool reverse) {
+    std::cout << "Phase 4\n";
     this->textureRect = sf::IntRect(0, 0, 0, 0);
     this->setTextureRect(this->textureRect);
     if (reverse) {

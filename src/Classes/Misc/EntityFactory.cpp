@@ -10,8 +10,7 @@ void EntityFactory::createEntity(EntityType type, sf::Vector2f position) {
 		new Player(position, 150, level->getLevelRaw(), level->getSizeX(), 5.f, 15.f, this->entityManager);
 		break;
 	case MEDUSA:
-		std::cout << "dazd\n";
-		new MedusaHeadSpawner(position.y, level->getLevelRaw(), level->getSizeX(), rand() % 4 + 4, rand() % 3 + 4, rand() % 5 + 5, this->entityManager, this->view);
+		new MedusaHeadSpawner(position.y, level->getLevelRaw(), level->getSizeX(), rand() % 4 + 4, 5, 5, this->entityManager, this->view);
 		break;
 	case SKELETON:
 		new SkeletonSpawner(position, level->getLevelRaw(), level->getSizeX(), 1.f, 500, 2500, this->entityManager, this->view);

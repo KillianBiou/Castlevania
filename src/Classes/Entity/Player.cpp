@@ -11,7 +11,10 @@ Player::Player(sf::Vector2f pos, int frameDelay, const int* currentLevel, const 
 	this->spriteSizeXAttack2 = 241;
 	this->spriteSizeYAttack2 = 128;
 
-	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 3}, {JUMPING, 1}, {ATTACK, 3}, {HURT, 2}, {DEATH, 4} });
+	this->manaMax = 5;
+	this->mana = this->manaMax;
+
+	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 3}, {JUMPING, 1}, {ATTACK, 4}, {HURT, 2}, {DEATH, 4} });
 
 	this->maxHp = 75;
 	this->hp = this->maxHp;
@@ -33,6 +36,10 @@ void const Player::drawChild(sf::RenderTarget* renderTarget) {
 
 const sf::Vector2f Player::cameraTracking() {
 	return this->getPosition();
+}
+
+EntityManager* Player::getEntityManager() {
+	return this->entityManager;
 }
 
 void const Player::attack(bool advance) {
@@ -65,18 +72,45 @@ void const Player::attack(bool advance) {
 			break;
 		case 3:
 			this->weapon->phase3(this->side == LEFT ? false : true);
+
+			for (Entity* entity : this->entityManager->detectCollisionMonster(this->hitboxWeapon.getGlobalBounds())) {
+				std::cout << "Hit : " << entity->getName() << std::endl;
+				this->alreadyHit.push_back(entity);
+				entity->takeDamage(this->weapon->getDamage());
+			}
+			break;
+		case 4:
+			this->weapon->phase4(this->side == LEFT ? false : true);
 			this->freeze = false;
 			this->setHorizontalMovement(NONE);
 			this->weapon->move(176.f * this->side * -1, 0.f);
 			this->weaponPositionModifier.x += 176.f * this->side * -1;
 			
 			for (Entity* entity : this->entityManager->detectCollisionMonster(this->hitboxWeapon.getGlobalBounds())) {
-				std::cout << "Hit : " << entity->getName() << std::endl;
-				entity->takeDamage(this->weapon->getDamage());
+				if(std::find(this->alreadyHit.begin(), this->alreadyHit.end(), entity) == this->alreadyHit.end()) {
+					std::cout << entity->getName() << std::endl;
+					std::cout << "Hit : " << entity->getName() << std::endl;
+					entity->takeDamage(this->weapon->getDamage());
+				}
 			}
+			this->alreadyHit.clear();
 			this->isAttacking = false;
 			break;
 		}
+	}
+}
+
+void Player::specialOne() {
+	if (this->mana >= 1) {
+		std::cout << "Knife" << std::endl;
+		this->mana--;
+	}
+}
+
+void Player::specialTwo() {
+	if (this->mana >= 1) {
+		std::cout << "Axe" << std::endl;
+		this->mana--;
 	}
 }
 
@@ -163,6 +197,14 @@ Weapon* Player::getWeapon() {
 
 sf::RectangleShape Player::gethitboxWeapon() {
 	return this->hitboxWeapon;
+}
+
+int Player::getMana() {
+	return this->mana;
+}
+
+int Player::getMaxMana() {
+	return this->manaMax;
 }
 
 bool Player::isInvulnerable() {

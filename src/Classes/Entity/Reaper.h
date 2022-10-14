@@ -20,6 +20,8 @@ private:
 
 	float timeBetweenAttacks;
 
+	sf::Music bossTheme;
+
 	void animate();
 	void moveBoundary();
 	void moveTick();

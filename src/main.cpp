@@ -63,12 +63,13 @@ const int lvl1ySize = 24;
 
 std::multimap<EntityType, sf::Vector2f> lvl1EntityMap{
     {PLAYER, sf::Vector2f(256, 1080)},
-    {MEDUSA, sf::Vector2f(0, 1000)},
-    {MEDUSA, sf::Vector2f(0, 500)},
-    {MEDUSA, sf::Vector2f(0, 1500)},
+    {MEDUSA, sf::Vector2f(0, 300)},
+    {MEDUSA, sf::Vector2f(0, 600)},
+    {MEDUSA, sf::Vector2f(0, 900)},
+    {MEDUSA, sf::Vector2f(0, 1200)},
     {ZOMBIE, sf::Vector2f(1000, 1080)},
     {SKELETON, sf::Vector2f(500, 1080)},
-    {MUMMY, sf::Vector2f(2000, 1000)}
+    {REAPER, sf::Vector2f(2000, 1000)}
 };
 
 /*int main()
@@ -184,6 +185,8 @@ std::multimap<EntityType, sf::Vector2f> lvl1EntityMap{
 int main() {
     sf::RenderWindow drawingWindow(sf::VideoMode(1920, 1080), "Drawing windows", sf::Style::Close);
     auto desktop = sf::VideoMode::getDesktopMode();
+
+    srand(time(NULL));
 
     drawingWindow.setFramerateLimit(60);
 

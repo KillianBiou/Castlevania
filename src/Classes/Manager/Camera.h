@@ -2,6 +2,7 @@
 #include "EntityManager.h"
 #include "../Misc/Score.h"
 #include "../Misc/HealthBar.h"
+#include "../Misc/ManaBar.h"
 
 class Camera {
 private:
@@ -12,6 +13,7 @@ private:
 
 	Score* score;
 	HealthBar* healthBar;
+	ManaBar* manaBar;
 
 	float width;
 	float height;
@@ -33,4 +35,5 @@ public:
 
 	Score* getScore();
 	HealthBar* getHealthBar();
+	ManaBar* getManaBar();
 };

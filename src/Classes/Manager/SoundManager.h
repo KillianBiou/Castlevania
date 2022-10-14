@@ -12,14 +12,19 @@ private:
 	sf::Music* currentMusic;
 	int currentMusicId;
 
-	int nbMaxMusic = 4;
+	int nbMaxMusic = 5;
+
+	bool bossMusic = false;
 
 	void clearFinishedSfx();
+	void playMusic(int id);
 
 public:
 	SoundManager();
 	void update();
 
-	void playMusic(int id);
+	void playBossMusic(sf::Music* music);
+	void endBossMusic(sf::Music* music);
+
 	void playSoundEffect(sf::SoundBuffer* soundBuffer);
 };

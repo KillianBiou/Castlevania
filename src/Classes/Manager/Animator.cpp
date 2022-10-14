@@ -14,7 +14,7 @@ Animator::Animator(Entity* entity, int frameDelay): frameDelay(frameDelay) {
 }
 
 void Animator::animate() {
-	int nextFrame = this->animationClock.getElapsedTime().asMilliseconds() / (this->currentAnimation == ATTACK ? this->entity->getTimePerAttack() / 3 : this->frameDelay);
+	int nextFrame = this->animationClock.getElapsedTime().asMilliseconds() / (this->currentAnimation == ATTACK ? this->entity->getTimePerAttack() / 4 : this->frameDelay);
 
 	if (nextFrame >= this->nbFrame[this->currentAnimation]) {
 

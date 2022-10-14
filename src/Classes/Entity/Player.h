@@ -1,11 +1,17 @@
 #pragma once
 #include "Entity.h"
 #include "../Misc/Weapon.h"
+#include "../Projectiles/StraightProjectile.h"
+#include "../Projectiles/ParabolicProjectile.h"
 
 class Player: public Entity
 {
 private:
 	Weapon* weapon;
+
+	int manaMax;
+	int mana;
+
 	bool isAttacking;
 	sf::RectangleShape hitboxWeapon;
 	sf::Clock invulnerabilityClock;
@@ -18,7 +24,11 @@ private:
 
 	bool dead = false;
 
+	std::vector<Entity*> alreadyHit;
+
 	sf::SoundBuffer jumpSound;
+
+
 
 	void updateHitboxWeapon();
 
@@ -34,6 +44,9 @@ public:
 	void takeDamage(int amount);
 	void jump();
 	
+	void specialOne();
+	void specialTwo();
+
 	void addHp(int amount);
 	void addMaxHp(int amount);
 
@@ -42,7 +55,12 @@ public:
 	void changeWeapon(Weapon* weapon);
 
 	Weapon* getWeapon();
+	EntityManager* getEntityManager();
 	sf::RectangleShape gethitboxWeapon();
+
+	int getMana();
+	int getMaxMana();
+
 	bool isInvulnerable();
 };
 

@@ -1,19 +1,15 @@
 #include "SoundManager.h"
 
 SoundManager::SoundManager() {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < this->nbMaxMusic; i++) {
 		this->musicList.push_back(new sf::Music());
 		this->musicList.at(i)->openFromFile("music/0" + std::to_string(i + 1) + ".ogg");
 	}
 	this->playMusic(0);
-
-	srand(time(NULL));
-
 }
 
 void SoundManager::update() {
-	std::cout << this->sfxList.size() << std::endl;
-	if (this->currentMusic->getStatus() == 0) {
+	if (!this->bossMusic && this->currentMusic->getStatus() == 0) {
 		int randomId = -1;
 		do {
 			randomId = rand() % this->nbMaxMusic;
@@ -25,11 +21,25 @@ void SoundManager::update() {
 }
 
 void SoundManager::playMusic(int id) {
-	if(this->currentMusic)
+	if (this->currentMusic)
 		this->currentMusic->stop();
 	this->currentMusic = this->musicList.at(id);
 	this->currentMusicId = id;
 	this->currentMusic->play();
+}
+
+void SoundManager::playBossMusic(sf::Music* music) {
+	this->currentMusic->stop();
+	music->play();
+	music->setLoop(true);
+	this->bossMusic = true;
+}
+
+void SoundManager::endBossMusic(sf::Music* music) {
+	music->stop();
+	this->playBossMusic(this->currentMusic);
+	this->bossMusic = false;
+	this->playMusic(4);
 }
 
 void SoundManager::playSoundEffect(sf::SoundBuffer* soundBuffer) {

@@ -1,4 +1,5 @@
 #include "Reaper.h"
+#include "../Manager/GameManager.h"
 
 Reaper::Reaper(sf::Vector2f pos, const int* currentLevel, const int levelXSize, float speedFactor, EntityManager* entityManager) : Monster("images/Reaper.png", pos, 128, 159, "Reaper", 150, currentLevel, levelXSize, speedFactor, 0.f, entityManager, NULL) {
 	this->hp = 10;
@@ -23,6 +24,7 @@ Reaper::Reaper(sf::Vector2f pos, const int* currentLevel, const int levelXSize, 
 	this->scoreOnDeath = 1000;
 
 	this->hitSound.loadFromFile("sfx/pHurt.wav");
+	this->bossTheme.openFromFile("music/deathTheme.ogg");
 }
 
 const void Reaper::update() {
@@ -55,6 +57,7 @@ void Reaper::moveTick() {
 void Reaper::startBoss() {
 	this->bossStarted = true;
 	this->entityManager->startBossCombat(this);
+	this->entityManager->getGameManager()->getSoundManager()->playBossMusic(&this->bossTheme);
 }
 
 const sf::Vector2f Reaper::cameraTracking() {
@@ -103,6 +106,7 @@ const void Reaper::taskDeletion() {
 
 Reaper::~Reaper() {
 	this->entityManager->endBossCombat();
+	this->entityManager->getGameManager()->getSoundManager()->endBossMusic(&this->bossTheme);
 	this->weaponUpgrade = new WeaponUpgrade(this->currentLevel, this->levelXSize, 2);
 	this->entityManager->addCollectible(this->weaponUpgrade);
 	this->weaponUpgrade->setPosition(this->getPosition());

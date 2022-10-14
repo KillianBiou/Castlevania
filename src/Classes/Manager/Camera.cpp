@@ -5,6 +5,7 @@ Camera::Camera(const int levelXSize, const int levelYSize) : levelXSize(levelXSi
 
 	this->score = new Score("font/Pixel.ttf");
 	this->healthBar = new HealthBar("font/Pixel.ttf");
+	this->manaBar = new ManaBar("font/Pixel.ttf");
 }
 
 float Camera::clamp(float value, float min, float max) {
@@ -31,12 +32,15 @@ void Camera::trackTarget(sf::RenderTarget* renderTarget) {
 		renderTarget->setView(*this->view);
 	}
 	this->healthBar->setPosition(view->getCenter().x - view->getSize().x / 2, view->getCenter().y - view->getSize().y / 2);
-	this->score->setPosition(view->getCenter().x - view->getSize().x / 2, view->getCenter().y - view->getSize().y / 2 + 70);
+	this->manaBar->setPosition(view->getCenter().x - view->getSize().x / 2, view->getCenter().y - view->getSize().y / 2 + 70);
+	this->score->setPosition(view->getCenter().x - view->getSize().x / 2, view->getCenter().y - view->getSize().y / 2 + 140);
 	
 	this->healthBar->update();
+	this->manaBar->update();
 	this->score->update();
 
 	renderTarget->draw(*this->healthBar);
+	renderTarget->draw(*this->manaBar);
 	renderTarget->draw(*this->score);
 }
 
@@ -64,4 +68,8 @@ Score* Camera::getScore() {
 
 HealthBar* Camera::getHealthBar() {
 	return this->healthBar;
+}
+
+ManaBar* Camera::getManaBar() {
+	return this->manaBar;
 }

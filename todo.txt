@@ -12,24 +12,26 @@ Boss
 	- Reaper V
 	- Dracula X
 
+Player
+	- Add knife : straight projectile
+	- Add axe : parabolic projectile
+
 Collectibles
 	- Coeur / Heal V -> random on kill V
 	- HP up V -> drop at x score V
 	- Amélioration arme V -> drop boss V
+	- Mana : Use special
 
 Camera 
 	- System focus V
 		- Changer de focus en cours de jeu V
 
 Musique :
-	- Musique background
-	- Sound Effect
-		- Attack
-		- Hurt
+	- Musique background V
+	- Sound Effect V
+		- Attack V
+		- Hurt V
 		- Death
-		Monster :
-			- Death move
-			- Mummy move
 
 Menu principal
 	- Nouvelle partie

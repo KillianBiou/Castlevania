@@ -26,6 +26,7 @@ public:
 	void phase1(bool reverse);
 	void phase2(bool reverse);
 	void phase3(bool reverse);
+	void phase4(bool reverse);
 
 	int getCurrentPhase();
 	int getDamage();

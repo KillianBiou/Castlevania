@@ -1,4 +1,5 @@
 #include "WeaponUpgrade.h"
+#include "../Manager/GameManager.h"
 
 WeaponUpgrade::WeaponUpgrade(const int* level, const int X_SIZE, int upgradeLevel) : Collectible("images/Collectibles.png", sf::IntRect(32 + upgradeLevel * 32, 0, 32, 32), level, X_SIZE) {
 	this->setScale(1.5f, 1.5f);
@@ -17,6 +18,7 @@ WeaponUpgrade::WeaponUpgrade(const int* level, const int X_SIZE, int upgradeLeve
 }
 
 const void WeaponUpgrade::onPickup(Player* player) {
+	player->getEntityManager()->getGameManager()->getSoundManager()->playSoundEffect(&this->pickupSound);
 	player->changeWeapon(this->weapon);
 	this->setTextureRect(sf::IntRect(0, 0, 0, 0));
 }
