@@ -19,6 +19,7 @@
 #include "Classes/Collectible/HPUp.h"
 #include "Classes/Collectible/WeaponUpgrade.h"
 #include "Classes/Manager/GameManager.h"
+#include "Classes/Manager/MenuManager.h"
 #include "Classes/Manager/Camera.h"
 #include "Classes/Misc/Level.h"
 #include "Classes/Projectiles/StraightProjectile.h"
@@ -187,23 +188,31 @@ int main() {
     auto desktop = sf::VideoMode::getDesktopMode();
 
     srand(time(NULL));
+    bool continueLoop = true;
 
     drawingWindow.setFramerateLimit(60);
 
     Level l(level1, lvl1XSize, lvl1ySize, "images/Background1.png");
 
-    GameManager gameManager(&l, EASY, &lvl1EntityMap);
+    MenuManager menu("a");
+    //GameManager gameManager(&l, EASY, &lvl1EntityMap);
 
     while (drawingWindow.isOpen()) {
         sf::Event event;
         while (drawingWindow.pollEvent(event)) {
-            gameManager.processInput(event, &drawingWindow);
+            //gameManager.processInput(event, &drawingWindow);
+            menu.processInput(event, &drawingWindow);
         }
 
         drawingWindow.clear(sf::Color::Black);
 
-        gameManager.update(&drawingWindow);
+        //gameManager.update(&drawingWindow);
+        continueLoop = menu.update(&drawingWindow);
 
         drawingWindow.display();
     }
+}
+
+void menu() {
+
 }

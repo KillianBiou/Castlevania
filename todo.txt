@@ -12,6 +12,14 @@ Boss
 	- Reaper V
 	- Dracula X
 
+Game :
+	- Main Menu V
+		- Play
+		- Select Level
+		- Quit V
+	- Level Transition
+	- Pause
+
 Player
 	- Add knife : straight projectile V
 	- Add axe : parabolic projectile V
@@ -32,7 +40,3 @@ Musique :
 		- Attack V
 		- Hurt V
 		- Death V
-
-Menu principal
-	- Nouvelle partie
-	- Quitter 
