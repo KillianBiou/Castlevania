@@ -12,6 +12,8 @@ Monster::Monster(std::string texturePath, sf::Vector2f pos, int sizeX, int sizeY
 	this->specialDrop = false;
 
 	this->side = RIGHT;
+
+	this->deathSound.loadFromFile("sfx/medusaDeath.wav");
 }
 
 void const Monster::drawChild(sf::RenderWindow* renderWindow) {

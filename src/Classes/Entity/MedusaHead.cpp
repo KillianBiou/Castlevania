@@ -9,6 +9,7 @@ MedusaHead::MedusaHead(std::string name, sf::Vector2f pos, const int* currentLev
 	this->scoreOnDeath = 50;
 
 	this->sinClock = sf::Clock();
+	this->deathSound.loadFromFile("sfx/medusaDeath.wav");
 }
 
 const void MedusaHead::update() {

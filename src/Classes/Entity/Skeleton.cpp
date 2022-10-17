@@ -4,6 +4,8 @@ Skeleton::Skeleton(sf::Vector2f pos, const int* currentLevel, const int levelXSi
 	this->hp = 3;
 	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 2}, {HURT, 2}, {DEATH, 2} });
 
+	this->manaOnDeath = 3;
+
 	if (!this->boneTexture.loadFromFile("images/Bone.png")) {
 		std::cout << "Error while loading : " << "images/Bone.png" << std::endl;
 	}
@@ -18,6 +20,7 @@ Skeleton::Skeleton(sf::Vector2f pos, const int* currentLevel, const int levelXSi
 	this->scoreOnDeath = 200;
 
 	this->hitSound.loadFromFile("sfx/pHurt.wav");
+	this->deathSound.loadFromFile("sfx/skeletonDeath.wav");
 }
 
 

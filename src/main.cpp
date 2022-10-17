@@ -69,7 +69,7 @@ std::multimap<EntityType, sf::Vector2f> lvl1EntityMap{
     {MEDUSA, sf::Vector2f(0, 1200)},
     {ZOMBIE, sf::Vector2f(1000, 1080)},
     {SKELETON, sf::Vector2f(500, 1080)},
-    {REAPER, sf::Vector2f(2000, 1000)}
+    {MUMMY, sf::Vector2f(2000, 1000)}
 };
 
 /*int main()

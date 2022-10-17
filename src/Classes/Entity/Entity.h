@@ -56,6 +56,8 @@ protected:
 	bool toBeDeleted;
 	int scoreOnDeath;
 
+	int manaOnDeath = 1;
+
 	float verticalVelocity;
 	float speedFactor;
 	float jumpFactor;
@@ -78,6 +80,7 @@ protected:
 	int frameDelay;
 
 	sf::SoundBuffer hitSound;
+	sf::SoundBuffer deathSound;
 
 	// Function
 	void applyGravity();

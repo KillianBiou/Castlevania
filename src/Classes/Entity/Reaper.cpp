@@ -7,6 +7,8 @@ Reaper::Reaper(sf::Vector2f pos, const int* currentLevel, const int levelXSize, 
 	this->animator->setAnimations({ {IDLE, 1}, {HURT, 2}, {DEATH, 3} });
 	this->animator->playAnimation(IDLE);
 
+	this->manaOnDeath = 10;
+
 	this->cameraLock = this->getPosition();
 
 	this->timeBetweenAttacks = 2000;
@@ -25,6 +27,7 @@ Reaper::Reaper(sf::Vector2f pos, const int* currentLevel, const int levelXSize, 
 
 	this->hitSound.loadFromFile("sfx/pHurt.wav");
 	this->bossTheme.openFromFile("music/deathTheme.ogg");
+	this->deathSound.loadFromFile("sfx/reaperDeath.wav");
 }
 
 const void Reaper::update() {

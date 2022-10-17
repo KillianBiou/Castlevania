@@ -33,6 +33,18 @@ std::vector<Projectile*> EntityManager::detectCollisionProjectile(sf::FloatRect 
     return collidedList;
 }
 
+std::vector<Projectile*> EntityManager::detectCollisionAllyProjectile(sf::FloatRect boundary) {
+    std::vector<Projectile*> collidedList = std::vector<Projectile*>();
+    for (int i = 0; i < this->allyProjectileList.size(); i++) {
+        Projectile* currentProjectile = this->allyProjectileList.at(i);
+        if (boundary.intersects(currentProjectile->getGlobalBounds())) {
+            collidedList.push_back(currentProjectile);
+        }
+    }
+
+    return collidedList;
+}
+
 std::vector<Collectible*> EntityManager::detectCollisionCollectibles(sf::FloatRect boundary) {
     std::vector<Collectible*> collidedList = std::vector<Collectible*>();
     for (int i = 0; i < this->collectibleList.size(); i++) {
@@ -72,6 +84,10 @@ void EntityManager::addProjectile(Projectile* projectile) {
     this->projectileList.push_back(projectile);
 }
 
+void EntityManager::addAllyProjectile(Projectile* projectile) {
+    this->allyProjectileList.push_back(projectile);
+}
+
 void EntityManager::removeMonster(Monster* monster) {
     this->monstersList.erase(std::remove(this->monstersList.begin(), this->monstersList.end(), monster), this->monstersList.end());
 }
@@ -80,14 +96,24 @@ void EntityManager::removeProjectile(Projectile* projectile) {
     this->projectileList.erase(std::remove(this->projectileList.begin(), this->projectileList.end(), projectile), this->projectileList.end());
 }
 
+void EntityManager::removeAllyProjectile(Projectile* projectile) {
+    this->allyProjectileList.erase(std::remove(this->allyProjectileList.begin(), this->allyProjectileList.end(), projectile), this->allyProjectileList.end());
+}
+
 void EntityManager::removeCollectible(Collectible* collectible) {
     this->collectibleList.erase(std::remove(this->collectibleList.begin(), this->collectibleList.end(), collectible), this->collectibleList.end());
 }
 
 void EntityManager::updateAllEntities() {
+    this->clearOutOfBoundsProjectiles();
 	if(player)
         player->update();
 	for (int i = 0; i < monstersList.size(); i++) {
+        for (Projectile* projectile : this->detectCollisionAllyProjectile(monstersList.at(i)->getGlobalBounds())) {
+            if(abs(this->player->getPosition().x - projectile->getPosition().x) < 1200)
+                monstersList.at(i)->takeDamage(1);
+            this->removeAllyProjectile(projectile);
+        }
         monstersList.at(i)->update();
 	}
     for (Spawner* spawner : this->spawnerList) {
@@ -96,8 +122,10 @@ void EntityManager::updateAllEntities() {
     for (Collectible* collectible : this->collectibleList) {
         collectible->update();
     }
-    this->clearOutOfBoundsProjectiles();
     for (Projectile* projectile : projectileList) {
+        projectile->update();
+    }
+    for (Projectile* projectile : allyProjectileList) {
         projectile->update();
     }
     if (!player->isInvulnerable()) {
@@ -128,6 +156,16 @@ void EntityManager::clearOutOfBoundsProjectiles() {
             delete temp;
         }
     }
+    for (Projectile* projectile : this->allyProjectileList) {
+        std::cout << "dfopzak,dpazo\n";
+        if (!projectile->getGlobalBounds().intersects(tempCollider)) {
+            std::cout << "deleted\n";
+            Projectile* temp = projectile;
+            projectile->setPosition(0.f, -9000.f);
+            this->removeAllyProjectile(projectile);
+            delete temp;
+        }
+    }
 
 }
 
@@ -142,6 +180,9 @@ void EntityManager::drawAllEntities(sf::RenderTarget* renderTarget) {
     }
     for (int i = 0; i < projectileList.size(); i++) {
         renderTarget->draw(*projectileList.at(i));
+    }
+    for (int i = 0; i < allyProjectileList.size(); i++) {
+        renderTarget->draw(*allyProjectileList.at(i));
     }
     for (int i = 0; i < collectibleList.size(); i++) {
         renderTarget->draw(*collectibleList.at(i));
@@ -171,10 +212,16 @@ bool EntityManager::isOnScreen(sf::Vector2f pos) {
 
 void EntityManager::startBossCombat(Monster* target) {
     this->gameManager->getCamera()->setTarget(target);
+    for (Spawner* spawner : this->spawnerList) {
+        spawner->switchSpawn();
+    }
 }
 
 void EntityManager::endBossCombat() {
     this->gameManager->getCamera()->setTarget(this->player);
+    for (Spawner* spawner : this->spawnerList) {
+        spawner->switchSpawn();
+    }
 }
 
 void EntityManager::addScore(int amount) {

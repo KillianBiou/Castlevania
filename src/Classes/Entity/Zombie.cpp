@@ -4,6 +4,8 @@ Zombie::Zombie(sf::Vector2f pos, const int* currentLevel, const int levelXSize, 
 	this->hp = 2;
 	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 2}, {DEATH, 0} });
 
+	this->manaOnDeath = 2;
+
 	this->animator->playAnimation(RUNNING);
 
 	this->doubleSpeed = false;
@@ -12,6 +14,7 @@ Zombie::Zombie(sf::Vector2f pos, const int* currentLevel, const int levelXSize, 
 	this->setHorizontalMovement(direction);
 
 	this->hitSound.loadFromFile("sfx/pHurt.wav");
+	this->deathSound.loadFromFile("sfx/zombieDeath.wav");
 }
 
 void const Zombie::update() {

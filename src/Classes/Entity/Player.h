@@ -8,6 +8,8 @@ class Player: public Entity
 {
 private:
 	Weapon* weapon;
+	sf::Texture knifeTexture;
+	sf::Texture axeTexture;
 
 	int manaMax;
 	int mana;
@@ -15,6 +17,8 @@ private:
 	bool isAttacking;
 	sf::RectangleShape hitboxWeapon;
 	sf::Clock invulnerabilityClock;
+	sf::Clock specialClock;
+	int specialCooldown = 500;
 
 	float invulnerabilityTime;
 
@@ -27,8 +31,6 @@ private:
 	std::vector<Entity*> alreadyHit;
 
 	sf::SoundBuffer jumpSound;
-
-
 
 	void updateHitboxWeapon();
 
@@ -49,6 +51,8 @@ public:
 
 	void addHp(int amount);
 	void addMaxHp(int amount);
+
+	void addMana(int amount);
 
 	const sf::Vector2f cameraTracking();
 

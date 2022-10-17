@@ -142,7 +142,7 @@ void Entity::takeDamage(int amount) {
     }
     else {
         this->animator->playAnimation(HURT);
-        this->entityManager->getGameManager()->getSoundManager()->playSoundEffect(&this->hitSound);
+        this->playSfx(&this->hitSound);
         this->damageFlicker();
     }
 }
@@ -159,6 +159,8 @@ void Entity::damageFlicker() {
 
 
 void Entity::die() {
+    this->playSfx(&this->deathSound);
+    this->entityManager->getPlayer()->addMana(this->manaOnDeath);
     this->entityManager->addScore(this->scoreOnDeath);
     this->dead = true;
     this->animator->playAnimation(DEATH);

@@ -5,13 +5,21 @@
 
 Player::Player(sf::Vector2f pos, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager) : Entity("images/Belmon.png", pos, 64, 128, frameDelay, currentLevel, levelXSize, speedFactor, jumpFactor, entityManager) {
 	this->weapon = new Weapon("images/Whip1.png", 1, 400, "sfx/whip1.ogg");
+
+	if (!this->knifeTexture.loadFromFile("images/Knife.png")) {
+		std::cout << "Error while loading : " << "images/Knife.png" << std::endl;
+	}
+	if (!this->axeTexture.loadFromFile("images/Axe.png")) {
+		std::cout << "Error while loading : " << "images/Axe.png" << std::endl;
+	}
+
 	this->timePerAttack = this->weapon->getTimePerAttack();
 	this->spriteSizeXAttack1 = 128;
 	this->spriteSizeYAttack1 = 128;
 	this->spriteSizeXAttack2 = 241;
 	this->spriteSizeYAttack2 = 128;
 
-	this->manaMax = 5;
+	this->manaMax = 10;
 	this->mana = this->manaMax;
 
 	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 3}, {JUMPING, 1}, {ATTACK, 4}, {HURT, 2}, {DEATH, 4} });
@@ -24,6 +32,7 @@ Player::Player(sf::Vector2f pos, int frameDelay, const int* currentLevel, const 
 	this->jumpSound.loadFromFile("sfx/jump.wav");
 	this->hitSound.loadFromFile("sfx/pHurt.wav");
 
+	this->specialClock = sf::Clock();
 	this->invulnerabilityClock = sf::Clock();
 	this->invulnerabilityTime = 1000.f;
 	entityManager->setPlayer(this);
@@ -101,16 +110,26 @@ void const Player::attack(bool advance) {
 }
 
 void Player::specialOne() {
-	if (this->mana >= 1) {
+	if (this->mana >= 1 && this->specialClock.getElapsedTime().asMilliseconds() >= this->specialCooldown) {
 		std::cout << "Knife" << std::endl;
+		this->specialClock.restart();
 		this->mana--;
+		StraightProjectile* temp = new StraightProjectile(this->knifeTexture, 64, 64, this->getPosition(), 15.f, sf::Vector2f(this->getPosition().x + 10 * this->getScale().x, this->getPosition().y), 1);
+		temp->setOrigin(32, 32);
+		temp->setScale(-this->getScale().x, 1.f);
+		this->entityManager->addAllyProjectile(temp);
 	}
 }
 
 void Player::specialTwo() {
-	if (this->mana >= 1) {
+	if (this->mana >= 1 && this->specialClock.getElapsedTime().asMilliseconds() >= this->specialCooldown) {
 		std::cout << "Axe" << std::endl;
+		this->specialClock.restart();
 		this->mana--;
+		ParabolicProjectile* temp = new ParabolicProjectile(this->axeTexture, 64, 64, this->getPosition() - sf::Vector2f(0.f, this->spriteSizeY / 2), 0.65f, 500 *  this->getScale().x, 4);
+		temp->setOrigin(32, 32);
+		temp->setScale(-this->getScale().x, 1.f);
+		this->entityManager->addAllyProjectile(temp);
 	}
 }
 
@@ -155,8 +174,9 @@ void Player::takeDamage(int amount) {
 }
 
 void Player::jump() {
+	if (this->isGrounded)
+		this->playSfx(&this->jumpSound);
 	this->setVerticalMovement(UP);
-	this->entityManager->getGameManager()->getSoundManager()->playSoundEffect(&this->jumpSound);
 }
 
 void Player::changeWeapon(Weapon* weapon) {
@@ -176,6 +196,13 @@ void Player::addMaxHp(int amount) {
 		this->maxHp += amount;
 	}
 	this->hp = this->maxHp;
+}
+
+void Player::addMana(int amount) {
+	this->mana += amount;
+	if (this->mana > this->manaMax) {
+		this->mana = this->manaMax;
+	}
 }
 
 void Player::updateHitboxWeapon() {

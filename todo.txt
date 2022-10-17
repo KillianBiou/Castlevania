@@ -13,14 +13,14 @@ Boss
 	- Dracula X
 
 Player
-	- Add knife : straight projectile
-	- Add axe : parabolic projectile
+	- Add knife : straight projectile V
+	- Add axe : parabolic projectile V
 
 Collectibles
 	- Coeur / Heal V -> random on kill V
 	- HP up V -> drop at x score V
 	- Amélioration arme V -> drop boss V
-	- Mana : Use special
+	- Mana : gain on kill V
 
 Camera 
 	- System focus V
@@ -31,7 +31,7 @@ Musique :
 	- Sound Effect V
 		- Attack V
 		- Hurt V
-		- Death
+		- Death V
 
 Menu principal
 	- Nouvelle partie

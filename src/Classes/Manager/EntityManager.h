@@ -31,6 +31,7 @@ private:
 	sf::View* cameraView;
 
 	std::vector<Projectile*> projectileList;
+	std::vector<Projectile*> allyProjectileList;
 	std::vector<Monster*> monstersList;
 	std::vector<Spawner*> spawnerList;
 	std::vector<Collectible*> collectibleList;
@@ -42,20 +43,23 @@ public:
 
 	EntityManager(Camera* camera, GameManager* gameManager);
 
-	std::vector<Entity*> detectCollisionMonster(sf::FloatRect boundary);
-	std::vector<Projectile*> detectCollisionProjectile(sf::FloatRect boundary);
-	std::vector<Collectible*> detectCollisionCollectibles(sf::FloatRect boundary);
-
 	void setPlayer(Player* player);
 	void addSpawner(Spawner* spawner);
 	void addMonster(Monster* monster);
 	void addProjectile(Projectile* projectile);
+	void addAllyProjectile(Projectile* projectile);
 	void addCollectible(Collectible* collectible);
+	
+	std::vector<Entity*> detectCollisionMonster(sf::FloatRect boundary);
+	std::vector<Projectile*> detectCollisionProjectile(sf::FloatRect boundary);
+	std::vector<Projectile*> detectCollisionAllyProjectile(sf::FloatRect boundary);
+	std::vector<Collectible*> detectCollisionCollectibles(sf::FloatRect boundary);
 
 	bool verifyScore();
 
 	void removeMonster(Monster* monster);
 	void removeProjectile(Projectile* projectile);
+	void removeAllyProjectile(Projectile* projectile);
 	void removeCollectible(Collectible* collectible);
 
 	void drawAllEntities(sf::RenderTarget* renderTarget);

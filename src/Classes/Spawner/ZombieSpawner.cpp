@@ -17,7 +17,8 @@ void ZombieSpawner::spawnEntity() {
 		direction = LEFT;
 		xSpawn = this->maxX;
 	}
-	this->currentInstance = new Zombie(sf::Vector2f(xSpawn, this->getPosition().y), this->level, this->xSize, this->speedFactor, direction, this->entityManager, this);
+	if(canSpawn)
+		this->currentInstance = new Zombie(sf::Vector2f(xSpawn, this->getPosition().y), this->level, this->xSize, this->speedFactor, direction, this->entityManager, this);
 }
 
 void const ZombieSpawner::update() {

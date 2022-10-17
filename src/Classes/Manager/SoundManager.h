@@ -7,12 +7,12 @@
 class SoundManager {
 private:
 	std::vector<sf::Music*> musicList;
-	std::vector<sf::Sound> sfxList;
+	std::vector<sf::Sound*> sfxList;
 
 	sf::Music* currentMusic;
 	int currentMusicId;
 
-	int nbMaxMusic = 5;
+	int nbMaxMusic = 4;
 
 	bool bossMusic = false;
 

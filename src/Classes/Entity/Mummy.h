@@ -18,6 +18,8 @@ private:
 
 	sf::Vector2f cameraLock;
 
+	sf::Music bossTheme;
+
 	void enrage();
 	void animate();
 	void goToward();

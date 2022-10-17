@@ -11,7 +11,8 @@ MedusaHeadSpawner::MedusaHeadSpawner(float y, const int* level, const int xSize,
 }
 
 void MedusaHeadSpawner::spawnEntity() {
-	this->currentInstance = new MedusaHead("Medusahead 1", this->getPosition(), this->level, this->xSize, this->speedFactor, this->amplitude, this->frequency, this->entityManager, this);
+	if(canSpawn)
+		this->currentInstance = new MedusaHead("Medusahead 1", this->getPosition(), this->level, this->xSize, this->speedFactor, this->amplitude, this->frequency, this->entityManager, this);
 }
 
 
