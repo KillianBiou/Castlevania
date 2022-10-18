@@ -4,8 +4,8 @@
 #include "../Manager/GameManager.h"
 
 
-Entity::Entity(std::string texturePath, sf::Vector2f position, int sizeX, int sizeY, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager):
-               spriteSizeX(sizeX), spriteSizeY(sizeY), frameDelay(frameDelay), currentLevel(currentLevel), levelXSize(levelXSize), speedFactor(speedFactor), jumpFactor(jumpFactor) {
+Entity::Entity(std::string texturePath, sf::Vector2f position, int sizeX, int sizeY, int frameDelay, float speedFactor, float jumpFactor, EntityManager* entityManager):
+               spriteSizeX(sizeX), spriteSizeY(sizeY), frameDelay(frameDelay), speedFactor(speedFactor), jumpFactor(jumpFactor) {
     this->name = "Entity";
     if (!this->texture.loadFromFile(texturePath)) {
         std::cout << "Error while loading : " << texturePath << std::endl;
@@ -80,18 +80,19 @@ void Entity::moveCollisionPoint() {
 }
 
 void Entity::checkCollision() {
+    Level* currentLevel = this->entityManager->getGameManager()->getLevel();
     // Ground Check
     int xCollision = int(this->groundedPoint.x / 64);
     int yCollision = int(this->groundedPoint.y / 64);
     int xCollisionBis = int(this->groundedPointBis.x / 64);
     int yCollisionBis = int(this->groundedPointBis.y / 64);
-    if ((this->currentLevel[xCollision + yCollision * levelXSize] != 0 || this->currentLevel[xCollisionBis + yCollisionBis * levelXSize] != 0) && this->isGrounded == false) {
+    if ((currentLevel->getLevelRaw()[xCollision + yCollision * currentLevel->getSizeX()] != 0 || currentLevel->getLevelRaw()[xCollisionBis + yCollisionBis * currentLevel->getSizeX()] != 0) && this->isGrounded == false) {
         this->setIsGrounded(true);
         this->setVerticalMovement(NONE);
         this->setPosition(this->getPosition().x, yCollision * 64 - spriteSizeY / 2.f);
 
     }
-    else if ((this->currentLevel[xCollision + yCollision * levelXSize] == 0 && this->currentLevel[xCollisionBis + yCollisionBis * levelXSize] == 0) && this->isGrounded == true) {
+    else if ((currentLevel->getLevelRaw()[xCollision + yCollision * currentLevel->getSizeX()] == 0 && currentLevel->getLevelRaw()[xCollisionBis + yCollisionBis * currentLevel->getSizeX()] == 0) && this->isGrounded == true) {
         this->setIsGrounded(false);
     }
 
@@ -100,7 +101,7 @@ void Entity::checkCollision() {
     yCollision = int(this->topBoundPoint.y / 64);
     xCollisionBis = int(this->topBoundPointBis.x / 64);
     yCollisionBis = int(this->topBoundPointBis.y / 64);
-    if (this->currentLevel[xCollision + yCollision * levelXSize] != 0 || this->currentLevel[xCollisionBis + yCollisionBis * levelXSize] != 0) {
+    if (currentLevel->getLevelRaw()[xCollision + yCollision * currentLevel->getSizeX()] != 0 || currentLevel->getLevelRaw()[xCollisionBis + yCollisionBis * currentLevel->getSizeX()] != 0) {
         this->verticalVelocity = 0.f;
         this->move(0.f, 5.f);
     }
@@ -112,7 +113,7 @@ void Entity::checkCollision() {
     yCollisionBis = int(this->rightBoundPointBis.y / 64);
     int xCollisionPrime = int(this->rightBoundPointPrime.x / 64);
     int yCollisionPrime = int(this->rightBoundPointPrime.y / 64);
-    if ((this->currentLevel[xCollision + yCollision * levelXSize] != 0 || this->currentLevel[xCollisionBis + yCollisionBis * levelXSize] != 0 || this->currentLevel[xCollisionPrime + yCollisionPrime * levelXSize] != 0) && this->moveDirection == RIGHT) {
+    if ((currentLevel->getLevelRaw()[xCollision + yCollision * currentLevel->getSizeX()] != 0 || currentLevel->getLevelRaw()[xCollisionBis + yCollisionBis * currentLevel->getSizeX()] != 0 || currentLevel->getLevelRaw()[xCollisionPrime + yCollisionPrime * currentLevel->getSizeX()] != 0) && this->moveDirection == RIGHT) {
         this->blockageRight = true;
     }
     else {
@@ -126,7 +127,7 @@ void Entity::checkCollision() {
     yCollisionBis = int(this->leftBoundPointBis.y / 64);
     xCollisionPrime = int(this->leftBoundPointPrime.x / 64);
     yCollisionPrime = int(this->leftBoundPointPrime.y / 64);
-    if ((this->currentLevel[xCollision + yCollision * levelXSize] != 0 || this->currentLevel[xCollisionBis + yCollisionBis * levelXSize] != 0 || this->currentLevel[xCollisionPrime + yCollisionPrime * levelXSize] != 0) && this->moveDirection == LEFT) {
+    if ((currentLevel->getLevelRaw()[xCollision + yCollision * currentLevel->getSizeX()] != 0 || currentLevel->getLevelRaw()[xCollisionBis + yCollisionBis * currentLevel->getSizeX()] != 0 || currentLevel->getLevelRaw()[xCollisionPrime + yCollisionPrime * currentLevel->getSizeX()] != 0) && this->moveDirection == LEFT) {
         this->blockageLeft = true;
     }
     else {

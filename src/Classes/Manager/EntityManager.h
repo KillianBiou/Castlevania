@@ -65,6 +65,8 @@ public:
 	void drawAllEntities(sf::RenderTarget* renderTarget);
 	void updateAllEntities();
 
+	void clear();
+
 	void startBossCombat(Monster* target);
 	void endBossCombat();
 

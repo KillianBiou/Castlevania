@@ -19,9 +19,6 @@ enum MoveDirection
 class Entity: public sf::Sprite
 {
 protected:
-	const int* currentLevel;
-	const int levelXSize;
-
 	int maxHp;
 	int hp;
 	std::string name;
@@ -90,8 +87,8 @@ protected:
 	void playSfx(sf::SoundBuffer* sound);
 
 public:
-	Entity(std::string texturePath, sf::Vector2f position, int sizeX, int sizeY, int frameDelay, const int* currentLevel, const int levelXSize,
-		   float speedFactor, float jumpFactor, EntityManager* entityManager);
+	Entity(std::string texturePath, sf::Vector2f position, int sizeX, int sizeY, int frameDelay, 
+		float speedFactor, float jumpFactor, EntityManager* entityManager);
 
 	void updateAll();
 	void moveCollisionPoint();

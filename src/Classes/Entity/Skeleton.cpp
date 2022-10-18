@@ -1,6 +1,6 @@
 #include "Skeleton.h"
 
-Skeleton::Skeleton(sf::Vector2f pos, const int* currentLevel, const int levelXSize, float speedFactor, float targetDistToPlayer, int attackCooldown, EntityManager* entityManager, Spawner* spawner) : Monster("images/Skeleton.png", pos, 64, 128, "Skeleton", 100, currentLevel, levelXSize, speedFactor, 0, entityManager, spawner) {
+Skeleton::Skeleton(sf::Vector2f pos, float speedFactor, float targetDistToPlayer, int attackCooldown, EntityManager* entityManager, Spawner* spawner) : Monster("images/Skeleton.png", pos, 64, 128, "Skeleton", 100, speedFactor, 0, entityManager, spawner) {
 	this->hp = 3;
 	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 2}, {HURT, 2}, {DEATH, 2} });
 

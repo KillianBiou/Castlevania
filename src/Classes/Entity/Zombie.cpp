@@ -1,6 +1,6 @@
 #include "Zombie.h"
 
-Zombie::Zombie(sf::Vector2f pos, const int* currentLevel, const int levelXSize, float speedFactor, MoveDirection direction, EntityManager* entityManager, Spawner* spawner) : Monster("images/Zombie.png", pos, 64, 128, "Zombie", 100, currentLevel, levelXSize, speedFactor, 0, entityManager, spawner) {
+Zombie::Zombie(sf::Vector2f pos, float speedFactor, MoveDirection direction, EntityManager* entityManager, Spawner* spawner) : Monster("images/Zombie.png", pos, 64, 128, "Zombie", 100, speedFactor, 0, entityManager, spawner) {
 	this->hp = 2;
 	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 2}, {DEATH, 0} });
 

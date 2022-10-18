@@ -1,6 +1,7 @@
 #include "Camera.h"
+#include "GameManager.h"
 
-Camera::Camera(const int levelXSize, const int levelYSize) : levelXSize(levelXSize), levelYSize(levelYSize) {
+Camera::Camera() {
 	this->view = new sf::View(sf::FloatRect(0, 500, 1920, 1080));
 
 	this->score = new Score("font/Pixel.ttf");
@@ -13,20 +14,31 @@ float Camera::clamp(float value, float min, float max) {
 }
 
 void Camera::trackTarget(sf::RenderTarget* renderTarget) {
+	if (!this->entityManager) {
+		return;
+	}
+	this->levelXSize = this->entityManager->getGameManager()->getLevel()->getSizeX();
+	this->levelYSize = this->entityManager->getGameManager()->getLevel()->getSizeY();
 	if (target) {
 		sf::Vector2f targetPos = this->target->cameraTracking();
 		targetPos.x = clamp(targetPos.x, this->view->getSize().x / 2, this->levelXSize * 64 - this->view->getSize().x / 2);
 		targetPos.y = clamp(targetPos.y, this->view->getSize().y / 2, this->levelYSize * 64 - this->view->getSize().y / 2);
 		
-		sf::Vector2f direction = sf::Vector2f(targetPos.x - view->getCenter().x, targetPos.y - view->getCenter().y);
-		float magnitude = sqrt(direction.x * direction.x + direction.y * direction.y);
-		if (magnitude > 10) {
-			direction.x = (direction.x / magnitude) * 10.f;
-			direction.y = (direction.y / magnitude) * 10.f;
-			this->view->move(direction);
+		if (this->teleportToTarget) {
+			this->view->setCenter(targetPos);
+			this->teleportToTarget = false;
 		}
 		else {
-			this->view->setCenter(targetPos);
+			sf::Vector2f direction = sf::Vector2f(targetPos.x - view->getCenter().x, targetPos.y - view->getCenter().y);
+			float magnitude = sqrt(direction.x * direction.x + direction.y * direction.y);
+			if (magnitude > 10) {
+				direction.x = (direction.x / magnitude) * 10.f;
+				direction.y = (direction.y / magnitude) * 10.f;
+				this->view->move(direction);
+			}
+			else {
+				this->view->setCenter(targetPos);
+			}
 		}
 
 		renderTarget->setView(*this->view);
@@ -57,9 +69,14 @@ void Camera::setTarget(Entity* target) {
 		float x = clamp(target->getPosition().x, this->view->getSize().x / 2, this->levelXSize * 64 - this->view->getSize().x / 2);
 		float y = clamp(target->getPosition().y, this->view->getSize().y / 2, this->levelYSize * 64 - this->view->getSize().y / 2);
 		this->view->setCenter(sf::Vector2f(x, y));
+		teleportToTarget = true;
 	}
 	this->target = target;
 	this->firstInitialisation = false;
+}
+
+void Camera::teleport() {
+	this->teleportToTarget = true;
 }
 
 Score* Camera::getScore() {

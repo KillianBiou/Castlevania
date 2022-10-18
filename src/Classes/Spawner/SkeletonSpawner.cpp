@@ -7,7 +7,7 @@ SkeletonSpawner::SkeletonSpawner(sf::Vector2f pos, const int* level, const int x
 
 void SkeletonSpawner::spawnEntity() {
 	if(canSpawn)
-		this->currentInstance = new Skeleton(this->getPosition(), this->level, this->xSize, this->speedFactor, this->targetDistToPlayer, this->attackCooldown, this->entityManager, this);
+		this->currentInstance = new Skeleton(this->getPosition(), this->speedFactor, this->targetDistToPlayer, this->attackCooldown, this->entityManager, this);
 }
 
 void const SkeletonSpawner::update() {

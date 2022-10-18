@@ -153,7 +153,6 @@ void EntityManager::clearOutOfBoundsProjectiles() {
         if (!projectile->getGlobalBounds().intersects(tempCollider)) {
             Projectile* temp = projectile;
             this->removeProjectile(projectile);
-            delete temp;
         }
     }
     for (Projectile* projectile : this->allyProjectileList) {
@@ -222,6 +221,14 @@ void EntityManager::endBossCombat() {
     for (Spawner* spawner : this->spawnerList) {
         spawner->switchSpawn();
     }
+}
+
+void EntityManager::clear() {
+    this->monstersList.clear();
+    this->projectileList.clear();
+    this->allyProjectileList.clear();
+    this->spawnerList.clear();
+    this->collectibleList.clear();
 }
 
 void EntityManager::addScore(int amount) {

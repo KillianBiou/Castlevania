@@ -3,7 +3,7 @@
 #include "../Manager/EntityManager.h"
 #include "../Manager/GameManager.h"
 
-Player::Player(sf::Vector2f pos, int frameDelay, const int* currentLevel, const int levelXSize, float speedFactor, float jumpFactor, EntityManager* entityManager) : Entity("images/Belmon.png", pos, 64, 128, frameDelay, currentLevel, levelXSize, speedFactor, jumpFactor, entityManager) {
+Player::Player(sf::Vector2f pos, int frameDelay, float speedFactor, float jumpFactor, EntityManager* entityManager) : Entity("images/Belmon.png", pos, 64, 128, frameDelay, speedFactor, jumpFactor, entityManager) {
 	this->weapon = new Weapon("images/Whip1.png", 1, 400, "sfx/whip1.ogg");
 
 	if (!this->knifeTexture.loadFromFile("images/Knife.png")) {

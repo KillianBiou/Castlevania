@@ -1,8 +1,12 @@
 #include "MenuManager.h"
+#include "GameMaster.h"
+#include "GameManager.h"
 
-MenuManager::MenuManager(std::string a)  {
+MenuManager::MenuManager(GameMaster* gameMaster): gameMaster(gameMaster) {
     this->cursorTexture.loadFromFile("images/Knife.png");
     this->backgroundTexture.loadFromFile("images/mainMenu.png");
+    this->lvl1Texture.loadFromFile("images/level1Menu.png");
+    this->lvl2Texture.loadFromFile("images/level2Menu.png");
     this->thunderTexture.loadFromFile("images/thunderEffect.png");
     this->font.loadFromFile("font/mainMenu.ttf");
 
@@ -12,6 +16,14 @@ MenuManager::MenuManager(std::string a)  {
     backgroundImage.setTexture(backgroundTexture);
     this->cursorSprite = sf::Sprite();
     cursorSprite.setTexture(cursorTexture);
+
+    this->lvl1Image = sf::Sprite();
+    this->lvl1Image.setTexture(this->lvl1Texture);
+    this->lvl1Image.setPosition(400, 450);
+
+    this->lvl2Image = sf::Sprite();
+    this->lvl2Image.setTexture(this->lvl2Texture);
+    this->lvl2Image.setPosition(1000, 450);
 
     this->thunderEffect = sf::Sprite();
     this->thunderEffect.setTexture(thunderTexture);
@@ -38,10 +50,37 @@ MenuManager::MenuManager(std::string a)  {
     this->exitButton.setFillColor(sf::Color::White);
     this->exitButton.setPosition(sf::Vector2f(400, 700));
 
+    this->backButton = sf::Text();
+    this->backButton.setFont(this->font);
+    this->backButton.setString("Back");
+    this->backButton.setCharacterSize(100);
+    this->backButton.setFillColor(sf::Color::White);
+    this->backButton.setPosition(sf::Vector2f(850, 800));
+
+    this->lvl1Description = sf::Text();
+    this->lvl1Description.setFont(this->font);
+    this->lvl1Description.setString("Entrance");
+    this->lvl1Description.setCharacterSize(75);
+    this->lvl1Description.setFillColor(sf::Color::White);
+    this->lvl1Description.setPosition(sf::Vector2f(this->lvl1Image.getPosition() + sf::Vector2f(125, 190)));
+
+    this->lvl2Description = sf::Text();
+    this->lvl2Description.setFont(this->font);
+    this->lvl2Description.setString("Clock Tower");
+    this->lvl2Description.setCharacterSize(75);
+    this->lvl2Description.setFillColor(sf::Color::White);
+    this->lvl2Description.setPosition(sf::Vector2f(this->lvl2Image.getPosition() + sf::Vector2f(100.f, 190)));
+
     this->cursorMap = {
         {0, sf::Vector2f(this->playButton.getPosition() + sf::Vector2f(50 + this->playButton.getGlobalBounds().width, this->playButton.getGlobalBounds().height / 2))},
         {1, sf::Vector2f(this->selectLevel.getPosition() + sf::Vector2f(50 + this->selectLevel.getGlobalBounds().width, this->selectLevel.getGlobalBounds().height / 2))},
         {2, sf::Vector2f(this->exitButton.getPosition() + sf::Vector2f(50 + this->exitButton.getGlobalBounds().width, this->exitButton.getGlobalBounds().height / 2))}
+    };
+
+    this->cursorMapLevelS = {
+        {0, sf::Vector2f(this->lvl1Image.getPosition() + sf::Vector2f(50 + this->lvl1Image.getGlobalBounds().width, this->lvl1Image.getGlobalBounds().height / 2))},
+        {1, sf::Vector2f(this->lvl2Image.getPosition() + sf::Vector2f(50 + this->lvl2Image.getGlobalBounds().width, this->lvl2Image.getGlobalBounds().height / 2))},
+        {2, sf::Vector2f(this->backButton.getPosition() + sf::Vector2f(50 + this->backButton.getGlobalBounds().width, this->backButton.getGlobalBounds().height / 2))}
     };
 
     this->music.openFromFile("music/mainMenu.ogg");
@@ -72,8 +111,16 @@ bool MenuManager::update(sf::RenderTarget* renderTarget) {
                 currentTime = 255;
             this->thunderEffect.setColor(sf::Color(255, 255, 255, 255 - currentTime));
         }
+        else if (timestamp >= 3000) {
+            this->exit();
+        }
     }
-    this->cursorSprite.setPosition(this->cursorMap[this->currentPosision]);
+    if (this->levelSelection) {
+        this->cursorSprite.setPosition(this->cursorMapLevelS[this->currentPosition]);
+    }
+    else {
+        this->cursorSprite.setPosition(this->cursorMap[this->currentPosition]);
+    }
     this->draw(renderTarget);
 
     if (stopFadeOut) {
@@ -83,32 +130,84 @@ bool MenuManager::update(sf::RenderTarget* renderTarget) {
 }
 
 void MenuManager::processSelection(sf::RenderTarget* target) {
-    switch (this->currentPosision) {
-    case 0:
-        this->fadeOutClock = new sf::Clock();
-        this->thunder.play();
-        this->blockInput = true;
-        break;
-    case 1:
-        break;
-    case 2:
-        ((sf::RenderWindow*)target)->close();
-        break;
+    if (!this->levelSelection) {
+        switch (this->currentPosition) {
+        case 0:
+            this->fadeOutClock = new sf::Clock();
+            this->thunder.play();
+            this->blockInput = true;
+            this->exitCode = LEVEL1;
+            break;
+        case 1:
+            this->currentPosition = 0;
+            this->levelSelection = true;
+            break;
+        case 2:
+            ((sf::RenderWindow*)target)->close();
+            break;
+        }
     }
+    else {
+        switch (this->currentPosition) {
+        case 0:
+            this->fadeOutClock = new sf::Clock();
+            this->thunder.play();
+            this->blockInput = true;
+            this->exitCode = LEVEL1;
+            break;
+        case 1:
+            this->fadeOutClock = new sf::Clock();
+            this->thunder.play();
+            this->blockInput = true;
+            this->exitCode = LEVEL2;
+            break;
+        case 2:
+            this->currentPosition = 0;
+            this->levelSelection = false;
+            break;
+        }
+    }
+}
+
+void MenuManager::exit() {
+    this->gameMaster->changeState(GAME);
+    this->music.stop();
+    this->gameMaster->loadLvl(this->exitCode);
 }
 
 void MenuManager::draw(sf::RenderTarget* renderTarget) {
     backgroundImage.setColor(this->currentColor);
     renderTarget->draw(this->backgroundImage);
 
-    playButton.setFillColor(this->currentColor);
-    renderTarget->draw(this->playButton);
+    if (!this->levelSelection) {
+        playButton.setFillColor(this->currentColor);
+        renderTarget->draw(this->playButton);
 
-    selectLevel.setFillColor(this->currentColor);
-    renderTarget->draw(this->selectLevel);
+        selectLevel.setFillColor(this->currentColor);
+        renderTarget->draw(this->selectLevel);
 
-    exitButton.setFillColor(this->currentColor);
-    renderTarget->draw(this->exitButton);
+        exitButton.setFillColor(this->currentColor);
+        renderTarget->draw(this->exitButton);
+    }
+    else {
+        lvl1Image.setColor(this->currentColor);
+        renderTarget->draw(this->lvl1Image);
+
+        lvl2Image.setColor(this->currentColor);
+        renderTarget->draw(this->lvl2Image);
+
+        lvl1Description.setFillColor(sf::Color(190, 190, 190, this->currentColor.a));
+        renderTarget->draw(this->lvl1Description);
+
+        lvl2Description.setFillColor(sf::Color(190, 190, 190, this->currentColor.a));
+        renderTarget->draw(this->lvl2Description);
+
+        backButton.setFillColor(this->currentColor);
+        renderTarget->draw(this->backButton);
+
+        backButton.setFillColor(this->currentColor);
+        renderTarget->draw(this->backButton);
+    }
 
     cursorSprite.setColor(this->currentColor);
     renderTarget->draw(this->cursorSprite);
@@ -125,11 +224,11 @@ const void MenuManager::processInput(sf::Event event, sf::RenderTarget* target) 
         switch (event.key.code) {
         case sf::Keyboard::Up:
             if(!blockInput)
-                this->currentPosision -= this->currentPosision == 0 ? 0 : 1;
+                this->currentPosition -= this->currentPosition == 0 ? 0 : 1;
             break;
         case sf::Keyboard::Down:
             if (!blockInput)
-                this->currentPosision += this->currentPosision == this->maxPosition ? 0 : 1;
+                this->currentPosition += this->currentPosition == this->maxPosition ? 0 : 1;
             break;
         case sf::Keyboard::Enter:
             if (!blockInput)

@@ -26,7 +26,7 @@ private:
 	void startBoss();
 
 public:
-	Mummy(sf::Vector2f pos, const int* currentLevel, const int levelXSize, float speedFactor, EntityManager* entityManager);
+	Mummy(sf::Vector2f pos, float speedFactor, EntityManager* entityManager);
 	const void update();
 
 	const sf::Vector2f cameraTracking();

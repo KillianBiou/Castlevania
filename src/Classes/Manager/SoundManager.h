@@ -14,17 +14,20 @@ private:
 
 	int nbMaxMusic = 4;
 
+	bool canPlay = false;
 	bool bossMusic = false;
 
 	void clearFinishedSfx();
-	void playMusic(int id);
 
 public:
 	SoundManager();
 	void update();
-
+	
+	void playMusic(int id);
 	void playBossMusic(sf::Music* music);
 	void endBossMusic(sf::Music* music);
 
 	void playSoundEffect(sf::SoundBuffer* soundBuffer);
+
+	void setCanPlay(bool canPlay);
 };

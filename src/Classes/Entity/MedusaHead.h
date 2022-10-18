@@ -9,7 +9,7 @@ private:
 	float frequency;
 
 public:
-	MedusaHead(std::string name, sf::Vector2f pos, const int* currentLevel, const int levelXSize, float speedFactor, float amplitude, float frequency, EntityManager* entityManager, Spawner* spawner);
+	MedusaHead(std::string name, sf::Vector2f pos, float speedFactor, float amplitude, float frequency, EntityManager* entityManager, Spawner* spawner);
 	const void update();
 
 };

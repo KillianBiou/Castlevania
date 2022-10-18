@@ -13,9 +13,19 @@ enum Difficulty {
 	HARD
 };
 
+enum LevelId {
+	LEVEL1 = 0,
+	LEVEL2 = 1
+};
+
+class GameMaster;
+
 class GameManager: public InputManager {
 private:
+	GameMaster* gameMaster;
+
 	Level* level;
+	LevelId currentLvlId;
 	EntityManager* entityManager;
 	Camera* camera;
 	SoundManager* soundManager;
@@ -25,10 +35,15 @@ private:
 
 	std::vector<int> pointsToHpUp;
 
+	void loadEntities();
+
 public:
-	GameManager(Level* level, Difficulty difficulty, std::multimap<EntityType, sf::Vector2f>* entityList);
+	GameManager(Difficulty difficulty, GameMaster* gameMaster);
 
 	void update(sf::RenderTarget* renderTarget);
+	void loadLevel(LevelId id);
+
+	void startGame();
 
 	const void processInput(sf::Event event, sf::RenderTarget* target);
 
@@ -37,4 +52,5 @@ public:
 	Level* getLevel();
 	Camera* getCamera();
 	SoundManager* getSoundManager();
+	EntityManager* getEntityManager();
 };

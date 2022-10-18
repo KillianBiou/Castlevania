@@ -5,17 +5,18 @@ SoundManager::SoundManager() {
 		this->musicList.push_back(new sf::Music());
 		this->musicList.at(i)->openFromFile("music/0" + std::to_string(i + 1) + ".ogg");
 	}
-	this->playMusic(0);
 }
 
 void SoundManager::update() {
-	this->clearFinishedSfx();
-	if (!this->bossMusic && this->currentMusic->getStatus() == 0) {
-		int randomId = -1;
-		do {
-			randomId = rand() % this->nbMaxMusic;
-		} while (randomId == this->currentMusicId);
-		this->playMusic(randomId);
+	if (canPlay) {
+		this->clearFinishedSfx();
+		if (!this->bossMusic && this->currentMusic->getStatus() == 0) {
+			int randomId = -1;
+			do {
+				randomId = rand() % this->nbMaxMusic;
+			} while (randomId == this->currentMusicId);
+			this->playMusic(randomId);
+		}
 	}
 }
 
@@ -56,4 +57,8 @@ void SoundManager::clearFinishedSfx() {
 
 		}
 	}
+}
+
+void SoundManager::setCanPlay(bool canPlay) {
+	this->canPlay = canPlay;
 }

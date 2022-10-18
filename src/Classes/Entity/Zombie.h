@@ -7,7 +7,7 @@ private:
 	bool doubleSpeed;
 
 public:
-	Zombie(sf::Vector2f pos, const int* currentLevel, const int levelXSize, float speedFactor, MoveDirection moveDirection, EntityManager* entityManager, Spawner* spawner);
+	Zombie(sf::Vector2f pos, float speedFactor, MoveDirection moveDirection, EntityManager* entityManager, Spawner* spawner);
 	void const update();
 };
 

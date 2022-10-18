@@ -19,21 +19,24 @@ private:
 	float height;
 
 	bool firstInitialisation = true;
+	bool teleportToTarget = false;
 
-	const int levelXSize;
-	const int levelYSize;
+	int levelXSize;
+	int levelYSize;
 
 	float clamp(float value, float min, float max);
 
 public:
-	Camera(const int levelXSize, const int levelYSize);
+	Camera();
 	void trackTarget(sf::RenderTarget* renderTarget);
 
 	sf::View* getView();
 	void setEntityManager(EntityManager* entityManager);
 	void setTarget(Entity* entity);
+	void teleport();
 
 	Score* getScore();
 	HealthBar* getHealthBar();
 	ManaBar* getManaBar();
+
 };

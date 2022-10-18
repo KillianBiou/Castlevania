@@ -1,77 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Classes/Tilemap.h"
-#include "Classes/Entity/Entity.h"
-#include "Classes/Entity/Player.h"
-#include "Classes/Entity/Monster.h"
-#include "Classes/Entity/MedusaHead.h"
-#include "Classes/Entity/Zombie.h"
-#include "Classes/Entity/Skeleton.h"
-#include "Classes/Entity/Mummy.h"
-#include "Classes/Entity/Reaper.h"
-#include "Classes/Manager/EntityManager.h"
-#include "Classes/Spawner/MedusaHeadSpawner.h"
-#include "Classes/Spawner/ZombieSpawner.h"
-#include "Classes/Spawner/SkeletonSpawner.h"
-#include "Classes/Misc/HealthBar.h"
-#include "Classes/Misc/Score.h"
-#include "Classes/Collectible/Heart.h"
-#include "Classes/Collectible/HPUp.h"
-#include "Classes/Collectible/WeaponUpgrade.h"
-#include "Classes/Manager/GameManager.h"
-#include "Classes/Manager/MenuManager.h"
-#include "Classes/Manager/Camera.h"
-#include "Classes/Misc/Level.h"
-#include "Classes/Projectiles/StraightProjectile.h"
+#include "Classes/Manager/GameMaster.h"
 #include <algorithm>
 
 float clip(float n, float lower, float upper) {
     return std::max(lower, std::min(n, upper));
 }
-
-const int level1[] =
-{
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 1, 1, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 1, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 1, 1, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 1, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 1, 1, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 1, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 1, 1, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 1, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 1, 1, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 1, 1, 0, 0, 0, 0, 0, 0,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 1, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 1, 1, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 1, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
-};
-
-const int lvl1XSize = 60;
-const int lvl1ySize = 24;
-
-std::multimap<EntityType, sf::Vector2f> lvl1EntityMap{
-    {PLAYER, sf::Vector2f(256, 1080)},
-    {MEDUSA, sf::Vector2f(0, 300)},
-    {MEDUSA, sf::Vector2f(0, 600)},
-    {MEDUSA, sf::Vector2f(0, 900)},
-    {MEDUSA, sf::Vector2f(0, 1200)},
-    {ZOMBIE, sf::Vector2f(1000, 1080)},
-    {SKELETON, sf::Vector2f(500, 1080)},
-    {MUMMY, sf::Vector2f(2000, 1000)}
-};
 
 /*int main()
 {
@@ -192,22 +126,17 @@ int main() {
 
     drawingWindow.setFramerateLimit(60);
 
-    Level l(level1, lvl1XSize, lvl1ySize, "images/Background1.png");
-
-    MenuManager menu("a");
-    //GameManager gameManager(&l, EASY, &lvl1EntityMap);
+    GameMaster* gameMaster = new GameMaster();
 
     while (drawingWindow.isOpen()) {
         sf::Event event;
         while (drawingWindow.pollEvent(event)) {
-            //gameManager.processInput(event, &drawingWindow);
-            menu.processInput(event, &drawingWindow);
+            gameMaster->processInput(event, &drawingWindow);
         }
 
         drawingWindow.clear(sf::Color::Black);
 
-        //gameManager.update(&drawingWindow);
-        continueLoop = menu.update(&drawingWindow);
+        gameMaster->update(&drawingWindow);
 
         drawingWindow.display();
     }

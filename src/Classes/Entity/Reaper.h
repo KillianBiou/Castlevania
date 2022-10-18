@@ -29,7 +29,7 @@ private:
 	void startBoss();
 
 public:
-	Reaper(sf::Vector2f pos, const int* currentLevel, const int levelXSize, float speedFactor, EntityManager* entityManager);
+	Reaper(sf::Vector2f pos, float speedFactor, EntityManager* entityManager);
 
 	const void update();
 	const void taskDeletion();

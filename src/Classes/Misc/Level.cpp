@@ -1,6 +1,7 @@
 #include "Level.h"
+#include "EntityFactory.h";
 
-Level::Level(const int* level, const int sizeX, const int sizeY, std::string backgroundImagePath) : levelRaw(level), sizeX(sizeX), sizeY(sizeY) {
+Level::Level(const int* level, const int sizeX, const int sizeY, std::multimap<EntityType, sf::Vector2f> entityMap, std::string backgroundImagePath) : levelRaw(level), sizeX(sizeX), sizeY(sizeY), entityMap(entityMap) {
 	this->tilemap = Tilemap();
 	this->tilemap.load("images/Platform.png", 64, level, sizeX, sizeY);
 
@@ -29,4 +30,8 @@ const int Level::getSizeY() {
 
 const int* Level::getLevelRaw() {
 	return this->levelRaw;
+}
+
+std::multimap<EntityType, sf::Vector2f>* Level::getEntityMap() {
+	return &this->entityMap;
 }

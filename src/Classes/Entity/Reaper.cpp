@@ -1,7 +1,7 @@
 #include "Reaper.h"
 #include "../Manager/GameManager.h"
 
-Reaper::Reaper(sf::Vector2f pos, const int* currentLevel, const int levelXSize, float speedFactor, EntityManager* entityManager) : Monster("images/Reaper.png", pos, 128, 159, "Reaper", 150, currentLevel, levelXSize, speedFactor, 0.f, entityManager, NULL) {
+Reaper::Reaper(sf::Vector2f pos, float speedFactor, EntityManager* entityManager) : Monster("images/Reaper.png", pos, 128, 159, "Reaper", 150, speedFactor, 0.f, entityManager, NULL) {
 	this->hp = 10;
 	this->maxHp = 10;
 	this->animator->setAnimations({ {IDLE, 1}, {HURT, 2}, {DEATH, 3} });
@@ -68,6 +68,7 @@ const sf::Vector2f Reaper::cameraTracking() {
 }
 
 void Reaper::checkCollision() {
+	Level* currentLevel = this->entityManager->getGameManager()->getLevel();
 	sf::View* view = this->entityManager->getView();
 
 	if (!this->entityManager->isOnScreen(this->topBoundPoint) || !this->entityManager->isOnScreen(this->groundedPoint)) {
@@ -81,13 +82,13 @@ void Reaper::checkCollision() {
 	int yCollision = int(this->groundedPoint.y / 64);
 	int xCollisionBis = int(this->groundedPointBis.x / 64);
 	int yCollisionBis = int(this->groundedPointBis.y / 64);
-	if ((this->currentLevel[xCollision + yCollision * levelXSize] != 0 && this->currentLevel[xCollisionBis + yCollisionBis * levelXSize] != 0) && this->isGrounded == false) {
+	if ((currentLevel->getLevelRaw()[xCollision + yCollision * currentLevel->getSizeX()] != 0 && currentLevel->getLevelRaw()[xCollisionBis + yCollisionBis * currentLevel->getSizeX()] != 0) && this->isGrounded == false) {
 		this->movementVector.y *= -1;
 		this->touchdownCooldown.restart();
 		this->setPosition(this->getPosition().x, yCollision * 64 - spriteSizeY / 2.f);
 
 	}
-	else if ((this->currentLevel[xCollision + yCollision * levelXSize] == 0 && this->currentLevel[xCollisionBis + yCollisionBis * levelXSize] == 0) && this->isGrounded == true) {
+	else if ((currentLevel->getLevelRaw()[xCollision + yCollision * currentLevel->getSizeX()] == 0 && currentLevel->getLevelRaw()[xCollisionBis + yCollisionBis * currentLevel->getSizeX()] == 0) && this->isGrounded == true) {
 		this->setIsGrounded(false);
 	}
 }
@@ -108,9 +109,10 @@ const void Reaper::taskDeletion() {
 }
 
 Reaper::~Reaper() {
+	Level* currentLevel = this->entityManager->getGameManager()->getLevel();
 	this->entityManager->endBossCombat();
 	this->entityManager->getGameManager()->getSoundManager()->endBossMusic(&this->bossTheme);
-	this->weaponUpgrade = new WeaponUpgrade(this->currentLevel, this->levelXSize, 2);
+	this->weaponUpgrade = new WeaponUpgrade(currentLevel->getLevelRaw(), currentLevel->getSizeX(), 2);
 	this->entityManager->addCollectible(this->weaponUpgrade);
 	this->weaponUpgrade->setPosition(this->getPosition());
 }

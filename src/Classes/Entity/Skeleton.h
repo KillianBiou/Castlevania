@@ -18,7 +18,7 @@ private:
 	void attack();
 	void goToward();
 public:
-	Skeleton(sf::Vector2f pos, const int* currentLevel, const int levelXSize, float speedFactor, float targetDistToPlayer, int attackCooldown, EntityManager* entityManager, Spawner* spawner);
+	Skeleton(sf::Vector2f pos, float speedFactor, float targetDistToPlayer, int attackCooldown, EntityManager* entityManager, Spawner* spawner);
 	
 	void const update();
 	
