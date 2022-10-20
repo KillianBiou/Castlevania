@@ -32,8 +32,8 @@ void Camera::trackTarget(sf::RenderTarget* renderTarget) {
 			sf::Vector2f direction = sf::Vector2f(targetPos.x - view->getCenter().x, targetPos.y - view->getCenter().y);
 			float magnitude = sqrt(direction.x * direction.x + direction.y * direction.y);
 			if (magnitude > 10) {
-				direction.x = (direction.x / magnitude) * 10.f;
-				direction.y = (direction.y / magnitude) * 10.f;
+				direction.x = (direction.x / magnitude) * 15.f;
+				direction.y = (direction.y / magnitude) * 15.f;
 				this->view->move(direction);
 			}
 			else {

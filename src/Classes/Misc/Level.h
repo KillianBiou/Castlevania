@@ -16,7 +16,7 @@ private:
 	const int sizeY;
 
 public:
-	Level(const int* level, const int sizeX, const int sizeY, std::multimap<EntityType, sf::Vector2f> entityMap, std::string backgroundImagePath);
+	Level(const int* level, const int sizeX, const int sizeY, std::multimap<EntityType, sf::Vector2f> entityMap, std::string backgroundImagePath, std::string tilesetPath);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	const int* getLevelRaw();

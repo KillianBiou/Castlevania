@@ -12,7 +12,7 @@ void EntityFactory::createEntity(EntityType type, sf::Vector2f position) {
 			entityManager->getPlayer()->setPosition(position);
 		}
 		else {
-			new Player(position, 150, 5.f, 15.f, this->entityManager);
+			new Player(position, 150, 5.f, 17.f, this->entityManager);
 		}
 		break;
 	case MEDUSA:

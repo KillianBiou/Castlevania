@@ -14,10 +14,10 @@ Boss
 
 Game :
 	- Main Menu V
-		- Play
-		- Select Level
+		- Play V
+		- Select Level V
 		- Quit V
-	- Level Transition
+	- Level Transition V
 	- Pause
 
 Player
@@ -33,6 +33,17 @@ Collectibles
 Camera 
 	- System focus V
 		- Changer de focus en cours de jeu V
+
+Level :
+	End Level 2
+		- Mob
+		- Tileset
+		- Background
+		- Boss Arena
+
+Tutorial :
+	- When playing start :
+		- Show images that explain how the game works
 
 Musique :
 	- Musique background V

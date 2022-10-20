@@ -114,7 +114,8 @@ void EntityManager::updateAllEntities() {
                 monstersList.at(i)->takeDamage(1);
             this->removeAllyProjectile(projectile);
         }
-        monstersList.at(i)->update();
+        if(this->isOnScreen(monstersList.at(i)->getPosition()))
+            monstersList.at(i)->update();
 	}
     for (Spawner* spawner : this->spawnerList) {
         spawner->update();
@@ -196,6 +197,10 @@ float EntityManager::xDistToPlayer(float xPos) {
     return this->player->getPosition().x - xPos;
 }
  
+float EntityManager::yDistToPlayer(float yPos) {
+    return this->player->getPosition().y - yPos;
+}
+
 bool EntityManager::isOnScreen(sf::Vector2f pos) {
     float xMin = this->cameraView->getCenter().x - this->cameraView->getSize().x / 2;
     float xMax = xMin + this->cameraView->getSize().x;

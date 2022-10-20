@@ -16,7 +16,11 @@ private:
 
 	sf::Vector2f movementVector;
 
+	sf::Vector2f scytheV1;
+	sf::Vector2f scytheV2;
+
 	bool bossStarted;
+	bool firstAttack = true;
 
 	float timeBetweenAttacks;
 

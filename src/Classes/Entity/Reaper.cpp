@@ -11,6 +11,9 @@ Reaper::Reaper(sf::Vector2f pos, float speedFactor, EntityManager* entityManager
 
 	this->cameraLock = this->getPosition();
 
+	this->scytheV1 = this->getPosition() + sf::Vector2f(300.f, -150.f);
+	this->scytheV2 = this->getPosition() + sf::Vector2f(-300.f, -150.f);
+
 	this->timeBetweenAttacks = 2000;
 	this->attackClock = sf::Clock();
 	this->touchdownCooldown = sf::Clock();
@@ -35,18 +38,20 @@ const void Reaper::update() {
 	animator->animate();
 	this->moveCollisionPoint();
 
-	if (abs(this->entityManager->xDistToPlayer(this->getPosition().x)) < 500) {
+	if (abs(this->entityManager->xDistToPlayer(this->getPosition().x)) < 500 && abs(this->entityManager->yDistToPlayer(this->getPosition().y)) < 500) {
 		if (!this->bossStarted)
 			this->startBoss();
 	}
 	if (this->bossStarted) {
-		if (this->attackClock.getElapsedTime().asMilliseconds() >= this->timeBetweenAttacks) {
+		if (this->attackClock.getElapsedTime().asMilliseconds() >= std::max(this->timeBetweenAttacks * ((float)this->hp / this->maxHp), 800.f)) {
 			int direction = this->entityManager->xDistToPlayer(this->getPosition().x) < 0 ? -1 : 1;
-			StraightProjectile* temp = new StraightProjectile(this->projectileTexture, 64, 64, this->getPosition() + sf::Vector2f(0.f, -64.f), 5.f, this->entityManager->playerPosition(), 2);
+			StraightProjectile* temp = new StraightProjectile(this->projectileTexture, 64, 64, this->scytheV2 + sf::Vector2f(0.f, -64.f), 5.f, this->entityManager->playerPosition(), 2);
+			StraightProjectile* temp2 = new StraightProjectile(this->projectileTexture, 64, 64, this->scytheV1, 5.f, this->entityManager->playerPosition(), 2);
 			this->entityManager->addProjectile(temp);
+			this->entityManager->addProjectile(temp2);
 			this->attackClock.restart();
 		}
-		if (touchdownCooldown.getElapsedTime().asMilliseconds() >= 5000 && this->entityManager->isOnScreen(this->getPosition())) {
+		if (this->firstAttack || touchdownCooldown.getElapsedTime().asMilliseconds() >= 5000 && this->entityManager->isOnScreen(this->getPosition())) {
 			this->checkCollision();
 			this->moveTick();
 		}
@@ -82,9 +87,10 @@ void Reaper::checkCollision() {
 	int yCollision = int(this->groundedPoint.y / 64);
 	int xCollisionBis = int(this->groundedPointBis.x / 64);
 	int yCollisionBis = int(this->groundedPointBis.y / 64);
-	if ((currentLevel->getLevelRaw()[xCollision + yCollision * currentLevel->getSizeX()] != 0 && currentLevel->getLevelRaw()[xCollisionBis + yCollisionBis * currentLevel->getSizeX()] != 0) && this->isGrounded == false) {
+	if ((currentLevel->getLevelRaw()[xCollision + yCollision * currentLevel->getSizeX()] == 1 && currentLevel->getLevelRaw()[xCollisionBis + yCollisionBis * currentLevel->getSizeX()] == 1) && this->isGrounded == false) {
 		this->movementVector.y *= -1;
 		this->touchdownCooldown.restart();
+		this->firstAttack = false;
 		this->setPosition(this->getPosition().x, yCollision * 64 - spriteSizeY / 2.f);
 
 	}

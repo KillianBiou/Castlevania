@@ -74,6 +74,7 @@ public:
 
 	sf::Vector2f playerPosition();
 	float xDistToPlayer(float xPos);
+	float yDistToPlayer(float yPos);
 	bool isOnScreen(sf::Vector2f pos);
 	void addScore(int amount);
 

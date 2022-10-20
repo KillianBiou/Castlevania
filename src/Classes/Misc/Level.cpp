@@ -1,9 +1,9 @@
 #include "Level.h"
 #include "EntityFactory.h";
 
-Level::Level(const int* level, const int sizeX, const int sizeY, std::multimap<EntityType, sf::Vector2f> entityMap, std::string backgroundImagePath) : levelRaw(level), sizeX(sizeX), sizeY(sizeY), entityMap(entityMap) {
+Level::Level(const int* level, const int sizeX, const int sizeY, std::multimap<EntityType, sf::Vector2f> entityMap, std::string backgroundImagePath, std::string tilesetPath) : levelRaw(level), sizeX(sizeX), sizeY(sizeY), entityMap(entityMap) {
 	this->tilemap = Tilemap();
-	this->tilemap.load("images/Platform.png", 64, level, sizeX, sizeY);
+	this->tilemap.load(tilesetPath, 64, level, sizeX, sizeY);
 
 	if (!this->backgroundTexture.loadFromFile(backgroundImagePath)) {
 		std::cout << "Error while loading : " << backgroundImagePath << std::endl;
