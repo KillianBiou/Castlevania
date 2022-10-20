@@ -6,11 +6,12 @@ Mob V
 	- MedusaHead V
 	- Zombie V
 	- Squelette V
+		- Rework
+			- Check to not fall
 
 Boss
 	- Momie V
 	- Reaper V
-	- Dracula X
 
 Game :
 	- Main Menu V
@@ -35,15 +36,17 @@ Camera
 		- Changer de focus en cours de jeu V
 
 Level :
-	End Level 2
-		- Mob
-		- Tileset
-		- Background
-		- Boss Arena
+	End Level 2 V
+		- Mob V
+		- Tileset V
+		- Background V
+		- Boss Arena V
 
-Tutorial :
+Cinematics:
 	- When playing start :
 		- Show images that explain how the game works
+	- On pickup Lvl 2 Weapon :
+		- Play end cinematics
 
 Musique :
 	- Musique background V

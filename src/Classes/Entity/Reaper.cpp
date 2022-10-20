@@ -2,8 +2,8 @@
 #include "../Manager/GameManager.h"
 
 Reaper::Reaper(sf::Vector2f pos, float speedFactor, EntityManager* entityManager) : Monster("images/Reaper.png", pos, 128, 159, "Reaper", 150, speedFactor, 0.f, entityManager, NULL) {
-	this->hp = 10;
-	this->maxHp = 10;
+	this->hp = 30;
+	this->maxHp = 30;
 	this->animator->setAnimations({ {IDLE, 1}, {HURT, 2}, {DEATH, 3} });
 	this->animator->playAnimation(IDLE);
 
