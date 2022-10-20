@@ -51,7 +51,7 @@ const void Reaper::update() {
 			this->entityManager->addProjectile(temp2);
 			this->attackClock.restart();
 		}
-		if (this->firstAttack || touchdownCooldown.getElapsedTime().asMilliseconds() >= 5000 && this->entityManager->isOnScreen(this->getPosition())) {
+		if (this->firstAttack || touchdownCooldown.getElapsedTime().asMilliseconds() >= 5000 && this->entityManager->isOnScreen(this->getPosition(), 0)) {
 			this->checkCollision();
 			this->moveTick();
 		}
@@ -76,10 +76,10 @@ void Reaper::checkCollision() {
 	Level* currentLevel = this->entityManager->getGameManager()->getLevel();
 	sf::View* view = this->entityManager->getView();
 
-	if (!this->entityManager->isOnScreen(this->topBoundPoint) || !this->entityManager->isOnScreen(this->groundedPoint)) {
+	if (!this->entityManager->isOnScreen(this->topBoundPoint, 0) || !this->entityManager->isOnScreen(this->groundedPoint, 0)) {
 		this->movementVector.y *= -1;
 	}
-	if (!this->entityManager->isOnScreen(this->rightBoundPointBis) || !this->entityManager->isOnScreen(this->leftBoundPointBis)) {
+	if (!this->entityManager->isOnScreen(this->rightBoundPointBis, 0) || !this->entityManager->isOnScreen(this->leftBoundPointBis, 0)) {
 		this->movementVector.x *= -1;
 	}
 

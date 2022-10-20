@@ -288,12 +288,6 @@ const void GameManager::processInput(sf::Event event, sf::RenderTarget* target) 
         case sf::Keyboard::Num4:
             this->loadLevel(LEVEL2);
             break;
-        case sf::Keyboard::Num5:
-            std::cout << "Skeleton (" << this->entityManager->getPlayer()->getPosition().x << ", " << this->entityManager->getPlayer()->getPosition().y << ")\n";
-            break;
-        case sf::Keyboard::Num6:
-            std::cout << "Zombie (" << this->entityManager->getPlayer()->getPosition().x << ", " << this->entityManager->getPlayer()->getPosition().y << ")\n";
-            break;
         }
         break;
 

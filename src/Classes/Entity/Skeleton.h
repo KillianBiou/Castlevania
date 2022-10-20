@@ -12,6 +12,9 @@ private:
 	sf::Clock attackClock;
 	int attackCooldown;
 
+	bool canGoLeft = true;
+	bool canGoRight = true;
+
 	sf::Texture boneTexture;
 	Projectile* currentProjectile;
 

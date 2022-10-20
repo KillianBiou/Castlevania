@@ -7,7 +7,7 @@ Mob V
 	- Zombie V
 	- Squelette V
 		- Rework
-			- Check to not fall
+			- Check to not fall V
 
 Boss
 	- Momie V

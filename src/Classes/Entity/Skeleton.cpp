@@ -1,4 +1,5 @@
 #include "Skeleton.h"
+#include "../Manager/GameManager.h"
 
 Skeleton::Skeleton(sf::Vector2f pos, float speedFactor, float targetDistToPlayer, int attackCooldown, EntityManager* entityManager, Spawner* spawner) : Monster("images/Skeleton.png", pos, 64, 128, "Skeleton", 100, speedFactor, 0, entityManager, spawner) {
 	this->hp = 3;
@@ -67,15 +68,37 @@ void Skeleton::animate() {
 }
 
 void Skeleton::goToward() {
+	Level* currentLevel = this->entityManager->getGameManager()->getLevel();
 	float distToTarget = this->getPosition().x - this->positionTarget.x;
+
+	int xCollision = int(this->groundedPoint.x / 64);
+	int yCollision = int(this->groundedPoint.y / 64);
+	int xCollisionBis = int(this->groundedPointBis.x / 64);
+	int yCollisionBis = int(this->groundedPointBis.y / 64);
+
+	if ((currentLevel->getLevelRaw()[xCollision + yCollision * currentLevel->getSizeX()] != 0)) {
+		this->canGoLeft = true;
+	}
+	else {
+		this->canGoLeft = false;
+	}
+	if ((currentLevel->getLevelRaw()[xCollisionBis + yCollisionBis * currentLevel->getSizeX()] != 0)) {
+		this->canGoRight = true;
+	}
+	else {
+		this->canGoRight = false;
+	}
 
 	if (distToTarget > -5 && distToTarget < 5) {
 		this->moveDirection = NONE;
 	}
-	else if (distToTarget < 0) {
+	else if (distToTarget < 0 && this->canGoRight) {
 		this->moveDirection = RIGHT;
 	}
-	else if (distToTarget > 0) {
+	else if (distToTarget > 0 && this->canGoLeft) {
 		this->moveDirection = LEFT;
+	}
+	else {
+		this->moveDirection = NONE;
 	}
 }

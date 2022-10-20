@@ -114,8 +114,9 @@ void EntityManager::updateAllEntities() {
                 monstersList.at(i)->takeDamage(1);
             this->removeAllyProjectile(projectile);
         }
-        if(this->isOnScreen(monstersList.at(i)->getPosition()))
+        if (this->cull(monstersList.at(i)->getPosition())) {
             monstersList.at(i)->update();
+        }
 	}
     for (Spawner* spawner : this->spawnerList) {
         spawner->update();
@@ -143,13 +144,20 @@ void EntityManager::updateAllEntities() {
     }
 }
 
-void EntityManager::clearOutOfBoundsProjectiles() {
-    float xMin = this->cameraView->getCenter().x - this->cameraView->getSize().x / 2;
-    float xMax = xMin + this->cameraView->getSize().x;
-    float yMin = this->cameraView->getCenter().y - this->cameraView->getSize().y / 2;
-    float yMax = yMin + this->cameraView->getSize().y;
+bool EntityManager::cull(sf::Vector2f pos) {
+    if (abs(this->xDistToPlayer(pos.x)) < 2000 && abs(this->yDistToPlayer(pos.y)) < 1000) {
+        return true;
+    }
+    return false;
+}
 
-    sf::FloatRect tempCollider(sf::Vector2f(xMin, yMin), sf::Vector2f(this->cameraView->getSize().x, this->cameraView->getSize().y));
+void EntityManager::clearOutOfBoundsProjectiles() {
+    float xMin = (this->cameraView->getCenter().x - this->cameraView->getSize().x / 2) - 250;
+    float xMax = (xMin + this->cameraView->getSize().x) + 250;
+    float yMin = (this->cameraView->getCenter().y - this->cameraView->getSize().y / 2) - 250;
+    float yMax = (yMin + this->cameraView->getSize().y) + 250;
+
+    sf::FloatRect tempCollider(sf::Vector2f(xMin, yMin), sf::Vector2f(this->cameraView->getSize().x + 192, this->cameraView->getSize().y + 192));
     for (Projectile* projectile : this->projectileList) {
         if (!projectile->getGlobalBounds().intersects(tempCollider)) {
             Projectile* temp = projectile;
@@ -172,6 +180,7 @@ void EntityManager::clearOutOfBoundsProjectiles() {
 void EntityManager::drawAllEntities(sf::RenderTarget* renderTarget) {
     renderTarget->draw(*player);
 	player->drawChild(renderTarget);
+    this->debugDrawMonsters((sf::RenderWindow*)renderTarget);
 	for (int i = 0; i < monstersList.size(); i++) {
         renderTarget->draw(*monstersList.at(i));
 	}
@@ -201,12 +210,11 @@ float EntityManager::yDistToPlayer(float yPos) {
     return this->player->getPosition().y - yPos;
 }
 
-bool EntityManager::isOnScreen(sf::Vector2f pos) {
-    float xMin = this->cameraView->getCenter().x - this->cameraView->getSize().x / 2;
-    float xMax = xMin + this->cameraView->getSize().x;
-    float yMin = this->cameraView->getCenter().y - this->cameraView->getSize().y / 2;
-    float yMax = yMin + this->cameraView->getSize().y;
-    sf::FloatRect tempCollider(sf::Vector2f(xMin, yMin), sf::Vector2f(this->cameraView->getSize().x, this->cameraView->getSize().y));
+bool EntityManager::isOnScreen(sf::Vector2f pos, float offset) {
+    float xMin = (this->cameraView->getCenter().x - this->cameraView->getSize().x / 2) - offset;
+    float yMin = (this->cameraView->getCenter().y - this->cameraView->getSize().y / 2) - offset;
+
+    sf::FloatRect tempCollider(sf::Vector2f(xMin, yMin), sf::Vector2f(this->cameraView->getSize().x + offset, this->cameraView->getSize().y + offset));
 
     if (!tempCollider.contains(pos)) {
         return false;
@@ -223,6 +231,7 @@ void EntityManager::startBossCombat(Monster* target) {
 
 void EntityManager::endBossCombat() {
     this->gameManager->getCamera()->setTarget(this->player);
+    this->projectileList.clear();
     for (Spawner* spawner : this->spawnerList) {
         spawner->switchSpawn();
     }

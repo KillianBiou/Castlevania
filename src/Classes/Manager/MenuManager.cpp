@@ -10,6 +10,22 @@ MenuManager::MenuManager(GameMaster* gameMaster): gameMaster(gameMaster) {
     this->thunderTexture.loadFromFile("images/thunderEffect.png");
     this->font.loadFromFile("font/mainMenu.ttf");
 
+    this->tuto1Texture.loadFromFile("images/Tuto1.png");
+    this->tuto2Texture.loadFromFile("images/Tuto2.png");
+    this->tuto3Texture.loadFromFile("images/Tuto3.png");
+
+    this->tuto1Sprite = sf::Sprite();
+    this->tuto1Sprite.setTexture(this->tuto1Texture);
+    this->tuto1Sprite.setPosition(0, 0);
+
+    this->tuto2Sprite = sf::Sprite();
+    this->tuto2Sprite.setTexture(this->tuto2Texture);
+    this->tuto2Sprite.setPosition(0, 0);
+
+    this->tuto3Sprite = sf::Sprite();
+    this->tuto3Sprite.setTexture(this->tuto3Texture);
+    this->tuto3Sprite.setPosition(0, 0);
+
     this->currentColor = sf::Color(255, 255, 255, 255);
 
     this->backgroundImage = sf::Sprite();

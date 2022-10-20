@@ -20,7 +20,7 @@ Entity::Entity(std::string texturePath, sf::Vector2f position, int sizeX, int si
     this->blockageLeft = false;
     this->blockageRight = false;
     this->moveDirection = NONE;
-    this->gravityFactor = .055f;
+    this->gravityFactor = .070f;
     this->side = RIGHT;
     this->freeze = false;
     this->isHurt = false;

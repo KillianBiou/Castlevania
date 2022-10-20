@@ -30,6 +30,14 @@ private:
 	sf::Text lvl1Description;
 	sf::Text lvl2Description;
 
+	sf::Texture tuto1Texture;
+	sf::Texture tuto2Texture;
+	sf::Texture tuto3Texture;
+
+	sf::Sprite tuto1Sprite;
+	sf::Sprite tuto2Sprite;
+	sf::Sprite tuto3Sprite;
+
 	sf::Texture thunderTexture;
 	sf::Sprite thunderEffect;
 
