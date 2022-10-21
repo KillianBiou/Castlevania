@@ -15,7 +15,8 @@ enum Difficulty {
 
 enum LevelId {
 	LEVEL1 = 0,
-	LEVEL2 = 1
+	LEVEL2 = 1,
+	TUTORIAL = 2
 };
 
 class GameMaster;
@@ -33,7 +34,23 @@ private:
 	bool leftHeld;
 	bool rightHeld;
 
+	sf::Clock* endCutsceneClock;
+
 	std::vector<int> pointsToHpUp;
+
+	sf::Texture cutsceneBG;
+	sf::Texture cutsceneCastle;
+	sf::Texture cutsceneCull;
+	sf::Texture textClear;
+	sf::Sprite cutsceneBGS;
+	sf::Sprite cutsceneCastleS;
+	sf::Sprite cutsceneCullS;
+	sf::Sprite textClearS;
+
+	sf::SoundBuffer castleCrush;
+	sf::SoundBuffer victoryMusic;
+	bool startedSfx = false;
+	bool victoryMusicStarted = false;
 
 	void loadEntities();
 
@@ -48,6 +65,8 @@ public:
 	const void processInput(sf::Event event, sf::RenderTarget* target);
 
 	bool isNextBuffReached(int score);
+
+	void playEndCutscene();
 
 	Level* getLevel();
 	Camera* getCamera();

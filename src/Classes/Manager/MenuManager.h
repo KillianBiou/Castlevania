@@ -13,7 +13,10 @@ private:
 
 	int currentPosition = 0;
 	int maxPosition = 2;
+	int currentTutorial = 0;
 	int currentOpacity = 255;
+
+	bool end = false;
 
 	LevelId exitCode;
 
@@ -71,6 +74,8 @@ public:
 
 	bool update(sf::RenderTarget* renderTarget);
 	void draw(sf::RenderTarget* renderTarget);
+
+	void reset();
 	
 	const void processInput(sf::Event event, sf::RenderTarget* target);
 };

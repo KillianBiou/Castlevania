@@ -29,6 +29,7 @@ private:
 public:
 	Camera();
 	void trackTarget(sf::RenderTarget* renderTarget);
+	void reset();
 
 	sf::View* getView();
 	void setEntityManager(EntityManager* entityManager);

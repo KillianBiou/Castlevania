@@ -75,6 +75,10 @@ void Camera::setTarget(Entity* target) {
 	this->firstInitialisation = false;
 }
 
+void Camera::reset() {
+	this->target = nullptr;
+}
+
 void Camera::teleport() {
 	this->teleportToTarget = true;
 }

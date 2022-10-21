@@ -195,24 +195,58 @@ GameManager::GameManager(Difficulty difficulty, GameMaster* gameMaster): gameMas
 }
 
 void GameManager::update(sf::RenderTarget* renderTarget) {
-    if (level) {
-        this->entityManager->updateAllEntities();
+    if (this->endCutsceneClock) {
+        renderTarget->setView(sf::View(sf::Vector2f(960, 540), sf::Vector2f(1920, 1080)));
+        int currentTimeStamp = this->endCutsceneClock->getElapsedTime().asMilliseconds();
 
-        renderTarget->draw(*this->level);
+        renderTarget->draw(this->cutsceneBGS);
+        renderTarget->draw(this->cutsceneCastleS);
+        renderTarget->draw(this->cutsceneCullS);
 
-        entityManager->drawAllEntities(renderTarget);
+        this->soundManager->setCanPlay(false);
+        std::cout << currentTimeStamp << std::endl;
 
-        this->camera->trackTarget(renderTarget);
-
-        this->soundManager->update();
-
-        if (this->entityManager->getPlayer()->getPosition().x >= (this->level->getSizeX() - 1) * 64) {
-            if (this->currentLvlId == LEVEL1)
-                this->loadLevel(LEVEL2);
+        if (currentTimeStamp > 2000) {
+            if (!this->startedSfx) {
+                this->startedSfx = true;
+                this->soundManager->playSoundEffect(&this->castleCrush);
+            }
+            int offset = std::sin(currentTimeStamp * 10) * 5;
+            float pixelPerTick = 278.f / 5000.f;
+            this->cutsceneCastleS.setPosition(sf::Vector2f(1173 + offset, 260 + pixelPerTick * (currentTimeStamp - 2000)));
         }
-        else if (this->entityManager->getPlayer()->getPosition().x <= 64) {
-            if (this->currentLvlId == LEVEL2)
-                this->loadLevel(LEVEL1);
+        if (currentTimeStamp >= 9000) {
+            if(!this->victoryMusicStarted) {
+                this->victoryMusicStarted = true;
+                this->soundManager->playSoundEffect(&this->victoryMusic);
+            }
+            renderTarget->draw(this->textClearS);
+        }
+        if (currentTimeStamp >= 15000) {
+            this->camera->reset();
+            this->gameMaster->changeState(MENU);
+        }
+    }
+    else {
+        if (level) {
+            this->entityManager->updateAllEntities();
+
+            renderTarget->draw(*this->level);
+
+            entityManager->drawAllEntities(renderTarget);
+
+            this->camera->trackTarget(renderTarget);
+
+            this->soundManager->update();
+
+            if (this->entityManager->getPlayer()->getPosition().x >= (this->level->getSizeX() - 1) * 64) {
+                if (this->currentLvlId == LEVEL1)
+                    this->loadLevel(LEVEL2);
+            }
+            else if (this->entityManager->getPlayer()->getPosition().x <= 64) {
+                if (this->currentLvlId == LEVEL2)
+                    this->loadLevel(LEVEL1);
+            }
         }
     }
 }
@@ -251,6 +285,33 @@ void GameManager::startGame() {
     this->soundManager->playMusic(0);
 }
 
+void GameManager::playEndCutscene() {
+    this->endCutsceneClock = new sf::Clock();
+    this->cutsceneBG.loadFromFile("images/EndsceneBackground.png");
+    this->cutsceneCastle.loadFromFile("images/Castle.png");
+    this->cutsceneCull.loadFromFile("images/CutsceneCull.png");
+    this->textClear.loadFromFile("images/text.png");
+    
+    this->cutsceneBGS = sf::Sprite();
+    this->cutsceneBGS.setTexture(this->cutsceneBG);
+    this->cutsceneBGS.setPosition(0, 0);
+
+    this->cutsceneCastleS = sf::Sprite();
+    this->cutsceneCastleS.setTexture(this->cutsceneCastle);
+    this->cutsceneCastleS.setPosition(1173, 260);
+
+    this->cutsceneCullS = sf::Sprite();
+    this->cutsceneCullS.setTexture(this->cutsceneCull);
+    this->cutsceneCullS.setPosition(0, 539);
+
+    this->textClearS = sf::Sprite();
+    this->textClearS.setTexture(this->textClear);
+    this->textClearS.setPosition(200, 300);
+
+    this->castleCrush.loadFromFile("sfx/castleCrush.ogg");
+    this->victoryMusic.loadFromFile("sfx/AllClear.ogg");
+}
+
 const void GameManager::processInput(sf::Event event, sf::RenderTarget* target) {
     switch (event.type) {
     case sf::Event::Closed:
@@ -287,6 +348,9 @@ const void GameManager::processInput(sf::Event event, sf::RenderTarget* target) 
             break;
         case sf::Keyboard::Num4:
             this->loadLevel(LEVEL2);
+            break;
+        case sf::Keyboard::Num5:
+            this->playEndCutscene();
             break;
         }
         break;

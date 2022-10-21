@@ -127,8 +127,14 @@ bool MenuManager::update(sf::RenderTarget* renderTarget) {
                 currentTime = 255;
             this->thunderEffect.setColor(sf::Color(255, 255, 255, 255 - currentTime));
         }
-        else if (timestamp >= 3000) {
-            this->exit();
+        else if (!end && timestamp >= 3000) {
+            this->end = true;
+            if (this->exitCode == TUTORIAL) {
+                this->currentTutorial = 1;
+            }
+            else {
+                this->exit();
+            }
         }
     }
     if (this->levelSelection) {
@@ -145,14 +151,44 @@ bool MenuManager::update(sf::RenderTarget* renderTarget) {
     return true;
 }
 
+void MenuManager::reset() {
+    this->music.play();
+    this->music.setLoop(true);
+
+    this->currentColor.a = 255;
+    this->currentPosition = 0;
+    this->levelSelection = false;
+    delete this->fadeOutClock;
+
+    this->stopFadeOut = false;
+
+    this->currentTutorial = 0;
+    this->backgroundImage.setPosition(0, 0);
+}
+
 void MenuManager::processSelection(sf::RenderTarget* target) {
-    if (!this->levelSelection) {
+    if (this->exitCode == TUTORIAL) {
+        std::cout << "Processing : " << this->currentTutorial << std::endl;
+        switch (this->currentTutorial)
+        {
+        case 1:
+            this->currentTutorial = 2;
+            break;
+        case 2:
+            this->currentTutorial = 3;
+            break;
+        case 3:
+            this->exitCode = LEVEL1;
+            this->exit();
+            break;
+        }
+    }
+    else if (!this->levelSelection) {
         switch (this->currentPosition) {
         case 0:
             this->fadeOutClock = new sf::Clock();
             this->thunder.play();
-            this->blockInput = true;
-            this->exitCode = LEVEL1;
+            this->exitCode = TUTORIAL;
             break;
         case 1:
             this->currentPosition = 0;
@@ -192,6 +228,7 @@ void MenuManager::exit() {
 }
 
 void MenuManager::draw(sf::RenderTarget* renderTarget) {
+    renderTarget->setView(sf::View(sf::Vector2f(960, 540), sf::Vector2f(1920, 1080)));
     backgroundImage.setColor(this->currentColor);
     renderTarget->draw(this->backgroundImage);
 
@@ -227,6 +264,19 @@ void MenuManager::draw(sf::RenderTarget* renderTarget) {
 
     cursorSprite.setColor(this->currentColor);
     renderTarget->draw(this->cursorSprite);
+
+    switch (this->currentTutorial)
+    {
+    case 1:
+        renderTarget->draw(this->tuto1Sprite);
+        break;
+    case 2:
+        renderTarget->draw(this->tuto2Sprite);
+        break;
+    case 3:
+        renderTarget->draw(this->tuto3Sprite);
+        break;
+    }
 
     renderTarget->draw(this->thunderEffect);
 }

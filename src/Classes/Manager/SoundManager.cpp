@@ -61,4 +61,7 @@ void SoundManager::clearFinishedSfx() {
 
 void SoundManager::setCanPlay(bool canPlay) {
 	this->canPlay = canPlay;
+	if (!canPlay) {
+		this->currentMusic->stop();
+	}
 }

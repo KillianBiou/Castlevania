@@ -47,6 +47,12 @@ void GameMaster::loadLvl(LevelId id) {
 void GameMaster::changeState(GameState state) {
 	this->currentState = state;
 	if (state == GAME) {
+		delete this->gameManager;
+		this->gameManager = new GameManager(EASY, this);
 		this->gameManager->startGame();
+	}
+	if (state == MENU) {
+		delete this->menuManager;
+		this->menuManager = new MenuManager(this);
 	}
 }
