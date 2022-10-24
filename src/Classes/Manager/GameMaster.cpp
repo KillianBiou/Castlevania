@@ -40,6 +40,9 @@ void GameMaster::loadLvl(LevelId id) {
 		this->gameManager->loadLevel(id);
 		this->gameManager->getEntityManager()->getPlayer()->changeWeapon(new Weapon("images/Whip2.png", 2, 250, "sfx/whip2.ogg"));
 		break;
+	case MISSINGLVL:
+		this->gameManager->loadLevel(id);
+		break;
 	}
 }
 

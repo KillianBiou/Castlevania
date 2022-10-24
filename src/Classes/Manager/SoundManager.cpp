@@ -5,6 +5,8 @@ SoundManager::SoundManager() {
 		this->musicList.push_back(new sf::Music());
 		this->musicList.at(i)->openFromFile("music/0" + std::to_string(i + 1) + ".ogg");
 	}
+	this->horrorMusic = new sf::Music();
+	this->horrorMusic->openFromFile("music/HorrorMusic.ogg");
 	this->sfxList = {};
 }
 
@@ -26,6 +28,15 @@ void SoundManager::playMusic(int id) {
 		this->currentMusic->stop();
 	this->currentMusic = this->musicList.at(id);
 	this->currentMusicId = id;
+	this->currentMusic->play();
+}
+
+void SoundManager::playHorrorMusic() {
+	if (this->currentMusic)
+		this->currentMusic->stop();
+	this->currentMusic = this->horrorMusic;
+	this->currentMusic->setLoop(true);
+	this->currentMusicId = -1;
 	this->currentMusic->play();
 }
 

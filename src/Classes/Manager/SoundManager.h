@@ -10,7 +10,10 @@ private:
 	std::vector<sf::Music*> musicList;
 	std::list<sf::Sound> sfxList;
 
+	sf::Music* horrorMusic;
+
 	sf::Music* currentMusic;
+
 	int currentMusicId;
 
 	int nbMaxMusic = 4;
@@ -25,6 +28,7 @@ public:
 	void update();
 	
 	void playMusic(int id);
+	void playHorrorMusic();
 	void playBossMusic(sf::Music* music);
 	void endBossMusic(sf::Music* music);
 

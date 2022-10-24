@@ -1,6 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <list>
+#include <numeric>
+#include <SFML/Window/Keyboard.hpp>
 #include "InputManager.h"
 
 class GameMaster;
@@ -17,6 +20,8 @@ private:
 	int currentOpacity = 255;
 
 	bool end = false;
+
+	std::list<sf::Keyboard::Key> inputBuffer;
 
 	LevelId exitCode;
 
@@ -48,7 +53,9 @@ private:
 
 	sf::Music music;
 	sf::SoundBuffer thunderBuffer;
+	sf::SoundBuffer evilLaught;
 	sf::Sound thunder;
+	sf::Sound evilLaughtS;
 
 	std::map<int, sf::Vector2f> cursorMap;
 	std::map<int, sf::Vector2f> cursorMapLevelS;
@@ -60,6 +67,7 @@ private:
 	sf::Text backButton;
 
 	sf::Color currentColor;
+	sf::Color thunderColor;
 	sf::Clock* fadeOutClock;
 	
 	bool stopFadeOut = false;
@@ -67,6 +75,7 @@ private:
 	bool levelSelection = false;
 
 	void processSelection(sf::RenderTarget* renderTarget);
+	void konamiCode();
 	void exit();
 
 public:

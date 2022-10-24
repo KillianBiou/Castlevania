@@ -16,7 +16,8 @@ enum Difficulty {
 enum LevelId {
 	LEVEL1 = 0,
 	LEVEL2 = 1,
-	TUTORIAL = 2
+	MISSINGLVL = 2,
+	TUTORIAL = 3
 };
 
 class GameMaster;

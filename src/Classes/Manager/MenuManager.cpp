@@ -41,9 +41,11 @@ MenuManager::MenuManager(GameMaster* gameMaster): gameMaster(gameMaster) {
     this->lvl2Image.setTexture(this->lvl2Texture);
     this->lvl2Image.setPosition(1000, 450);
 
+    this->thunderColor = sf::Color(255, 255, 255, 0);
+
     this->thunderEffect = sf::Sprite();
     this->thunderEffect.setTexture(thunderTexture);
-    this->thunderEffect.setColor(sf::Color(255, 255, 255, 0));
+    this->thunderEffect.setColor(this->thunderColor);
 
     this->playButton = sf::Text();
     this->playButton.setFont(this->font);
@@ -105,13 +107,21 @@ MenuManager::MenuManager(GameMaster* gameMaster): gameMaster(gameMaster) {
     
     this->thunderBuffer.loadFromFile("sfx/Thunder.ogg");
     this->thunder.setBuffer(thunderBuffer);
+
+    this->evilLaught.loadFromFile("sfx/EvilLaught.ogg");
+    this->evilLaughtS.setBuffer(evilLaught);
+
+    for (int i = 0; i < 10; i++) {
+        this->inputBuffer.push_back(sf::Keyboard::C);
+    }
 }
 
 bool MenuManager::update(sf::RenderTarget* renderTarget) {
     if (this->fadeOutClock) {
         int timestamp = this->fadeOutClock->getElapsedTime().asMilliseconds();
         if (timestamp > 1000 && !stopFadeOut) {
-            this->thunderEffect.setColor(sf::Color(255, 255, 255, 0));
+            this->thunderColor.a = 0;
+            this->thunderEffect.setColor(this->thunderColor);
             int currentTime = (1000 - timestamp) / 4;
             if (currentTime > 255)
                 currentTime = 255;
@@ -125,7 +135,8 @@ bool MenuManager::update(sf::RenderTarget* renderTarget) {
             int currentTime = timestamp / 4;
             if (currentTime > 255)
                 currentTime = 255;
-            this->thunderEffect.setColor(sf::Color(255, 255, 255, 255 - currentTime));
+            this->thunderColor.a = 255 - currentTime;
+            this->thunderEffect.setColor(this->thunderColor);
         }
         else if (!end && timestamp >= 3000) {
             this->end = true;
@@ -221,6 +232,15 @@ void MenuManager::processSelection(sf::RenderTarget* target) {
     }
 }
 
+void MenuManager::konamiCode(){
+    this->thunderColor = sf::Color(136, 8, 8, 0);
+    this->fadeOutClock = new sf::Clock();
+    this->evilLaughtS.play();
+    this->thunder.play();
+    this->blockInput = true;
+    this->exitCode = MISSINGLVL;
+}
+
 void MenuManager::exit() {
     this->gameMaster->changeState(GAME);
     this->music.stop();
@@ -301,5 +321,20 @@ const void MenuManager::processInput(sf::Event event, sf::RenderTarget* target) 
                 this->processSelection(target);
             break;
         }
+        break;
+    case sf::Event::KeyReleased:
+        this->inputBuffer.push_back(event.key.code);
+        this->inputBuffer.pop_front();
+        int sum = 0;
+        int i = 2;
+        for (sf::Keyboard::Key key : this->inputBuffer) {
+            sum += key * i;
+            std::cout << sum << std::endl;
+            i *= 2;
+        }
+        if (sum == 37126) {
+            this->konamiCode();
+        }
+        break;
     }
 }
