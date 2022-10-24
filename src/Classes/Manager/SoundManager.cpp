@@ -5,6 +5,7 @@ SoundManager::SoundManager() {
 		this->musicList.push_back(new sf::Music());
 		this->musicList.at(i)->openFromFile("music/0" + std::to_string(i + 1) + ".ogg");
 	}
+	this->sfxList = {};
 }
 
 void SoundManager::update() {
@@ -44,17 +45,20 @@ void SoundManager::endBossMusic(sf::Music* music) {
 
 void SoundManager::playSoundEffect(sf::SoundBuffer* soundBuffer) {
 	sf::SoundBuffer* temp = new sf::SoundBuffer(*soundBuffer);
-	this->sfxList.push_back(new sf::Sound());
+	this->sfxList.push_back(sf::Sound());
 
-	this->sfxList.at(this->sfxList.size() - 1)->setBuffer(*temp);
-	this->sfxList.at(this->sfxList.size() - 1)->play();
+	this->sfxList.back().setBuffer(*temp);
+	this->sfxList.back().play();
 }
 
 void SoundManager::clearFinishedSfx() {
-	for (int i = 0; i < this->sfxList.size(); i++) {
-		if (sfxList.at(i)->getStatus() == sf::Sound::Stopped && sfxList.at(i)->getPlayingOffset().asMilliseconds() == 0) {
-			this->sfxList.erase(std::remove(this->sfxList.begin(), this->sfxList.end(), sfxList.at(i)), this->sfxList.end());
-
+	std::cout << this->sfxList.size() << std::endl;
+	for (std::list<sf::Sound>::iterator i = this->sfxList.begin(); i != this->sfxList.end();) {
+		if (i->getStatus() == sf::Sound::Stopped && i->getPlayingOffset().asMilliseconds() == 0) {
+			i = this->sfxList.erase(i);
+		}
+		else {
+			i++;
 		}
 	}
 }

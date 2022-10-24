@@ -3,11 +3,12 @@
 #include <iostream>
 #include <random>
 #include <time.h>
+#include <list>
 
 class SoundManager {
 private:
 	std::vector<sf::Music*> musicList;
-	std::vector<sf::Sound*> sfxList;
+	std::list<sf::Sound> sfxList;
 
 	sf::Music* currentMusic;
 	int currentMusicId;
