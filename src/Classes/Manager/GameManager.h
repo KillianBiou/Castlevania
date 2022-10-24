@@ -35,6 +35,7 @@ private:
 	bool rightHeld;
 
 	sf::Clock* endCutsceneClock;
+	sf::Clock* fadeOutClock;
 
 	std::vector<int> pointsToHpUp;
 
@@ -42,10 +43,12 @@ private:
 	sf::Texture cutsceneCastle;
 	sf::Texture cutsceneCull;
 	sf::Texture textClear;
+	sf::Texture fadeOutTexture;
 	sf::Sprite cutsceneBGS;
 	sf::Sprite cutsceneCastleS;
 	sf::Sprite cutsceneCullS;
 	sf::Sprite textClearS;
+	sf::Sprite fadeOutSprite;
 
 	sf::SoundBuffer castleCrush;
 	sf::SoundBuffer victoryMusic;
@@ -66,6 +69,7 @@ public:
 
 	bool isNextBuffReached(int score);
 
+	void fadeOut();
 	void playEndCutscene();
 
 	Level* getLevel();

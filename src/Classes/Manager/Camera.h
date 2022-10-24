@@ -35,6 +35,7 @@ public:
 	void setEntityManager(EntityManager* entityManager);
 	void setTarget(Entity* entity);
 	void teleport();
+	sf::Vector2f getTargetPos();
 
 	Score* getScore();
 	HealthBar* getHealthBar();

@@ -178,18 +178,20 @@ GameManager::GameManager(Difficulty difficulty, GameMaster* gameMaster): gameMas
     this->loadLevel(LEVEL1);
     this->soundManager = new SoundManager();
 	
+    this->fadeOutTexture.loadFromFile("images/thunderEffect.png");
+    this->fadeOutSprite = sf::Sprite();
+    this->fadeOutSprite.setTexture(this->fadeOutTexture);
+    this->fadeOutSprite.setColor(sf::Color(0, 0, 0, 0));
+    this->fadeOutSprite.setPosition(0, 0);
+
 	switch (difficulty)
 	{
 	case EASY:
-		this->pointsToHpUp = { 200, 400, 600, 800 };
-		break;
-	case MEDIUM:
-		this->pointsToHpUp = { 400, 800, 1200, 1600 };
-		break;
-	case HARD:
-		this->pointsToHpUp = { 800, 1600, 2400, 3200 };
+		this->pointsToHpUp = { 1000, 2000, 3000, 4000, 5000, 6000, 7000 };
 		break;
 	default:
+        this->pointsToHpUp = { 200, 400, 600, 800 };
+
 		break;
 	}
 }
@@ -204,7 +206,6 @@ void GameManager::update(sf::RenderTarget* renderTarget) {
         renderTarget->draw(this->cutsceneCullS);
 
         this->soundManager->setCanPlay(false);
-        std::cout << currentTimeStamp << std::endl;
 
         if (currentTimeStamp > 2000) {
             if (!this->startedSfx) {
@@ -235,9 +236,26 @@ void GameManager::update(sf::RenderTarget* renderTarget) {
 
             entityManager->drawAllEntities(renderTarget);
 
+
             this->camera->trackTarget(renderTarget);
 
             this->soundManager->update();
+
+            if (this->fadeOutClock) {
+                int timestamp = this->fadeOutClock->getElapsedTime().asMilliseconds();
+                if (timestamp < 3000) {
+                    int currentTime = timestamp / 10;
+                    if (currentTime > 240)
+                        currentTime = 255;
+                    this->fadeOutSprite.setColor(sf::Color(0, 0, 0, currentTime));
+                    this->fadeOutSprite.setPosition(this->camera->getTargetPos() - sf::Vector2f(960, 540));
+                    renderTarget->setView(sf::View(this->camera->getTargetPos(), sf::Vector2f(1920, 1080)));
+                    renderTarget->draw(this->fadeOutSprite);
+                }
+                else {
+                    this->playEndCutscene();
+                }
+            }
 
             if (this->entityManager->getPlayer()->getPosition().x >= (this->level->getSizeX() - 1) * 64) {
                 if (this->currentLvlId == LEVEL1)
@@ -283,6 +301,11 @@ void GameManager::loadEntities() {
 void GameManager::startGame() {
     this->soundManager->setCanPlay(true);
     this->soundManager->playMusic(0);
+}
+
+void GameManager::fadeOut() {
+
+    this->fadeOutClock = new sf::Clock();
 }
 
 void GameManager::playEndCutscene() {

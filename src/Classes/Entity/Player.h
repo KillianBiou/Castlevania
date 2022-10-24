@@ -57,6 +57,7 @@ public:
 	const sf::Vector2f cameraTracking();
 
 	void changeWeapon(Weapon* weapon);
+	void triggerEnd();
 
 	Weapon* getWeapon();
 	EntityManager* getEntityManager();

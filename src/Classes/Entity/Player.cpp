@@ -24,7 +24,7 @@ Player::Player(sf::Vector2f pos, int frameDelay, float speedFactor, float jumpFa
 
 	this->animator->setAnimations({ {IDLE, 1}, {RUNNING, 3}, {JUMPING, 1}, {ATTACK, 4}, {HURT, 2}, {DEATH, 4} });
 
-	this->maxHp = 75;
+	this->maxHp = 3;
 	this->hp = this->maxHp;
 	this->name = "Belmon";
 
@@ -183,6 +183,10 @@ void Player::changeWeapon(Weapon* weapon) {
 	delete this->weapon;
 	this->weapon = weapon;
 	this->timePerAttack = weapon->getTimePerAttack();
+}
+
+void Player::triggerEnd() {
+	this->entityManager->getGameManager()->fadeOut();
 }
 
 void Player::addHp(int amount) {

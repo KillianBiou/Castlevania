@@ -5,6 +5,7 @@
 
 int main() {
     sf::RenderWindow drawingWindow(sf::VideoMode(1920, 1080), "Drawing windows", sf::Style::Close);
+    drawingWindow.setTitle("Castlevania 2022");
     auto desktop = sf::VideoMode::getDesktopMode();
 
     srand(time(NULL));

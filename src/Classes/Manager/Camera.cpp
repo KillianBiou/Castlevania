@@ -83,6 +83,13 @@ void Camera::teleport() {
 	this->teleportToTarget = true;
 }
 
+sf::Vector2f Camera::getTargetPos() {
+	sf::Vector2f targetPos = this->target->cameraTracking();
+	targetPos.x = clamp(targetPos.x, this->view->getSize().x / 2, this->levelXSize * 64 - this->view->getSize().x / 2);
+	targetPos.y = clamp(targetPos.y, this->view->getSize().y / 2, this->levelYSize * 64 - this->view->getSize().y / 2);
+	return targetPos;
+}
+
 Score* Camera::getScore() {
 	return this->score;
 }
