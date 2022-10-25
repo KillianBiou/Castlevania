@@ -230,6 +230,11 @@ void Player::die() {
 	this->entityManager->getGameManager()->fadeDeath();
 }
 
+void Player::setMaxHp(int amount) {
+	this->maxHp = amount;
+	this->hp = amount;
+}
+
 Weapon* Player::getWeapon() {
 	return this->weapon;
 }

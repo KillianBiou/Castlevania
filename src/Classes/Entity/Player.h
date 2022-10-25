@@ -55,6 +55,8 @@ public:
 
 	void addMana(int amount);
 
+	void setMaxHp(int amount);
+
 	const sf::Vector2f cameraTracking();
 
 	void changeWeapon(Weapon* weapon);

@@ -207,6 +207,7 @@ std::string missingLvlBackgroundImage = "images/missingLvlBackground.png";
 std::string missingLvlTilesetPath = "images/missingLvlTileSet.png";
 std::multimap<EntityType, sf::Vector2f> missingLvlEntityMap{
     {PLAYER, sf::Vector2f(92, 1150)},
+    {MISSINGNO, sf::Vector2f(4800, 1024)},
 };
 
 GameManager::GameManager(Difficulty difficulty, GameMaster* gameMaster): gameMaster(gameMaster) {
@@ -368,6 +369,11 @@ void GameManager::loadEntities() {
     for (std::pair<EntityType, sf::Vector2f> entry : *this->level->getEntityMap()) {
         tempFactory.createEntity(entry.first, entry.second);
     }
+
+    if (this->currentLvlId == MISSINGLVL) {
+        this->entityManager->getPlayer()->setMaxHp(20);
+    }
+
     this->camera->setTarget(this->entityManager->getPlayer());
     this->camera->teleport();
     this->camera->getHealthBar()->setEntity(this->entityManager->getPlayer());
@@ -387,6 +393,11 @@ void GameManager::fadeDeath() {
     this->soundManager->progressiveFadeOut(1000);
     this->deathClock = new sf::Clock();
     this->gameOver.loadFromFile("sfx/gameOver.ogg");
+    if (this->currentLvlId == MISSINGLVL) {
+        this->gameOver.loadFromFile("sfx/missingDeath.ogg");
+        this->deathText.setString("You have been murdered, you shall never leave this place.");
+        this->deathText.setFillColor(sf::Color(136, 8, 8, 255));
+    }
 }
 
 void GameManager::playEndCutscene() {

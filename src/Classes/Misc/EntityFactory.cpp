@@ -30,6 +30,9 @@ void EntityFactory::createEntity(EntityType type, sf::Vector2f position) {
 	case REAPER:
 		new Reaper(position, 5.f, this->entityManager);
 		break;
+	case MISSINGNO:
+		new MissingNo(position, 8.f, this->entityManager);
+		break;
 	default:
 		break;
 	}

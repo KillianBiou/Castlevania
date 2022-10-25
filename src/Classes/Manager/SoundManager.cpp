@@ -53,6 +53,7 @@ void SoundManager::playHorrorMusic() {
 
 void SoundManager::playBossMusic(sf::Music* music) {
 	this->currentMusic->stop();
+	this->currentMusic = music;
 	music->play();
 	music->setLoop(true);
 	this->bossMusic = true;

@@ -58,6 +58,7 @@ private:
 	sf::SoundBuffer castleCrush;
 	sf::SoundBuffer victoryMusic;
 	sf::SoundBuffer gameOver;
+	sf::SoundBuffer missingGameOver;
 	bool startedSfx = false;
 	bool victoryMusicStarted = false;
 

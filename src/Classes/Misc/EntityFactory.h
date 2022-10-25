@@ -6,6 +6,7 @@
 #include "../Spawner/ZombieSpawner.h"
 #include "../Entity/Mummy.h"
 #include "../Entity/Reaper.h"
+#include "../Entity/MissingNo.h"
 #include "../Misc/Level.h"
 
 enum EntityType {
@@ -14,7 +15,8 @@ enum EntityType {
 	SKELETON,
 	ZOMBIE,
 	MUMMY,
-	REAPER
+	REAPER,
+	MISSINGNO
 };
 
 class EntityFactory {
