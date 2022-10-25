@@ -222,6 +222,15 @@ GameManager::GameManager(Difficulty difficulty, GameMaster* gameMaster): gameMas
     this->fadeOutSprite.setColor(sf::Color(0, 0, 0, 0));
     this->fadeOutSprite.setPosition(0, 0);
 
+    this->font.loadFromFile("font/mainMenu.ttf");
+
+    this->deathText = sf::Text();
+    this->deathText.setFont(this->font);
+    this->deathText.setString("You died and your family heirloom is now forever lost.");
+    this->deathText.setCharacterSize(75);
+    this->deathText.setFillColor(sf::Color::White);
+    this->deathText.setPosition(10000, 10000);
+
 	switch (difficulty)
 	{
 	case EASY:
@@ -294,6 +303,29 @@ void GameManager::update(sf::RenderTarget* renderTarget) {
                 }
             }
 
+            if (this->deathClock) {
+                int timestamp = this->deathClock->getElapsedTime().asMilliseconds();
+                int currentTime = timestamp / 10;
+                if (currentTime > 120)
+                    currentTime = 130;
+                this->fadeOutSprite.setColor(sf::Color(0, 0, 0, currentTime));
+                this->fadeOutSprite.setPosition(this->camera->getTargetPos() - sf::Vector2f(960, 540));
+                renderTarget->setView(sf::View(this->camera->getTargetPos(), sf::Vector2f(1920, 1080)));
+                renderTarget->draw(this->fadeOutSprite);
+                if (timestamp > 4000) {
+                    this->deathText.setPosition(this->camera->getTargetPos() - sf::Vector2f(this->deathText.getGlobalBounds().width / 2, 0));
+                    renderTarget->draw(this->deathText);
+                    if (!this->startedSfx) {
+                        this->soundManager->playSoundEffect(&this->gameOver);
+                        this->startedSfx = true;
+                    }
+                }
+                if (timestamp > 8500) {
+                    this->camera->reset();
+                    this->gameMaster->changeState(MENU);
+                }
+            }
+
             if (this->entityManager->getPlayer()->getPosition().x >= (this->level->getSizeX() - 1) * 64) {
                 if (this->currentLvlId == LEVEL1)
                     this->loadLevel(LEVEL2);
@@ -348,8 +380,13 @@ void GameManager::startGame() {
 }
 
 void GameManager::fadeOut() {
-
     this->fadeOutClock = new sf::Clock();
+}
+
+void GameManager::fadeDeath() {
+    this->soundManager->progressiveFadeOut(1000);
+    this->deathClock = new sf::Clock();
+    this->gameOver.loadFromFile("sfx/gameOver.ogg");
 }
 
 void GameManager::playEndCutscene() {

@@ -33,6 +33,7 @@ private:
 	sf::SoundBuffer jumpSound;
 
 	void updateHitboxWeapon();
+	void die();
 
 public:
 	Player(sf::Vector2f pos, int frameDelay, float speedFactor, float jumpFactor, EntityManager* entityManager);

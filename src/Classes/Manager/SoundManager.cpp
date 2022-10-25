@@ -21,6 +21,17 @@ void SoundManager::update() {
 			this->playMusic(randomId);
 		}
 	}
+	if (this->fadeOut) {
+		int timestamp = this->fadeOut->getElapsedTime().asMilliseconds();
+		float scale = 100.f / this->fadeOutDuration;
+		int volume = std::max(std::min((int)(timestamp * scale), 100), 0);
+		this->currentMusic->setVolume(100 - volume);
+
+		if (timestamp >= this->fadeOutDuration) {
+			delete this->fadeOut;
+			this->fadeOut = nullptr;
+		}
+	}
 }
 
 void SoundManager::playMusic(int id) {
@@ -63,7 +74,6 @@ void SoundManager::playSoundEffect(sf::SoundBuffer* soundBuffer) {
 }
 
 void SoundManager::clearFinishedSfx() {
-	std::cout << this->sfxList.size() << std::endl;
 	for (std::list<sf::Sound>::iterator i = this->sfxList.begin(); i != this->sfxList.end();) {
 		if (i->getStatus() == sf::Sound::Stopped && i->getPlayingOffset().asMilliseconds() == 0) {
 			i = this->sfxList.erase(i);
@@ -72,6 +82,11 @@ void SoundManager::clearFinishedSfx() {
 			i++;
 		}
 	}
+}
+
+void SoundManager::progressiveFadeOut(int milliseconds) {
+	this->fadeOut = new sf::Clock();
+	this->fadeOutDuration = milliseconds;
 }
 
 void SoundManager::setCanPlay(bool canPlay) {

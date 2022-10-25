@@ -170,6 +170,9 @@ void Player::takeDamage(int amount) {
 	if (!this->isInvulnerable()) {
 		Entity::takeDamage(amount);
 		invulnerabilityClock.restart();
+		if (!this->dead && this->hp <= 0) {
+			this->die();
+		}
 	}
 }
 
@@ -220,6 +223,11 @@ void Player::updateHitboxWeapon() {
 		this->hitboxWeapon.setSize(sf::Vector2f(-112.f, 24.f));
 		this->weapon->setPosition(this->getPosition() + this->weaponPositionModifier);
 	}
+}
+
+void Player::die() {
+	Entity::die();
+	this->entityManager->getGameManager()->fadeDeath();
 }
 
 Weapon* Player::getWeapon() {

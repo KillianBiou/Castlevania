@@ -14,6 +14,9 @@ private:
 
 	sf::Music* currentMusic;
 
+	sf::Clock* fadeOut;
+	int fadeOutDuration;
+
 	int currentMusicId;
 
 	int nbMaxMusic = 4;
@@ -26,6 +29,8 @@ private:
 public:
 	SoundManager();
 	void update();
+
+	void progressiveFadeOut(int milliseconds);
 	
 	void playMusic(int id);
 	void playHorrorMusic();
