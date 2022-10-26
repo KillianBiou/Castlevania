@@ -8,9 +8,7 @@
 #include "../Misc/EntityFactory.h"
 
 enum Difficulty {
-	EASY,
-	MEDIUM,
-	HARD
+	EASY
 };
 
 enum LevelId {
