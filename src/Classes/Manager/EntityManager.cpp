@@ -189,8 +189,7 @@ void EntityManager::clearOutOfBoundsProjectiles() {
 void EntityManager::drawAllEntities(sf::RenderTarget* renderTarget) {
     renderTarget->draw(*player);
 	player->drawChild(renderTarget);
-    this->debugDrawMonsters((sf::RenderWindow*)renderTarget);
-	for (int i = 0; i < monstersList.size(); i++) {
+    for (int i = 0; i < monstersList.size(); i++) {
         renderTarget->draw(*monstersList.at(i));
 	}
     for (int i = 0; i < projectileList.size(); i++) {
