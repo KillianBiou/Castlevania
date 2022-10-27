@@ -9,6 +9,7 @@
 #include "../Entity/MissingNo.h"
 #include "../Misc/Level.h"
 
+// Enumeration to represent all the different type of monster if the game
 enum EntityType {
 	PLAYER,
 	MEDUSA,
@@ -19,6 +20,7 @@ enum EntityType {
 	MISSINGNO
 };
 
+// An utilitary class only for instanciating all the spawner/player 
 class EntityFactory {
 private:
 	EntityManager* entityManager;
@@ -28,5 +30,6 @@ private:
 public:
 	EntityFactory(Level* level, EntityManager* gameManager, sf::View* view);
 
+	// Generate a spawner/player at given location
 	void createEntity(EntityType type, sf::Vector2f position);
 };

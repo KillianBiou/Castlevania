@@ -4,6 +4,7 @@
 #include "../Collectible/WeaponUpgrade.h"
 #include "../Projectiles/StraightProjectile.h"
 
+// Class representing the boss of the first level
 class Reaper : public Monster {
 private:
 	sf::Texture projectileTexture;
@@ -27,9 +28,10 @@ private:
 	sf::Music bossTheme;
 
 	void animate();
-	void moveBoundary();
 	void moveTick();
+	// Check for screen border collision
 	void checkCollision();
+	// Trigger music, camera tracking, and spawner deactivation
 	void startBoss();
 
 public:

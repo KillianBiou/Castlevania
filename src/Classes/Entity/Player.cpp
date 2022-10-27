@@ -55,8 +55,10 @@ void const Player::attack(bool advance) {
 	if (this->animator->getCurrentAnimation() == HURT || this->dead) {
 		return;
 	}
+	// State based behaviour for attack
 	if (((!advance && this->weapon->getCurrentPhase() == 0) || advance)) {
 		switch (this->weapon->getCurrentPhase()) {
+		// Place the weapon's sprite behind player
 		case 0:
 			this->entityManager->getGameManager()->getSoundManager()->playSoundEffect(this->weapon->getAttackSound());
 			this->isAttacking = true;
@@ -74,6 +76,7 @@ void const Player::attack(bool advance) {
 		case 1:
 			this->weapon->phase1(this->side == LEFT ? false : true);
 			break;
+		// Place the weapon's sprite in front of the player
 		case 2:
 			this->weapon->phase2(this->side == LEFT ? false : true);
 			this->weapon->move(-176.f * this->side * -1, 0.f);
@@ -82,6 +85,7 @@ void const Player::attack(bool advance) {
 		case 3:
 			this->weapon->phase3(this->side == LEFT ? false : true);
 
+			// Detect collision between the weapon and monster, inflict damage
 			for (Entity* entity : this->entityManager->detectCollisionMonster(this->hitboxWeapon.getGlobalBounds())) {
 				std::cout << "Hit : " << entity->getName() << std::endl;
 				this->alreadyHit.push_back(entity);
@@ -95,6 +99,7 @@ void const Player::attack(bool advance) {
 			this->weapon->move(176.f * this->side * -1, 0.f);
 			this->weaponPositionModifier.x += 176.f * this->side * -1;
 			
+			// Detect collision between the weapon and monster, inflict damage
 			for (Entity* entity : this->entityManager->detectCollisionMonster(this->hitboxWeapon.getGlobalBounds())) {
 				if(std::find(this->alreadyHit.begin(), this->alreadyHit.end(), entity) == this->alreadyHit.end()) {
 					std::cout << entity->getName() << std::endl;
@@ -110,8 +115,8 @@ void const Player::attack(bool advance) {
 }
 
 void Player::specialOne() {
+	// If enough mana and cooldown finished, launch a straight projectile in front of player
 	if (this->mana >= 1 && this->specialClock.getElapsedTime().asMilliseconds() >= this->specialCooldown) {
-		std::cout << "Knife" << std::endl;
 		this->specialClock.restart();
 		this->mana--;
 		StraightProjectile* temp = new StraightProjectile(this->knifeTexture, 64, 64, this->getPosition(), 15.f, sf::Vector2f(this->getPosition().x + 10 * this->getScale().x, this->getPosition().y), 1);
@@ -122,8 +127,8 @@ void Player::specialOne() {
 }
 
 void Player::specialTwo() {
+	// If enough mana and cooldown finished, launch a parabolic projectile from the player
 	if (this->mana >= 1 && this->specialClock.getElapsedTime().asMilliseconds() >= this->specialCooldown) {
-		std::cout << "Axe" << std::endl;
 		this->specialClock.restart();
 		this->mana--;
 		ParabolicProjectile* temp = new ParabolicProjectile(this->axeTexture, 64, 64, this->getPosition() - sf::Vector2f(0.f, this->spriteSizeY / 2), 0.65f, 500 *  this->getScale().x, 4);
@@ -140,26 +145,21 @@ void Player::update() {
 }
 
 void Player::updateAnim() {
-	this->debugAnim = "IDLE";
+	// Play the corresponding animation
 	Animation tempAnim = IDLE;
 	if(this->moveDirection != NONE){
-		this->debugAnim = "RUNNING";
 		tempAnim = RUNNING;
 	}
 	if (this->verticalVelocity != 0) {
-		this->debugAnim = "JUMPING";
 		tempAnim = JUMPING;
 	}
 	if (this->isHurt) {
-		this->debugAnim = "HURT";
 		tempAnim = HURT;
 	}
 	if (this->isAttacking) {
-		this->debugAnim = "ATTACKING";
 		tempAnim = ATTACK;
 	}
 	if (this->hp <= 0) {
-		this->debugAnim = "DEATH";
 		tempAnim = DEATH;
 	}
 
@@ -167,6 +167,7 @@ void Player::updateAnim() {
 }
 
 void Player::takeDamage(int amount) {
+	// Take damage and activate an invulnerable cooldown
 	if (!this->isInvulnerable()) {
 		Entity::takeDamage(amount);
 		invulnerabilityClock.restart();
@@ -177,12 +178,14 @@ void Player::takeDamage(int amount) {
 }
 
 void Player::jump() {
+	// Jump if the player is grounded
 	if (this->isGrounded)
 		this->playSfx(&this->jumpSound);
 	this->setVerticalMovement(UP);
 }
 
 void Player::changeWeapon(Weapon* weapon) {
+	// Delete the current weapon and take the new one
 	delete this->weapon;
 	this->weapon = weapon;
 	this->timePerAttack = weapon->getTimePerAttack();
@@ -226,6 +229,7 @@ void Player::updateHitboxWeapon() {
 }
 
 void Player::die() {
+	// Die and trigger death animation
 	Entity::die();
 	this->entityManager->getGameManager()->fadeDeath();
 }

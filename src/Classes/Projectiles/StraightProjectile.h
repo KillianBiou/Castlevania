@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Projectile.h"
 
+// Class that represent a projectile that goes straight toward a target
 class StraightProjectile : public Projectile
 {
 private:

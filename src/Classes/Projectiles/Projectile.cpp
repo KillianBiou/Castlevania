@@ -6,11 +6,13 @@ Projectile::Projectile(sf::Texture spritesheet, int xSize, int ySize, sf::Vector
 	this->textureRect = sf::IntRect(0, 0, xSize, ySize);
 }
 
+// Update loop
 const void Projectile::update() {
 	this->animate();
 	this->moveTick();
 }
 
+// Animate the sprite
 const void Projectile::animate() {
 	if (this->animationClock.getElapsedTime().asMilliseconds() > 100) {
 		if (this->textureRect.left == (this->nbFrame - 1) * this->xSize) {

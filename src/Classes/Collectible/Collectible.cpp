@@ -11,11 +11,13 @@ Collectible::Collectible(std::string texturePath, sf::IntRect textureRect, const
 }
 
 void Collectible::moveGroundedPoint() {
+    // Move the ground check points
     this->groundedPoint1 = this->getPosition() + sf::Vector2f(-(this->getTextureRect().width / 5.f) * 2.f, this->getTextureRect().height * this->getScale().y);
     this->groundedPoint2 = this->getPosition() + sf::Vector2f((this->getTextureRect().width / 5.f) * 2.f, this->getTextureRect().height * this->getScale().y);
 }
 
 void Collectible::checkGrounded() {
+    // Check if the collectible's sprite touch the ground
     int xCollision = int(this->groundedPoint1.x / 64);
     int yCollision = int(this->groundedPoint1.y / 64);
     int xCollisionBis = int(this->groundedPoint2.x / 64);
@@ -24,11 +26,12 @@ void Collectible::checkGrounded() {
         this->isGrounded = true;
     }
     else if ((this->level[xCollision + yCollision * this->X_SIZE] == 0 && this->level[xCollisionBis + yCollisionBis * this->X_SIZE] == 0) && this->isGrounded == true) {
-        this->isGrounded =false;
+        this->isGrounded = false;
     }
 }
 
 void Collectible::moveTick() {
+    // Apply gravity if not grounded
     if (!this->isGrounded) {
         this->move(0.f, 1.f);
     }

@@ -89,12 +89,13 @@ MenuManager::MenuManager(GameMaster* gameMaster): gameMaster(gameMaster) {
     this->lvl2Description.setFillColor(sf::Color::White);
     this->lvl2Description.setPosition(sf::Vector2f(this->lvl2Image.getPosition() + sf::Vector2f(100.f, 190)));
 
+    // The cursor location for the base state
     this->cursorMap = {
         {0, sf::Vector2f(this->playButton.getPosition() + sf::Vector2f(50 + this->playButton.getGlobalBounds().width, this->playButton.getGlobalBounds().height / 2))},
         {1, sf::Vector2f(this->selectLevel.getPosition() + sf::Vector2f(50 + this->selectLevel.getGlobalBounds().width, this->selectLevel.getGlobalBounds().height / 2))},
         {2, sf::Vector2f(this->exitButton.getPosition() + sf::Vector2f(50 + this->exitButton.getGlobalBounds().width, this->exitButton.getGlobalBounds().height / 2))}
     };
-
+    // The cursor location for the level selection state
     this->cursorMapLevelS = {
         {0, sf::Vector2f(this->lvl1Image.getPosition() + sf::Vector2f(50 + this->lvl1Image.getGlobalBounds().width, this->lvl1Image.getGlobalBounds().height / 2))},
         {1, sf::Vector2f(this->lvl2Image.getPosition() + sf::Vector2f(50 + this->lvl2Image.getGlobalBounds().width, this->lvl2Image.getGlobalBounds().height / 2))},
@@ -117,6 +118,7 @@ MenuManager::MenuManager(GameMaster* gameMaster): gameMaster(gameMaster) {
 }
 
 bool MenuManager::update(sf::RenderTarget* renderTarget) {
+    // Visual effect for level selection
     if (this->fadeOutClock) {
         int timestamp = this->fadeOutClock->getElapsedTime().asMilliseconds();
         if (timestamp > 1000 && !stopFadeOut) {
@@ -148,12 +150,16 @@ bool MenuManager::update(sf::RenderTarget* renderTarget) {
             }
         }
     }
+
+    // Place the sprite to the right position
     if (this->levelSelection) {
         this->cursorSprite.setPosition(this->cursorMapLevelS[this->currentPosition]);
     }
     else {
         this->cursorSprite.setPosition(this->cursorMap[this->currentPosition]);
     }
+
+    // Draw itself
     this->draw(renderTarget);
 
     if (stopFadeOut) {
@@ -178,6 +184,7 @@ void MenuManager::reset() {
 }
 
 void MenuManager::processSelection(sf::RenderTarget* target) {
+    // Cycle throught the 3 tutorial image
     if (this->exitCode == TUTORIAL) {
         std::cout << "Processing : " << this->currentTutorial << std::endl;
         switch (this->currentTutorial)
@@ -196,28 +203,34 @@ void MenuManager::processSelection(sf::RenderTarget* target) {
     }
     else if (!this->levelSelection) {
         switch (this->currentPosition) {
+        // If selected : "Play"
         case 0:
             this->fadeOutClock = new sf::Clock();
             this->thunder.play();
             this->exitCode = TUTORIAL;
             break;
+        // If selected : "Level Selection"
         case 1:
             this->currentPosition = 0;
             this->levelSelection = true;
             break;
+        // Close the window
         case 2:
             ((sf::RenderWindow*)target)->close();
             break;
         }
     }
+    // If state is level selection
     else {
         switch (this->currentPosition) {
+        // Load level 1
         case 0:
             this->fadeOutClock = new sf::Clock();
             this->thunder.play();
             this->blockInput = true;
             this->exitCode = LEVEL1;
             break;
+        // Load level 2
         case 1:
             this->fadeOutClock = new sf::Clock();
             this->thunder.play();
@@ -242,6 +255,7 @@ void MenuManager::konamiCode(){
 }
 
 void MenuManager::exit() {
+    // Load the target level, and switch to game state
     this->gameMaster->changeState(GAME);
     this->music.stop();
     this->gameMaster->loadLvl(this->exitCode);

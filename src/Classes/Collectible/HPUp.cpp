@@ -6,6 +6,7 @@ HPUp::HPUp(const int* level, const int X_SIZE) : Collectible("images/Collectible
 }
 
 const void HPUp::onPickup(Player* player) {
+	// On Pickup, give 1 max hp to player
 	player->getEntityManager()->getGameManager()->getSoundManager()->playSoundEffect(&this->pickupSound);
 	player->addMaxHp(1);
 	this->setTextureRect(sf::IntRect(0, 0, 0, 0));

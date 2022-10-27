@@ -38,11 +38,14 @@ const void Reaper::update() {
 	animator->animate();
 	this->moveCollisionPoint();
 
+	// Start boss if player is close enought
 	if (abs(this->entityManager->xDistToPlayer(this->getPosition().x)) < 500 && abs(this->entityManager->yDistToPlayer(this->getPosition().y)) < 500) {
 		if (!this->bossStarted)
 			this->startBoss();
 	}
 	if (this->bossStarted) {
+		// Attack by instanciating projectile at given position
+		// Attack speed inceased as the boss have less HP
 		if (this->attackClock.getElapsedTime().asMilliseconds() >= std::max(this->timeBetweenAttacks * ((float)this->hp / this->maxHp), 800.f)) {
 			int direction = this->entityManager->xDistToPlayer(this->getPosition().x) < 0 ? -1 : 1;
 			StraightProjectile* temp = new StraightProjectile(this->projectileTexture, 64, 64, this->scytheV2 + sf::Vector2f(0.f, -64.f), 5.f, this->entityManager->playerPosition(), 2);
@@ -51,6 +54,7 @@ const void Reaper::update() {
 			this->entityManager->addProjectile(temp2);
 			this->attackClock.restart();
 		}
+		// If the boss stayed grounded for long enough, continue moving pattern
 		if (this->firstAttack || touchdownCooldown.getElapsedTime().asMilliseconds() >= 5000 && this->entityManager->isOnScreen(this->getPosition(), 0)) {
 			this->checkCollision();
 			this->moveTick();
@@ -69,6 +73,7 @@ void Reaper::startBoss() {
 }
 
 const sf::Vector2f Reaper::cameraTracking() {
+	// When tracked by camera, camera should be locked where the boss was instancied
 	return this->cameraLock;
 }
 
@@ -76,6 +81,7 @@ void Reaper::checkCollision() {
 	Level* currentLevel = this->entityManager->getGameManager()->getLevel();
 	sf::View* view = this->entityManager->getView();
 
+	// When touching screen border, invert vector
 	if (!this->entityManager->isOnScreen(this->topBoundPoint, 0) || !this->entityManager->isOnScreen(this->groundedPoint, 0)) {
 		this->movementVector.y *= -1;
 	}
@@ -83,6 +89,7 @@ void Reaper::checkCollision() {
 		this->movementVector.x *= -1;
 	}
 
+	// When touching a ground, make the boss stay grounded for x seconds
 	int xCollision = int(this->groundedPoint.x / 64);
 	int yCollision = int(this->groundedPoint.y / 64);
 	int xCollisionBis = int(this->groundedPointBis.x / 64);
@@ -115,6 +122,7 @@ const void Reaper::taskDeletion() {
 }
 
 Reaper::~Reaper() {
+	// On death, drop a Level 3 weapon upgrade
 	Level* currentLevel = this->entityManager->getGameManager()->getLevel();
 	this->entityManager->endBossCombat();
 	this->entityManager->getGameManager()->getSoundManager()->endBossMusic(&this->bossTheme);

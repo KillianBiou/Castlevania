@@ -4,6 +4,7 @@
 #include "../Projectiles/StraightProjectile.h"
 #include "../Projectiles/ParabolicProjectile.h"
 
+// Class representing the player
 class Player: public Entity
 {
 private:
@@ -38,8 +39,11 @@ private:
 public:
 	Player(sf::Vector2f pos, int frameDelay, float speedFactor, float jumpFactor, EntityManager* entityManager);
 	void const drawChild(sf::RenderTarget* renderTarget);
+	
+	// Update loop
 	void update();
 
+	// Animation checking
 	void updateAnim();
 
 	void const attack(bool advance);
@@ -47,6 +51,7 @@ public:
 	void takeDamage(int amount);
 	void jump();
 	
+	// Special attacks
 	void specialOne();
 	void specialTwo();
 

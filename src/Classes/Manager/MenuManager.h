@@ -9,7 +9,7 @@
 class GameMaster;
 enum LevelId;
 
-
+// Class that represent the main menu
 class MenuManager: public InputManager {
 private:
 	GameMaster* gameMaster;
@@ -21,6 +21,7 @@ private:
 
 	bool end = false;
 
+	// Easter egg tracker (Hint : Konami code)
 	std::list<sf::Keyboard::Key> inputBuffer;
 
 	LevelId exitCode;
@@ -74,17 +75,24 @@ private:
 	bool blockInput = false;
 	bool levelSelection = false;
 
+	// Process the selection according to current state
 	void processSelection(sf::RenderTarget* renderTarget);
+	// Trigger the easter egg's function
 	void konamiCode();
+	// Exit main menu and start the game
 	void exit();
 
 public:
 	MenuManager(GameMaster* gameMaster);
 
+	// Update loop
 	bool update(sf::RenderTarget* renderTarget);
+	// Render all the sprite with the specified render target
 	void draw(sf::RenderTarget* renderTarget);
 
+	// Maybe outdated, note sure 
 	void reset();
 	
+	// Override to process the keyboard input
 	const void processInput(sf::Event event, sf::RenderTarget* target);
 };

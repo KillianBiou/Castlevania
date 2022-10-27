@@ -4,6 +4,7 @@
 #include "../Collectible/WeaponUpgrade.h"
 #include "../Projectiles/SinProjectile.h"
 
+// Class representing the boss of the first level
 class Mummy : public Monster {
 private:
 	WeaponUpgrade* weaponUpgrade;
@@ -20,9 +21,12 @@ private:
 
 	sf::Music bossTheme;
 
+	// At half HP, enrage (x2 attack speed)
 	void enrage();
 	void animate();
+	// Go toward player
 	void goToward();
+	// Trigger music, camera tracking, and spawner deactivation
 	void startBoss();
 
 public:

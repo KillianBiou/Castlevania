@@ -9,6 +9,6 @@ SinProjectile::SinProjectile(sf::Texture spritesheet, int xSize, int ySize, sf::
 }
 
 const void SinProjectile::moveTick() {
+	// Move along the sin wave
 	this->move(this->speed, std::sin(this->sinClock.getElapsedTime().asSeconds() * this->frequency) * this->amplitude);
-	this->animate();
 }

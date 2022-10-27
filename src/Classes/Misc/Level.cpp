@@ -2,6 +2,7 @@
 #include "EntityFactory.h";
 
 Level::Level(const int* level, const int sizeX, const int sizeY, std::multimap<EntityType, sf::Vector2f> entityMap, std::string backgroundImagePath, std::string tilesetPath) : levelRaw(level), sizeX(sizeX), sizeY(sizeY), entityMap(entityMap) {
+	// Create the tilemap
 	this->tilemap = Tilemap();
 	this->tilemap.load(tilesetPath, 64, level, sizeX, sizeY);
 

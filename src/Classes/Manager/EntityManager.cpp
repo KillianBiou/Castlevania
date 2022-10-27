@@ -105,31 +105,38 @@ void EntityManager::removeCollectible(Collectible* collectible) {
 }
 
 void EntityManager::updateAllEntities() {
+    // Clear all projectiles that are out of screen bounds
     this->clearOutOfBoundsProjectiles();
 	if(player)
         player->update();
 	for (int i = 0; i < monstersList.size(); i++) {
+        // Check for collision with an allied projectile
         for (Projectile* projectile : this->detectCollisionAllyProjectile(monstersList.at(i)->getGlobalBounds())) {
             if(abs(this->player->getPosition().x - projectile->getPosition().x) < 1200)
                 monstersList.at(i)->takeDamage(1);
             this->removeAllyProjectile(projectile);
         }
+        // Update if the monsters is close enough to player
         if (this->cull(monstersList.at(i)->getPosition())) {
             monstersList.at(i)->update();
         }
 	}
+    // Update all spawners
     for (Spawner* spawner : this->spawnerList) {
         spawner->update();
     }
+    // Update all collectibles
     for (Collectible* collectible : this->collectibleList) {
         collectible->update();
     }
+    // Update all projectiles
     for (Projectile* projectile : projectileList) {
         projectile->update();
     }
     for (Projectile* projectile : allyProjectileList) {
         projectile->update();
     }
+    // Player collision with enemies if invulnerabily time is over
     if (!player->isInvulnerable()) {
         for (Entity* entity : this->detectCollisionMonster(player->getGlobalBounds())) {
             player->takeDamage(1);
@@ -138,6 +145,7 @@ void EntityManager::updateAllEntities() {
             player->takeDamage(1);
         }
     }
+    // Check for collectibles pickup
     for (Collectible* collectible : this->detectCollisionCollectibles(player->getGlobalBounds())) {
         collectible->onPickup(this->player);
         this->removeCollectible(collectible);
@@ -145,6 +153,7 @@ void EntityManager::updateAllEntities() {
 }
 
 bool EntityManager::cull(sf::Vector2f pos) {
+    // Check if the given pos is not too far of the player
     if (abs(this->xDistToPlayer(pos.x)) < 2000 && abs(this->yDistToPlayer(pos.y)) < 1000) {
         return true;
     }

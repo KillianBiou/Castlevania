@@ -1,6 +1,7 @@
 #pragma once
 #include "Monster.h"
 
+// Class representing a zombie
 class Zombie : public Monster
 {
 private:

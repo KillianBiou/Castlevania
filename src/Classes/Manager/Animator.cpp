@@ -14,27 +14,34 @@ Animator::Animator(Entity* entity, int frameDelay): frameDelay(frameDelay) {
 }
 
 void Animator::animate() {
+	// Fetch the frame to display
 	int nextFrame = this->animationClock.getElapsedTime().asMilliseconds() / (this->currentAnimation == ATTACK ? this->entity->getTimePerAttack() / 4 : this->frameDelay);
 
+	// If we reach the end of the animation 
 	if (nextFrame >= this->nbFrame[this->currentAnimation]) {
-
+		// Restart from the beginning
 		this->currentFrame = 0;
 		this->spriteRect.left = 0;
 		this->animationClock.restart();
+		// Indicate to trigger an attack
 		if (this->currentAnimation == ATTACK) {
 			this->entity->attack(true);
 		}
+		// Flicker in red for player feedback
 		if (this->currentAnimation == HURT) {
 			this->entity->damageFlicker();
 		}
+		// Kill the entity
 		if (this->currentAnimation == DEATH) {
 			this->entity->taskDeletion();
 			this->isDead = true;
 		}
 	}
+	// If we are on a new frame, draw it
 	else if (nextFrame != this->currentFrame) {
 		this->currentFrame = nextFrame;
 		this->spriteRect.left = this->currentFrame * this->entity->getSpriteSizeX();
+		// Advance in phase for the player's attack
 		if (this->currentAnimation == ATTACK) {
 			this->entity->attack(true);
 		}
@@ -45,15 +52,13 @@ void Animator::animate() {
 			}
 		}
 	}
-
-	//std::cout << this->spriteRect.width << ", " << this->spriteRect.left << std::endl;
 	if (!this->isDead) {
 		this->entity->setTextureRect(this->spriteRect);
 	}
 }
 
 void Animator::playAnimation(Animation animation) {
-	//std::cout << animation << std::endl;
+	// Play the animation only if it is available for the current entity
 	if (animation != this->currentAnimation && !(this->nbFrame.find(animation) == this->nbFrame.end())) {
 		this->animationClock.restart();
 		this->currentAnimation = animation;

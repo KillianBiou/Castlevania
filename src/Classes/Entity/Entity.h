@@ -7,6 +7,7 @@ class EntityManager;
 class GameManager;
 class Animator;
 
+// An enumeration that list all the possible movement direction
 enum MoveDirection
 {
 	NONE = 0,
@@ -16,6 +17,8 @@ enum MoveDirection
 	DOWN = 1
 };
 
+// An abstract class representing an Entity
+// <!> Contains a lot of outdated code
 class Entity: public sf::Sprite
 {
 protected:
@@ -90,12 +93,16 @@ public:
 	Entity(std::string texturePath, sf::Vector2f position, int sizeX, int sizeY, int frameDelay, 
 		float speedFactor, float jumpFactor, EntityManager* entityManager);
 
+	// Update loop
 	void updateAll();
+	// Move the collision point
 	void moveCollisionPoint();
 
 	virtual void const attack(bool advance) = 0;
+	// Inflict the given amount of damage
 	void takeDamage(int amount);
 	virtual const sf::Vector2f cameraTracking() = 0;
+	// Red flickering when taking damage
 	void damageFlicker();
 
 	int getSpriteSizeX();

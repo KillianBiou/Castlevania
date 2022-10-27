@@ -8,6 +8,7 @@
 
 class Spawner;
 
+// Abstract class reprensting a monster
 class Monster: public Entity
 {
 protected:
@@ -22,6 +23,7 @@ public:
 
 	void const attack(bool advance);
 	void const taskDeletion();
+	// Return a vector2f where the camera should go
 	const sf::Vector2f cameraTracking();
 
 	~Monster();

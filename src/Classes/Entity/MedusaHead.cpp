@@ -13,6 +13,7 @@ MedusaHead::MedusaHead(std::string name, sf::Vector2f pos, float speedFactor, fl
 }
 
 const void MedusaHead::update() {
+	// Move in a sin wave from left to right
 	this->move(-this->speedFactor, std::sin(this->sinClock.getElapsedTime().asSeconds() * this->frequency) * this->amplitude);
 	this->animator->animate();
 }

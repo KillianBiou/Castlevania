@@ -8,6 +8,7 @@ ParabolicProjectile::ParabolicProjectile(sf::Texture spritesheet, int xSize, int
 	this->gravity = gravity;
 	this->distance = distance;
 
+	// Calculation of the necessary velocity to reach target a y = 0
 	this->yVelocity = -this->gravity * 35;
 	this->frameToGround = (2 * this->yVelocity) / this->gravity;
 	this->xVelocity = -(this->distance / this->frameToGround);
@@ -15,5 +16,6 @@ ParabolicProjectile::ParabolicProjectile(sf::Texture spritesheet, int xSize, int
 
 const void ParabolicProjectile::moveTick() {
 	this->move(xVelocity, yVelocity);
+	// Applying gravity
 	this->yVelocity += gravity;
 }

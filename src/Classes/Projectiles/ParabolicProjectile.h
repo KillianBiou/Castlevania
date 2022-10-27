@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Projectile.h"
 
+// Class that represent a projectile that follow a parabolic trajectory, reaching y = 0 at target
 class ParabolicProjectile : public Projectile
 {
 private:

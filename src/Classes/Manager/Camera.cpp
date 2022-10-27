@@ -20,15 +20,18 @@ void Camera::trackTarget(sf::RenderTarget* renderTarget) {
 	this->levelXSize = this->entityManager->getGameManager()->getLevel()->getSizeX();
 	this->levelYSize = this->entityManager->getGameManager()->getLevel()->getSizeY();
 	if (target) {
+		// Clamp the view within the level (Dont display part of outside the level)
 		sf::Vector2f targetPos = this->target->cameraTracking();
 		targetPos.x = clamp(targetPos.x, this->view->getSize().x / 2, this->levelXSize * 64 - this->view->getSize().x / 2);
 		targetPos.y = clamp(targetPos.y, this->view->getSize().y / 2, this->levelYSize * 64 - this->view->getSize().y / 2);
 		
+		// Teleport the player isnteed of a smooth travling
 		if (this->teleportToTarget) {
 			this->view->setCenter(targetPos);
 			this->teleportToTarget = false;
 		}
 		else {
+			// Do a travelling toward target position
 			sf::Vector2f direction = sf::Vector2f(targetPos.x - view->getCenter().x, targetPos.y - view->getCenter().y);
 			float magnitude = sqrt(direction.x * direction.x + direction.y * direction.y);
 			if (magnitude > 10) {
@@ -36,6 +39,7 @@ void Camera::trackTarget(sf::RenderTarget* renderTarget) {
 				direction.y = (direction.y / magnitude) * 15.f;
 				this->view->move(direction);
 			}
+			// If the target pos is not too far, teleport to it
 			else {
 				this->view->setCenter(targetPos);
 			}
@@ -43,6 +47,7 @@ void Camera::trackTarget(sf::RenderTarget* renderTarget) {
 
 		renderTarget->setView(*this->view);
 	}
+	// Set HUD position
 	this->healthBar->setPosition(view->getCenter().x - view->getSize().x / 2, view->getCenter().y - view->getSize().y / 2);
 	this->manaBar->setPosition(view->getCenter().x - view->getSize().x / 2, view->getCenter().y - view->getSize().y / 2 + 70);
 	this->score->setPosition(view->getCenter().x - view->getSize().x / 2, view->getCenter().y - view->getSize().y / 2 + 140);
@@ -65,6 +70,7 @@ void Camera::setEntityManager(EntityManager* entityManager) {
 }
 
 void Camera::setTarget(Entity* target) {
+	// On game startup, teleport the camera straight to the player
 	if (firstInitialisation){
 		float x = clamp(target->getPosition().x, this->view->getSize().x / 2, this->levelXSize * 64 - this->view->getSize().x / 2);
 		float y = clamp(target->getPosition().y, this->view->getSize().y / 2, this->levelYSize * 64 - this->view->getSize().y / 2);

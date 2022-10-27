@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "GameMaster.h"
 
+// Raw array representing LVL 1
 const int level1[] =
 {
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -30,8 +31,10 @@ const int level1[] =
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 };
+// Size of the level 1
 const int lvl1XSize = 120;
 const int lvl1ySize = 24;
+// Multimap with all the spawner for level 1
 std::multimap<EntityType, sf::Vector2f> lvl1EntityMap{
     {PLAYER, sf::Vector2f(92, 1150)},
     {MEDUSA, sf::Vector2f(0, 100)},
@@ -52,9 +55,11 @@ std::multimap<EntityType, sf::Vector2f> lvl1EntityMap{
     {ZOMBIE, sf::Vector2f(6000, 500)},
     {MUMMY, sf::Vector2f(6748, 800)},
 };
+// Visual of level 1
 std::string lvl1BackgroundImage = "images/Background1.png";
 std::string lvl1TilesetPath = "images/Lvl1Tileset.png";
 
+// Raw array representing LVL 2
 const int level2[] =
 {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  ,
@@ -139,10 +144,13 @@ const int level2[] =
     3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  ,
     3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  , 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  ,
 };
+// Size of the level 2
 const int lvl2XSize = 70;
 const int lvl2ySize = 74;
+// Visual of level 2
 std::string lvl2BackgroundImage = "images/Background2.png";
 std::string lvl2TilesetPath = "images/Lvl2Tileset.png";
+// Multimap with all the spawner for level 2
 std::multimap<EntityType, sf::Vector2f> lvl2EntityMap{
     {PLAYER, sf::Vector2f(128, 4288)},
     {SKELETON, sf::Vector2f(512, 3968)},
@@ -171,6 +179,7 @@ std::multimap<EntityType, sf::Vector2f> lvl2EntityMap{
     {REAPER, sf::Vector2f(3520, 448)}
 };
 
+// Raw array representing missing level
 const int missingLvl[] =
 {
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -201,10 +210,13 @@ const int missingLvl[] =
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2  , 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 
 };
+// Size of the missing level
 const int missingLvlXSize = 120;
 const int missingLvlYSize = 24;
+// Visual of missing level
 std::string missingLvlBackgroundImage = "images/missingLvlBackground.png";
 std::string missingLvlTilesetPath = "images/missingLvlTileSet.png";
+// Multimap with all the spawner for missing level
 std::multimap<EntityType, sf::Vector2f> missingLvlEntityMap{
     {PLAYER, sf::Vector2f(92, 1150)},
     {MISSINGNO, sf::Vector2f(4800, 1024)},
@@ -235,6 +247,7 @@ GameManager::GameManager(Difficulty difficulty, GameMaster* gameMaster): gameMas
 	switch (difficulty)
 	{
 	case EASY:
+        // Initialize reward scale
 		this->pointsToHpUp = { 1000, 2000, 3000, 4000, 5000, 6000, 7000 };
 		break;
 	default:
@@ -244,6 +257,7 @@ GameManager::GameManager(Difficulty difficulty, GameMaster* gameMaster): gameMas
 }
 
 void GameManager::update(sf::RenderTarget* renderTarget) {
+    // If the end cutscene is triggered, play it
     if (this->endCutsceneClock) {
         renderTarget->setView(sf::View(sf::Vector2f(960, 540), sf::Vector2f(1920, 1080)));
         int currentTimeStamp = this->endCutsceneClock->getElapsedTime().asMilliseconds();
@@ -254,6 +268,7 @@ void GameManager::update(sf::RenderTarget* renderTarget) {
 
         this->soundManager->setCanPlay(false);
 
+        // Castle destruction effect and SFX
         if (currentTimeStamp > 2000) {
             if (!this->startedSfx) {
                 this->startedSfx = true;
@@ -263,6 +278,7 @@ void GameManager::update(sf::RenderTarget* renderTarget) {
             float pixelPerTick = 278.f / 5000.f;
             this->cutsceneCastleS.setPosition(sf::Vector2f(1173 + offset, 260 + pixelPerTick * (currentTimeStamp - 2000)));
         }
+        // Victory SFX and text
         if (currentTimeStamp >= 9000) {
             if(!this->victoryMusicStarted) {
                 this->victoryMusicStarted = true;
@@ -270,12 +286,14 @@ void GameManager::update(sf::RenderTarget* renderTarget) {
             }
             renderTarget->draw(this->textClearS);
         }
+        // Go back to main screen
         if (currentTimeStamp >= 15000) {
             this->camera->reset();
             this->gameMaster->changeState(MENU);
         }
     }
     else {
+        // If a level is loaded
         if (level) {
             this->entityManager->updateAllEntities();
 
@@ -288,6 +306,7 @@ void GameManager::update(sf::RenderTarget* renderTarget) {
 
             this->soundManager->update();
 
+            // On win, play a fade out before cutscene
             if (this->fadeOutClock) {
                 int timestamp = this->fadeOutClock->getElapsedTime().asMilliseconds();
                 if (timestamp < 3000) {
@@ -304,6 +323,7 @@ void GameManager::update(sf::RenderTarget* renderTarget) {
                 }
             }
 
+            // If player dead, play a quick animation
             if (this->deathClock) {
                 int timestamp = this->deathClock->getElapsedTime().asMilliseconds();
                 int currentTime = timestamp / 10;
@@ -327,6 +347,7 @@ void GameManager::update(sf::RenderTarget* renderTarget) {
                 }
             }
 
+            // Check for level change
             if (this->entityManager->getPlayer()->getPosition().x >= (this->level->getSizeX() - 1) * 64) {
                 if (this->currentLvlId == LEVEL1)
                     this->loadLevel(LEVEL2);
@@ -364,16 +385,19 @@ void GameManager::loadLevel(LevelId id) {
 }
 
 void GameManager::loadEntities() {
+    // Usage of Entity factory to load all the Entity from the multimap
     EntityFactory tempFactory(this->level, this->entityManager, this->camera->getView());
 
     for (std::pair<EntityType, sf::Vector2f> entry : *this->level->getEntityMap()) {
         tempFactory.createEntity(entry.first, entry.second);
     }
 
+    // For easter egg, augment player HP for maximized pain
     if (this->currentLvlId == MISSINGLVL) {
         this->entityManager->getPlayer()->setMaxHp(20);
     }
 
+    // Set all target to player
     this->camera->setTarget(this->entityManager->getPlayer());
     this->camera->teleport();
     this->camera->getHealthBar()->setEntity(this->entityManager->getPlayer());
@@ -390,9 +414,11 @@ void GameManager::fadeOut() {
 }
 
 void GameManager::fadeDeath() {
+    // Progressive music fadeout
     this->soundManager->progressiveFadeOut(1000);
     this->deathClock = new sf::Clock();
     this->gameOver.loadFromFile("sfx/gameOver.ogg");
+    // Easter egg surprise
     if (this->currentLvlId == MISSINGLVL) {
         this->gameOver.loadFromFile("sfx/missingDeath.ogg");
         this->deathText.setString("You have been murdered, you shall never leave this place.");

@@ -1,6 +1,7 @@
 #include "GameMaster.h"
 
 GameMaster::GameMaster() {
+	// Base state is on the menu
 	this->currentState = MENU;
 
 	this->gameManager = new GameManager(EASY, this);

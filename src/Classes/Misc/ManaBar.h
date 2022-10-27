@@ -3,6 +3,7 @@
 #include <vector>
 #include "../Entity/Player.h"
 
+// Class that represent the player's manabar
 class ManaBar : public sf::Transformable, public sf::Drawable
 {
 private:
@@ -21,8 +22,11 @@ private:
 
 public:
 	ManaBar(std::string fontPath);
+	// Set the player target to draw the mana
 	void setPlayer(Player* player);
+	// Update loop
 	void update();
+	// Render the manabar to the specified render target
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 

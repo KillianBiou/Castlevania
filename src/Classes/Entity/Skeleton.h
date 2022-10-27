@@ -3,7 +3,7 @@
 #include "../Manager/EntityManager.h"
 #include "../Projectiles/ParabolicProjectile.h"
 
-
+// Class represeting a skeleton
 class Skeleton: public Monster
 {
 private:

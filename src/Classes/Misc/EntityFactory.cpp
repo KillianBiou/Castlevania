@@ -7,6 +7,7 @@ EntityFactory::EntityFactory(Level* level, EntityManager* entityManager, sf::Vie
 void EntityFactory::createEntity(EntityType type, sf::Vector2f position) {
 	switch (type)
 	{
+	// Create a player only if no player exist already else way, move it to the target 
 	case PLAYER:
 		if (entityManager->getPlayer()) {
 			entityManager->getPlayer()->setPosition(position);

@@ -4,6 +4,8 @@
 #include "../Collectible/WeaponUpgrade.h"
 #include "../Projectiles/StraightProjectile.h"
 
+// Easter egg's impossible boss
+// Same logic as Death, but impossible to kill
 class MissingNo : public Monster {
 private:
 	sf::Texture projectileTexture;

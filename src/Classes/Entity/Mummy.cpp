@@ -10,6 +10,7 @@ Mummy::Mummy(sf::Vector2f pos, float speedFactor, EntityManager* entityManager) 
 
 	this->cameraLock = this->getPosition();
 
+	// Drop a weapon upgrade on death
 	this->specialDrop = true;
 	this->timeBetweenAttacks = 3000;
 	this->attackClock = sf::Clock();
@@ -25,10 +26,12 @@ Mummy::Mummy(sf::Vector2f pos, float speedFactor, EntityManager* entityManager) 
 }
 
 const sf::Vector2f Mummy::cameraTracking() {
+	// When tracked by camera, camera should be locked where the boss was instancied
 	return this->cameraLock;
 }
 
 const void Mummy::update() {
+	// Check if need to enrage
 	if (this->hp <= this->maxHp / 2) {
 		if (!this->isHurt)
 		{
@@ -39,18 +42,23 @@ const void Mummy::update() {
 		}
 	}
 
+	// Update physics and animation
 	this->updateAll();
+	// Start the boss combat if player is nearby
 	if (abs(this->entityManager->xDistToPlayer(this->getPosition().x)) < 500) {
 		if(!this->bossStarted)
 			this->startBoss();
 	}
+	// If boss started, Follow attack pattern
 	if (this->bossStarted) {
+		// Instanciate a sin projectile
 		if (this->attackClock.getElapsedTime().asMilliseconds() >= this->timeBetweenAttacks) {
 			int direction = this->entityManager->xDistToPlayer(this->getPosition().x) < 0 ? -1 : 1;
 			SinProjectile* temp = new SinProjectile(this->projectileTexture, 64, 64, this->getPosition() + sf::Vector2f(0.f, -64.f), 5.f * direction, 5.f, 5.f, 2);
 			this->entityManager->addProjectile(temp);
 			this->attackClock.restart();
 		}
+		// Go toward player
 		this->goToward();
 	}
 	
@@ -59,7 +67,6 @@ const void Mummy::update() {
 
 void Mummy::enrage() {
 	this->enraged = true;
-	//this->speedFactor *= 1.5;
 	this->timeBetweenAttacks /= 2;
 }
 
@@ -70,6 +77,7 @@ void Mummy::startBoss() {
 }
 
 void Mummy::animate() {
+	// Play the correct animation
 	Animation tempAnim = IDLE;
 	if (this->moveDirection != NONE) {
 		tempAnim = RUNNING;
@@ -86,6 +94,7 @@ void Mummy::animate() {
 void Mummy::goToward() {
 	float distToTarget = this->getPosition().x - this->entityManager->playerPosition().x;
 
+	// Always go straight for the player
 	if (distToTarget < -50) {
 		this->moveDirection = RIGHT;
 		this->setScale(-1.f, 1.f);
@@ -101,6 +110,7 @@ const void Mummy::taskDeletion() {
 }
 
 Mummy::~Mummy() {
+	// Drop a weapon upgrade Level 2
 	Level* currentLevel = this->entityManager->getGameManager()->getLevel();
 	this->entityManager->endBossCombat();
 	this->entityManager->getGameManager()->getSoundManager()->endBossMusic(&this->bossTheme);

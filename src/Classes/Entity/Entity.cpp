@@ -33,6 +33,7 @@ Entity::Entity(std::string texturePath, sf::Vector2f position, int sizeX, int si
 }
 
 void Entity::updateAll() {
+    // Apply gravity, check collision, animate
     this->applyGravity();
     this->moveCollisionPoint();
     this->checkCollision();
@@ -40,11 +41,13 @@ void Entity::updateAll() {
     animator->animate();
 }
 
+// Play a given SFX
 void Entity::playSfx(sf::SoundBuffer* sound) {
     this->entityManager->getGameManager()->getSoundManager()->playSoundEffect(sound);
 }
 
 void Entity::applyGravity() {
+    // Apply gravity if the entity is not grounded
     if (!this->isGrounded) {
         this->verticalVelocity += this->gravityFactor * 9.81f;
     }
@@ -79,6 +82,7 @@ void Entity::moveCollisionPoint() {
     this->leftBoundPointPrime = this->getPosition() + sf::Vector2f(-this->spriteSizeX / 2.f, 0.f);
 }
 
+// For collision details, check the rapport 
 void Entity::checkCollision() {
     Level* currentLevel = this->entityManager->getGameManager()->getLevel();
     // Ground Check
@@ -141,10 +145,12 @@ void Entity::checkCollision() {
 void Entity::takeDamage(int amount) {
     this->hp -= amount;
     std::cout << this->name << " : lost " << amount << "hp (" << this->hp << "/" << this->maxHp << ")\n";
+    // If out of HP, make the entity die
     if (this->hp <= 0) {
         this->die();
     }
     else {
+        // Play hurt animation, SFX and flickering
         this->animator->playAnimation(HURT);
         this->playSfx(&this->hitSound);
         this->damageFlicker();
@@ -163,8 +169,11 @@ void Entity::damageFlicker() {
 
 
 void Entity::die() {
+    // Death sound
     this->playSfx(&this->deathSound);
+    // Add mana to the player
     this->entityManager->getPlayer()->addMana(this->manaOnDeath);
+    // Add score
     this->entityManager->addScore(this->scoreOnDeath);
     this->dead = true;
     this->animator->playAnimation(DEATH);

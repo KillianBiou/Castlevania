@@ -3,6 +3,7 @@
 
 WeaponUpgrade::WeaponUpgrade(const int* level, const int X_SIZE, int upgradeLevel) : Collectible("images/Collectibles.png", sf::IntRect(32 + upgradeLevel * 32, 0, 32, 32), level, X_SIZE) {
 	this->setScale(1.5f, 1.5f);
+	// Set the caracteristique of the weapon's upgrade
 	switch (upgradeLevel)
 	{
 	case 1:
@@ -21,10 +22,12 @@ WeaponUpgrade::WeaponUpgrade(const int* level, const int X_SIZE, int upgradeLeve
 }
 
 const void WeaponUpgrade::onPickup(Player* player) {
+	// On pickup, change the weapon of the player
 	player->getEntityManager()->getGameManager()->getSoundManager()->playSoundEffect(&this->pickupSound);
 	player->changeWeapon(this->weapon);
 	this->setTextureRect(sf::IntRect(0, 0, 0, 0));
 
+	// If the weapon correspond to the heirloop (Level 3), trigger the end of the game
 	if (this->lvl == 3) {
 		player->triggerEnd();
 	}

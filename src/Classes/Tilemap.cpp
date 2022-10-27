@@ -1,5 +1,6 @@
 #include "Tilemap.h"
 
+
 void Tilemap::load(std::string tilesetPath, int tileSize, const int* map, const int numberXTiles, const int numberYTiles) {
 
 	if (!this->tileset.loadFromFile(tilesetPath)) {
@@ -10,6 +11,7 @@ void Tilemap::load(std::string tilesetPath, int tileSize, const int* map, const 
 	this->vArray.setPrimitiveType(sf::Quads);
 	this->vArray.resize(numberXTiles * numberYTiles * 4);
 
+	// Fill the vertex array with the corresponding quad texture corresponding to the ID of the block
 	for (int x = 0; x < numberXTiles; x++) {
 		for (int y = 0; y < numberYTiles; y++) {
 			int currentMapPosition = map[x + y * numberXTiles];

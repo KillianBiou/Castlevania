@@ -11,6 +11,7 @@ MissingNo::MissingNo(sf::Vector2f pos, float speedFactor, EntityManager* entityM
 
 	this->cameraLock = this->getPosition();
 
+	// Six Projectile spawn location
 	this->scytheV1 = this->getPosition() + sf::Vector2f(500.f, -300.f);
 	this->scytheV2 = this->getPosition() + sf::Vector2f(-500.f, -300.f);
 	this->scytheV3 = this->getPosition() + sf::Vector2f(600.f, -150.f);

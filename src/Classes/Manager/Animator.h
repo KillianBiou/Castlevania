@@ -1,6 +1,7 @@
 #pragma once
 #include "../Entity/Player.h"
 
+// Enumeration that list all the possible animation (Indicate their line in the spritesheet too)
 enum Animation {
 	IDLE = 0,
 	RUNNING = 1,
@@ -10,6 +11,7 @@ enum Animation {
 	DEATH = 5
 }; 
 
+// Class that is responsible of animating an Entity
 class Animator
 {
 private:
@@ -28,10 +30,14 @@ private:
 public:
 	Animator(Entity* entity, int frameDelay);
 
+	// Set the number of frame per animation
 	void setAnimations(std::map<Animation, int> nbFrame);
 
+	// Animation loop
 	void animate();
+	// Play a given animation
 	void playAnimation(Animation animation);
+	// Outdated ? 
 	void lockAnimation(bool state);
 
 	Animation getCurrentAnimation();

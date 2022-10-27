@@ -17,7 +17,9 @@ void Score::addScore(int amount) {
     this->text.setString("Score : " + std::to_string(this->score));
 }
 
+// Update loop
 void Score::update() {
+    // Keep the score display to its place
     this->text.setPosition(this->getPosition() + sf::Vector2f(10.f, 5.f));
 }
 

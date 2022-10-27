@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+// Abstract class that represent a collectible
 class Collectible: public sf::Sprite
 {
 protected:
@@ -23,8 +24,10 @@ protected:
 
 public:
 	Collectible(std::string texturePath, sf::IntRect textureRect, const int* level, const int X_SIZE);
+	// Update loop
 	void update();
 
+	// Virtual function that execute code when picked by player
 	virtual const void onPickup(Player* player) = 0;
 };
 

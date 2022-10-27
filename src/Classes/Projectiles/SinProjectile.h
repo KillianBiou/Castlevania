@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Projectile.h"
 
+// Class that represent a projectile that goes follow a sin waves
 class SinProjectile : public Projectile
 {
 private:

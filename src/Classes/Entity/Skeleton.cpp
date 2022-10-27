@@ -32,8 +32,10 @@ void const Skeleton::update() {
 
 	this->setScale(distToPlayer < 0 ? -1.f : 1.f, 1.f);
 
+	// Make the skeleton active if it is close enough to player
 	if (abs(distToPlayer) < this->targetDistToPlayer * 1.5) {
 		this->goToward();
+		// Throw bone
 		if (this->attackClock.getElapsedTime().asMilliseconds() > this->attackCooldown) {
 			this->attackClock.restart();
 			this->attack();
@@ -49,6 +51,7 @@ void const Skeleton::update() {
 }
 
 void Skeleton::attack() {
+	// Throw a parabolic projectile with a target on the player
 	currentProjectile = new ParabolicProjectile(this->boneTexture, 64, 64, this->getPosition(), 0.5f, this->entityManager->xDistToPlayer(this->getPosition().x), 3);
 	this->entityManager->addProjectile(currentProjectile);
 }
@@ -67,6 +70,7 @@ void Skeleton::animate() {
 	this->animator->playAnimation(tempAnim);
 }
 
+// Function that make the skeleton try to stay at given distance to player
 void Skeleton::goToward() {
 	Level* currentLevel = this->entityManager->getGameManager()->getLevel();
 	float distToTarget = this->getPosition().x - this->positionTarget.x;

@@ -1,6 +1,7 @@
 #pragma once
 #include "Monster.h"
 
+// Class that represent a medusa head
 class MedusaHead: public Monster
 {
 private:

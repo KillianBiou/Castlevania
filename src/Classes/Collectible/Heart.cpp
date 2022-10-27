@@ -6,6 +6,7 @@ Heart::Heart(const int* level, const int X_SIZE) : Collectible("images/Collectib
 }
 
 const void Heart::onPickup(Player* player) {
+	// On pickup, give 1 health to player
 	player->getEntityManager()->getGameManager()->getSoundManager()->playSoundEffect(&this->pickupSound);
 	player->addHp(1);
 	this->setTextureRect(sf::IntRect(0, 0, 0, 0));

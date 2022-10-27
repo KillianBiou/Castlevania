@@ -7,10 +7,12 @@
 #include "../Misc/Level.h"
 #include "../Misc/EntityFactory.h"
 
+// Enumeration that represent all possible difficulties
 enum Difficulty {
 	EASY
 };
 
+// Enumeration that represent all possible level
 enum LevelId {
 	LEVEL1 = 0,
 	LEVEL2 = 1,
@@ -65,17 +67,24 @@ private:
 public:
 	GameManager(Difficulty difficulty, GameMaster* gameMaster);
 
+	// Update loop
 	void update(sf::RenderTarget* renderTarget);
+	// Load the target level
 	void loadLevel(LevelId id);
 
+	// Start the game (Start music)
 	void startGame();
 
+	// Override to process input from the user
 	const void processInput(sf::Event event, sf::RenderTarget* target);
 
+	// Deliver Hp up buff when reaching milestone
 	bool isNextBuffReached(int score);
 
+	// Visual effect
 	void fadeOut();
 	void fadeDeath();
+	// Trigger end cutscene
 	void playEndCutscene();
 
 	Level* getLevel();
