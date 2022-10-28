@@ -484,15 +484,6 @@ const void GameManager::processInput(sf::Event event, sf::RenderTarget* target) 
         case sf::Keyboard::Num2:
             this->entityManager->getPlayer()->specialTwo();
             break;
-        case sf::Keyboard::Num3:
-            this->loadLevel(LEVEL1);
-            break;
-        case sf::Keyboard::Num4:
-            this->loadLevel(LEVEL2);
-            break;
-        case sf::Keyboard::Num5:
-            this->playEndCutscene();
-            break;
         }
         break;
 
